@@ -7,6 +7,8 @@
   <main class="card p-4 shadow-sm text-center">
     <h2 class="h4 mb-3">Bem-vindo</h2>
     <p>Sistema de planejamento de viagens em desenvolvimento.</p>
+    <%= button_to "Sign Up", new_user_registration_path, method: :get %>
+    <%= button_to "Login", new_user_session_path, method: :get %>
     <% if @notices.present? %>
       <section class="mt-4">
         <h3 class="h5 text-danger">Avisos importantes</h3>

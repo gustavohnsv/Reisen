@@ -59,6 +59,7 @@ group :development, :test do
   gem "selenium-webdriver", "~> 4.8"
   gem "reek", require: false
   gem "faker"
+  gem "launchy"
 end
 
 group :development do
