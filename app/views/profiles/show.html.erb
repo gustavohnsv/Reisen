@@ -1,7 +1,7 @@
 <h1> Logado como: <%=  @user.name %> </h1>
 <span> Atualmente na página: profiles#show </span>
-<%=  button_to "Novo roteiro", new_script_path, method: :get %>
-
+<%= button_to "Novo roteiro", new_script_path, method: :get %>
+<%= button_to "Nova checklist", new_checklist_path, method: :get %>
 <% if user_signed_in? %>
   <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" } %>
 <% end %>
