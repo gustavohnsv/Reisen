@@ -1,8 +1,8 @@
 # language: pt
 # encoding: utf-8
 
-Funcionalidade: Criar checklist
-    Para poder me organizar com listas customizáveis
+Funcionalidade: Criar roteiro
+  Para que eu possa organizar as minhas viagens
 
     # Cenário: (Feliz ou triste) Indica o comportamento esperado da funcionalidade
     # Dado: Estado atual do programa
@@ -10,13 +10,18 @@ Funcionalidade: Criar checklist
     # Quando: Ação que o usuário irá fazer
     # Então: Resultado esperado da ação
 
-    # Qual o nível de customização? Apenas criar itens? Operação "CRUD" completa?
-    # Todos podem ver a minha lista ou deve ser algo apenas para mim?
+  Contexto:
+    Dado que meu nome é "John Doe"
+    E que meu email é "johndoe@example.com"
+    E que minha senha é "password"
+    E que quero criar uma checklist chamada "Minha rotina"
+    E que eu tenho uma conta e estou no meu perfil
 
-    # usuário != participante ?
-    #Cenário: Conseguir criar checklist
-    #    Dado que sou um usuário
-    #    E que estou na página de perfil
-    #    Quando eu clico no botão "Criar checklist"
-    #    Então deve ser criada uma nova checklist
-    #    E eu devo ser redirecionado para ela
+  Cenario: Criar roteiro
+    Dado que eu estou na página de perfil
+    Quando clicar em "Nova checklist"
+    Então devo ser redirecionado para a tela de criação de checklist
+    Quando preencher o campo "Title" com "Minha rotina"
+    E clicar em "Criar checklist"
+    Então minha checklist deve ser criada
+    E devo ser redirecionado para a tela da nova checklist

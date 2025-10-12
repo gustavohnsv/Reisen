@@ -1,2 +1,10 @@
-<h1>Checklists#new</h1>
-<p>Find me in app/views/checklists/new.html.erb</p>
+<%= form_for @checklist do |f| %>
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title, autofocus: true, autocomplete: "title" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Criar checklist" %>
+  </div>
+<% end %>

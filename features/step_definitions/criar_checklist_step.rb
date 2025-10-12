@@ -1,19 +1,16 @@
-Dado('que sou um usuário') do
-  pending
+Dado('que quero criar uma checklist chamada {string}') do |string|
+  @title = string
 end
 
-Dado('que estou na página de perfil') do
-  pending
+Então('devo ser redirecionado para a tela de criação de checklist') do
+  expect(current_path).to eq(new_checklist_path)
 end
 
-Quando('eu clico no botão "Criar checklist"') do
-  pending
+Então('minha checklist deve ser criada') do
+  @checklist = Checklist.find_by(title: @title)
+  expect(@checklist).not_to be_nil
 end
 
-Então('deve ser criada uma nova checklist') do
-  pending
-end
-
-E('eu devo ser redirecionado para ela') do
-  pending
+Então('devo ser redirecionado para a tela da nova checklist') do
+  expect(current_path).to eq(checklist_path(@checklist.id))
 end
