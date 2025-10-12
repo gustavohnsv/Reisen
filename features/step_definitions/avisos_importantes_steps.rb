@@ -1,11 +1,12 @@
 Dado('que existe um aviso com o título {string} e o corpo {string} marcado como visível') do |titulo, corpo|
-  pending
+  # cria uma instância persistente no banco para a feature sem depender do FactoryBot
+  Notice.create!(title: titulo, body: corpo, visible: true)
 end
 
 Então('devo ver um aviso com o título {string}') do |titulo|
-  pending
+  expect(page).to have_content(titulo)
 end
 
 Então('devo ver o texto {string}') do |texto|
-  pending
+  expect(page).to have_content(texto)
 end
