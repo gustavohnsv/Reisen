@@ -7,9 +7,15 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
+        # If the remove_avatar checkbox was checked, purge the attachment
+        if params[:user] && params[:user][:remove_avatar] == '1'
+          @user.avatar.purge
+        end
       redirect_to profile_path(@user), notice: 'Usuário atualizado com sucesso.'
     else
-      render :edit, status: :unprocessable_content
+      # Render the profiles edit form where errors and the avatar field are displayed
+      @user = @user
+      render 'profiles/edit', status: :unprocessable_entity
     end
   end
 
@@ -32,6 +38,6 @@ class UsersController < ApplicationController
 
   def user_params
     # Define quais parâmetros podem ser atualizados do usuário
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  params.require(:user).permit(:name, :email, :password, :password_confirmation, :avatar, :remove_avatar)
   end
 end

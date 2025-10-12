@@ -8,7 +8,8 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  resources :profiles, only: [:show]
+  resources :profiles, only: [:show, :edit]
+  resources :users, only: [:edit, :update]
 
   get 'my_profile', to: 'profiles#my_profile'
 

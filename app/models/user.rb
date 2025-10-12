@@ -14,5 +14,24 @@ class User < ApplicationRecord
   has_many :checklist_items, dependent: :destroy
 
   has_many :participated_scripts, through: :participants, source: :script
+  has_one_attached :avatar
+  validate :avatar_type_and_size
 
+  private
+
+  def avatar_type_and_size
+    return unless avatar.attached?
+
+    # Validate content type is an image
+    content_type = avatar.blob.content_type
+    unless content_type.present? && content_type.start_with?("image")
+      errors.add(:avatar, "deve ser uma imagem")
+    end
+
+    # Validate size (2 MB max)
+    max_size = 2 * 1024 * 1024
+    if avatar.blob.byte_size > max_size
+      errors.add(:avatar, "é muito grande (máximo 2MB)")
+    end
+  end
 end

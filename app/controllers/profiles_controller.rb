@@ -11,6 +11,10 @@ class ProfilesController < ApplicationController
       redirect_to root_path
   end
 
+  def edit
+    @user = current_user
+  end
+
   def my_profile
     redirect_to profile_path(current_user)
   end

@@ -1,5 +1,11 @@
 <h1> Logado como: <%=  @user.name %> </h1>
 <span> Atualmente na página: profiles#show </span>
+<% if @user.avatar.attached? %>
+  <div class="profile-avatar">
+    <%# Show the original blob; variants may require image_processing gem in the environment %>
+    <%= image_tag url_for(@user.avatar), alt: "Avatar de "+@user.name %>
+  </div>
+<% end %>
 <%= button_to "Novo roteiro", new_script_path, method: :get %>
 <%= button_to "Nova checklist", new_checklist_path, method: :get %>
 <% if user_signed_in? %>
