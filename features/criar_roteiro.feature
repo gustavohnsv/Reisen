@@ -15,7 +15,9 @@ Funcionalidade: Criar roteiro
       E que meu email é "johndoe@example.com"
       E que minha senha é "password"
       E que quero criar um roteiro chamado "Viagem para Paris"
-      E que eu tenho uma conta e estou no meu perfil
+      E que eu tenho uma conta
+      E estou logado
+      E que estou no meu perfil
 
     Cenario: Criar roteiro
       Dado que eu estou na página de perfil

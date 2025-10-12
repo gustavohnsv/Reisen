@@ -7,7 +7,11 @@ class ProfilesController < ApplicationController
     unless @user == current_user
       redirect_to root_path, alert: "Acesso negado"
     end
-    rescue ActiveRecord::RecordNotFound => _
+    @scripts = Script
+                 .left_outer_joins(:participants)
+                 .where('scripts.user_id = :id OR participants.user_id = :id', id: @user.id)
+                 .distinct
+  rescue ActiveRecord::RecordNotFound => _
       redirect_to root_path
   end
 

@@ -8,6 +8,13 @@
 <% end %>
 <%= button_to "Novo roteiro", new_script_path, method: :get %>
 <%= button_to "Nova checklist", new_checklist_path, method: :get %>
+<% unless @scripts.nil? %>
+  <div style="display: flex; flex-direction: column">
+  <% @scripts&.each do |s| %>
+    <%= link_to s.title, script_path(s.id), method: :get %>
+  <% end %>
+  </div>
+<% end %>
 <% if user_signed_in? %>
   <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" } %>
 <% end %>

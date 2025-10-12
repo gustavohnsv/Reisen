@@ -50,6 +50,13 @@ jobs:
           bundle exec rails db:create
           bundle exec rails db:schema:load
 
+      - name: Run RSpec tests
+        env:
+          RAILS_ENV: test
+          CI: true
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+        run: bundle exec rspec
+
       - name: Run Cucumber
         env:
           RAILS_ENV: test
@@ -57,3 +64,8 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
           CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: bundle exec cucumber
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

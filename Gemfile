@@ -55,7 +55,7 @@ group :development, :test do
   gem "capybara"
   gem "database_cleaner-active_record"
   gem "simplecov", require: false
-  gem "coveralls", require: false
+  gem "coveralls_reborn", "~> 0.28", require: false
   gem "selenium-webdriver", "~> 4.8"
   gem "reek", require: false
   gem "faker"
