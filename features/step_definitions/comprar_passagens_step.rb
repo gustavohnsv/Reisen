@@ -8,7 +8,6 @@ Quando('clicar no link {string}') do |string|
 end
 
 Dado('que existem companhias áreas com links de compra disponíveis') do
-  save_and_open_page
   expect(page).to have_selector('a[href^="/mock"]')
 end
 
