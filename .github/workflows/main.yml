@@ -50,6 +50,13 @@ jobs:
           bundle exec rails db:create
           bundle exec rails db:schema:load
 
+      - name: Run RSpec tests
+        env:
+          RAILS_ENV: test
+          CI: true
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+        run: bundle exec rspec
+
       - name: Run Cucumber
         env:
           RAILS_ENV: test
