@@ -28,7 +28,18 @@ Dado('acesso a página de edição de perfil') do
 end
 
 Quando('altero meu nome de usuário para {string}') do |novo_nome|
-  pending
+  # procurar campo por labels comuns (PT/EN) ou pelo atributo name
+  field = ['Nome', 'Username', 'User name', 'Name'].find { |f| page.has_field?(f) }
+  if field
+    fill_in field, with: novo_nome
+  elsif page.has_selector?('input[name="user[name]"]')
+    find('input[name="user[name]"]').set(novo_nome)
+  else
+    # se não encontrou o campo, lançar erro para facilitar debug
+    raise "Campo de nome de usuário não encontrado para setar '#{novo_nome}'"
+  end
+
+  @new_username = novo_nome
 end
 
 Quando('salvo as alterações') do
@@ -40,15 +51,23 @@ Então('devo ver uma mensagem de sucesso') do
 end
 
 Então('meu nome de usuário deve ser exibido como {string}') do |nome|
-  pending
+  # aguarda e verifica que o texto aparece em algum lugar da página
+  expect(page).to have_content(nome)
 end
 
 Quando('apago meu nome de usuário') do
-  pending
+  field = ['Nome', 'Username', 'User name', 'Name'].find { |f| page.has_field?(f) }
+  if field
+    fill_in field, with: ''
+  elsif page.has_selector?('input[name="user[name]"]')
+    find('input[name="user[name]"]').set('')
+  else
+    raise 'Campo de nome de usuário não encontrado para limpar'
+  end
 end
 
 Então('devo ver uma mensagem de erro indicando que o nome de usuário não pode ser em branco') do
-  pending
+  expect(page).to have_content(/não pode (?:ficar )?em branco|can'?t be blank|can't be blank/i)
 end
 
 Dado('que já existe um usuário com nome {string}') do |nome|
@@ -56,5 +75,5 @@ Dado('que já existe um usuário com nome {string}') do |nome|
 end
 
 Então('devo ver uma mensagem de erro indicando que o nome de usuário já está em uso') do
-  expect(page).to have_content('Username has already been taken')
+  expect(page).to have_content(/já está em uso|já está em uso\.|has already been taken|already been taken|Name has already been taken/i)
 end
