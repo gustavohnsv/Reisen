@@ -27,6 +27,7 @@ O **Reisen** tem como objetivo centralizar todo o processo de planejamento. Ele 
 
 * [**Aplicação no Heroku:**](https://reisen-grupo-2025-4e079ecbb11a.herokuapp.com/)
 * [**Projeto no Jira, template Scrum:**](https://renan-bezerra-guima.atlassian.net/jira/software/projects/ER/boards/35)
+* [**Padrões do Projeto:**](https://docs.google.com/document/d/1NnjRiMTN7Aq1o_ljW0uol7TQJ1pWWNI4ZbM63vOzQ08/edit?usp=sharing)
 
 ---
 
