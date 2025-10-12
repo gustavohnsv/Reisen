@@ -47,8 +47,17 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
         run: |
+          # espera o Postgres ficar pronto (até ~30s)
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 && break
+            echo "waiting for postgres..."
+            sleep 1
+          done
+
           bundle exec rails db:create
           bundle exec rails db:migrate
+          # loga versão aplicada para facilitar debugging
+          bundle exec rails db:version
 
       - name: Run RSpec tests
         env:
@@ -69,3 +78,5 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          
