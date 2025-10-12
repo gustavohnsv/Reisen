@@ -45,7 +45,11 @@ class ScriptsController < ApplicationController
     if current_user.nil?
       redirect_to root_path, alert: "Acesso negado" and return
     end
-    @script = current_user.scripts.find(params[:id])
+    @script = Script
+                .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
+                .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
+                .distinct
+                .find(params[:id])
     rescue ActiveRecord::RecordNotFound => _
       redirect_to root_path
   end
