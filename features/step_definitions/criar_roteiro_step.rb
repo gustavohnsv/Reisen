@@ -1,10 +1,16 @@
-Dado('que eu tenho uma conta e estou no meu perfil') do
+Dado('que eu tenho uma conta') do
   @user = User.create!(name: @name, email: @email, password: @password, password_confirmation: @password)
   expect(@user).to_not be_nil
+end
+
+Dado('estou logado') do
   visit new_user_session_path
   fill_in "Email", with: @email
   fill_in "Password", with: @password
   click_button "Log in"
+end
+
+Dado('que estou no meu perfil') do
   expect(current_path).to eq(profile_path(@user.id))
 end
 
