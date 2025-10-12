@@ -8,7 +8,8 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  resources :profiles, only: [:show]
+  resources :profiles, only: [:show, :edit]
+  resources :users, only: [:edit, :update]
 
   get 'my_profile', to: 'profiles#my_profile'
 
@@ -32,5 +33,10 @@ Rails.application.routes.draw do
     get '/mock/gol', to: 'mocks#gol'
     get '/mock/azul', to: 'mocks#azul'
     get '/mock/erro', to: 'mocks#erro'
+  end
+
+  # Rota de desenvolvimento para auto-login rápido (APENAS em development)
+  if Rails.env.development?
+    get '/dev_login', to: 'dev#login'
   end
 end

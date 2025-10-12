@@ -39,3 +39,5 @@ coverage/
 
 # JetBrains IDE's folder
 .idea/
+
+/config/credentials/test.key

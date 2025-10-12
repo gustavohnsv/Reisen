@@ -1,5 +1,9 @@
 <div class="text-center">
     <a href="<%= root_path %>">Reisen</a>
     <a href="<%= root_path %>">Notícias</a>
-    <a href="<%=  root_path %>">Perfil</a>
+        <% if user_signed_in? %>
+            <a href="<%= profile_path(current_user) %>">Perfil</a>
+        <% else %>
+            <a href="<%= new_user_session_path %>">Perfil</a>
+        <% end %>
 </div>

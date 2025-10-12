@@ -1,0 +1,49 @@
+<h1>Editar Perfil</h1>
+
+<%= form_with model: @user, url: user_path(@user), local: true, html: { multipart: true } do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "erro") %> proibiu este usuário de ser salvo:</h2>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, 'Nome' %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email, 'Email' %><br>
+    <%= f.email_field :email %>
+  </div>
+
+  <div class="field">
+    <%= f.label :avatar, 'Imagem de Perfil' %><br>
+    <%= f.file_field :avatar %>
+  </div>
+
+  <% if @user.avatar.attached? %>
+    <div class="field">
+      <p>Preview atual:</p>
+      <%# Only attempt to generate a URL for persisted blobs (unsigned_id requires persistence) %>
+      <% if @user.avatar.blob && @user.avatar.blob.persisted? && @user.avatar.variable? %>
+        <%= image_tag url_for(@user.avatar.variant(resize_to_limit: [200, 200])) %>
+      <% else %>
+        <p>(imagem disponível após salvar)</p>
+      <% end %>
+      <div>
+        <%= f.check_box :remove_avatar %>
+        <%= f.label :remove_avatar, 'Remover imagem atual' %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit 'Salvar' %>
+  </div>
+<% end %>
