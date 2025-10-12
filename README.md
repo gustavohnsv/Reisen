@@ -8,7 +8,7 @@ Um portal completo para planejamento de viagens colaborativo, facilitando a orga
 
 [![Ruby on Rails CI Badge](https://github.com/kaique321123/taskhub/actions/workflows/main.yml/badge.svg)](https://github.com/kaique321123/taskhub/actions/workflows/main.yml)
 
-[![Coverage Status](https://coveralls.io/repos/github/kaique321123/Reisen/badge.svg?branch=main)](https://coveralls.io/github/kaique321123/Reisen?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/gustavohnsv/Reisen/badge.svg)](https://coveralls.io/github/gustavohnsv/Reisen)
 
 [![Maintainability](https://qlty.sh/gh/kaique321123/projects/Reisen/maintainability.svg)](https://qlty.sh/gh/kaique321123/projects/Reisen)
 

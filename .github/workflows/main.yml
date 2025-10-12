@@ -57,3 +57,8 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
           CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: bundle exec cucumber
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
