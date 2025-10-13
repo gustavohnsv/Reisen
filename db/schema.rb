@@ -57,6 +57,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_12_151838) do
     t.index ["user_id"], name: "index_checklists_on_user_id"
   end
 
+  create_table "notices", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.boolean "visible", default: false, null: false
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_notices_on_user_id"
+  end
+
   create_table "participants", force: :cascade do |t|
     t.integer "permission"
     t.integer "user_id", null: false
@@ -125,6 +135,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_12_151838) do
   add_foreign_key "checklist_items", "checklists"
   add_foreign_key "checklist_items", "users"
   add_foreign_key "checklists", "users"
+  add_foreign_key "notices", "users"
   add_foreign_key "participants", "scripts"
   add_foreign_key "participants", "users"
   add_foreign_key "script_comments", "scripts"

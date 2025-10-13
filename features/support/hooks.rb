@@ -18,3 +18,8 @@ Before('@mock_airlines') do
   }
   allow_any_instance_of(ScriptsController).to receive(:airlines).and_return(mocked_airlines)
 end
+
+# garante isolamento para os cenários de aviso
+Before do
+  Notice.delete_all
+end
