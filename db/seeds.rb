@@ -21,39 +21,14 @@ main_user = User.create!(
   password_confirmation: "123456",
 )
 
-main_script = Script.create!(
+Script.create!(
   title: "Viagem para " + Faker::Address::city,
   user: main_user
 )
 
-main_checklist = Checklist.create!(
+Checklist.create!(
   title: Faker::Lorem.sentence,
   user: main_user
 )
 
 puts "Usuário criado: {name=Usuário teste, email=testuser@example.com, password=123456}"
-
-5.times do
-  user = User.create!(
-    name: Faker::Name.name,
-    email: Faker::Internet.email,
-    password: "password",
-    password_confirmation: "password"
-  )
-
-  rand(2..5).times do
-    Script.create!(
-        title: "Viagem para " + Faker::Address::city,
-        user: user
-      )
-  end
-
-  rand(1..3).times do
-    Checklist.create!(
-      title: Faker::Lorem.sentence,
-      user: user
-    )
-  end
-end
-
-puts "Seed finalizado! Criados #{User.count} usuários, #{Script.count} roteiros e #{Checklist.count} checklists"

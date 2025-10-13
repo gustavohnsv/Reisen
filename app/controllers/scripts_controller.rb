@@ -42,14 +42,18 @@ class ScriptsController < ApplicationController
   private
 
   def set_script
-    if current_user.nil?
+    if current_user
+      @script = Script
+                  .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
+                  .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
+                  .distinct
+                  .find(params[:id])
+    elsif params[:token].present?
+      @script = Script.find_by(id: params[:id], shareable_token: params[:token])
+    end
+    if @script.nil?
       redirect_to root_path, alert: "Acesso negado" and return
     end
-    @script = Script
-                .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
-                .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
-                .distinct
-                .find(params[:id])
     rescue ActiveRecord::RecordNotFound => _
       redirect_to root_path
   end

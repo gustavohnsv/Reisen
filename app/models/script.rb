@@ -1,4 +1,6 @@
 class Script < ApplicationRecord
+  has_secure_token :shareable_token
+
   belongs_to :user
 
   has_many :participants, dependent: :destroy
