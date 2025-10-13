@@ -15,6 +15,13 @@
   <% end %>
   </div>
 <% end %>
+<% unless @checklists.nil? %>
+  <div style="display: flex; flex-direction: column">
+    <% @checklists&.each do |c| %>
+      <%= link_to c.title, checklist_path(c.id), method: :get %>
+    <% end %>
+  </div>
+<% end %>
 <% if user_signed_in? %>
   <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" } %>
 <% end %>
