@@ -12,13 +12,8 @@ RSpec.describe "layouts/_header", type: :view do
     expect(rendered).to have_link("Reisen", href: root_path)
   end
 
-  it 'exibe link para a página de Notícias' do
-    # Não tem a implementação correta para notícias (talvez vale remover)
-    expect(rendered).to have_link("Notícias", href: root_path)
-  end
-
-  it 'exibe link para a página de Perfil' do
+  it 'exibe link para a página de Login' do
     # Quando não autenticado, o link de Perfil aponta para a página de login
-    expect(rendered).to have_link("Perfil", href: new_user_session_path)
+    expect(rendered).to have_link("Login", href: new_user_session_path)
   end
 end
