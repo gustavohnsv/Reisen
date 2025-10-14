@@ -1,9 +1,19 @@
-<div class="text-center">
-    <a href="<%= root_path %>">Reisen</a>
-    <a href="<%= root_path %>">Notícias</a>
-        <% if user_signed_in? %>
-            <a href="<%= profile_path(current_user) %>">Perfil</a>
-        <% else %>
-            <a href="<%= new_user_session_path %>">Perfil</a>
-        <% end %>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <%= link_to "Reisen", root_path, class: "navbar-brand" %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <% if user_signed_in? %>
+            <%= link_to "Perfil", profile_path(current_user), class: "nav-link" %>
+          <% else %>
+            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
