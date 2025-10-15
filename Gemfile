@@ -55,6 +55,7 @@ group :development, :test do
   gem "database_cleaner-active_record"
   gem 'rails-controller-testing'
   gem "simplecov", require: false
+  gem "simplecov-lcov"
   gem "coveralls_reborn", "~> 0.28", require: false
   gem "selenium-webdriver", "~> 4.8"
   gem "reek", require: false

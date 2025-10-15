@@ -83,4 +83,4 @@ jobs:
         uses: qltysh/qlty-action/coverage@v2
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
-          files: target/lcov.info
+          files: 'coverage/lcov/*.lcov'
