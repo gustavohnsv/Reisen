@@ -35,12 +35,14 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# GRUPO DE PRODUÇÃO (PARA O HEROKU)
+# Grupo para produção (Heroku)
 group :production do
-  gem "pg"
+  gem "pg", "~> 1.1"
 end
-group :test do
-  gem 'rails-controller-testing'
+
+# Grupo para desenvolvimento (Local)
+group :development, :test do
+  gem "sqlite3", "~> 1.4"
 end
 
 
@@ -54,6 +56,7 @@ group :development, :test do
   gem "cucumber-rails", require: false
   gem "capybara"
   gem "database_cleaner-active_record"
+  gem 'rails-controller-testing'
   gem "simplecov", require: false
   gem "coveralls_reborn", "~> 0.28", require: false
   gem "selenium-webdriver", "~> 4.8"
