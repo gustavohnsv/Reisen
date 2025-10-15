@@ -1,9 +1,9 @@
 name: Ruby on Rails CI
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
+    branches: [ main, develop ]
+  push:
     branches: [ main, develop ]
 
 jobs:
