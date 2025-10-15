@@ -1,6 +1,8 @@
 class Script < ApplicationRecord
   has_secure_token :shareable_token
 
+  validates :title, presence: true
+
   belongs_to :user
 
   has_many :participants, dependent: :destroy

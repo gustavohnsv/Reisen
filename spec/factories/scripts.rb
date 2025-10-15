@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :script do
-    title { "MyString" }
+    sequence(:title) { |n| "Roteiro #{n}" }
     user { nil }
   end
 end

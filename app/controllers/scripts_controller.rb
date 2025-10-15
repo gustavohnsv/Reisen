@@ -1,7 +1,7 @@
 class ScriptsController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :news]
-  before_action :set_script, only: [:show, :edit, :update, :destroy, :news]
-  before_action :check_ownership, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:show]
+  before_action :set_script, only: [:show, :edit, :update]
+  before_action :check_ownership, only: [:edit, :update]
   def show
     @airlines = airlines
   end
@@ -12,7 +12,7 @@ class ScriptsController < ApplicationController
 
   def create
     @script = current_user.scripts.new(script_params)
-    if @script.save
+    if @script&.save
       redirect_to @script, notice: "Roteiro criado com sucesso"
     else
       render :new, status: :unprocessable_content
@@ -20,10 +20,11 @@ class ScriptsController < ApplicationController
   end
 
   def edit
+    # Já tem os dados do roteiro devido ao 'before_action :set_script'
   end
 
   def update
-    if @script.update(script_params)
+    if @script&.update(script_params)
       redirect_to @script, notice: "Roteiro editado com sucesso"
     else
       render :edit, status: :unprocessable_content
@@ -31,12 +32,12 @@ class ScriptsController < ApplicationController
   end
 
   def destroy
-    @script.destroy
-    redirect_to root_path, notice: "Roteiro deletado com sucesso"
-  end
-
-  def news
-    render plain: 'Página dedicadas a notícias relacionadas ao destino da viagem :)'
+    if (@script = current_user.scripts.find(params[:id]))
+      @script&.destroy
+      redirect_to root_path, notice: "Roteiro deletado com sucesso"
+    end
+  rescue ActiveRecord::RecordNotFound => _
+    redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 
   private
@@ -52,10 +53,10 @@ class ScriptsController < ApplicationController
       @script = Script.find_by(id: params[:id], shareable_token: params[:token])
     end
     if @script.nil?
-      redirect_to root_path, alert: "Acesso negado" and return
+      redirect_to root_path, alert: 'Você não tem permissão para fazer isso' and return
     end
     rescue ActiveRecord::RecordNotFound => _
-      redirect_to root_path
+      redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 
   def script_params
@@ -63,7 +64,7 @@ class ScriptsController < ApplicationController
   end
 
   def check_ownership
-    unless @script.user == current_user
+    unless @script&.user == current_user
       redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
     end
   end

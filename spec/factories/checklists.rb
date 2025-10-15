@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :checklist do
-    title { "MyString" }
+    sequence(:title) { |n| "Checklist #{n}" }
     user { nil }
   end
 end
