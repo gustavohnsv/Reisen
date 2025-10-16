@@ -106,7 +106,7 @@ RSpec.describe GoogleNewsService do
       primeira_noticia = result.first
       expect(primeira_noticia[:title]).to eq("Melhores pontos turísticos de #{location}")
       expect(primeira_noticia[:description]).to eq('Descubra os melhores lugares para visitar')
-      expect(primeira_noticia[:pubDate]).to eq('Thu, 13 Mar 2025 07:00:00 GMT')
+      expect(primeira_noticia[:pubDate]).to eq('13/03/2025')
       expect(primeira_noticia[:link]).to eq('https://exemplo.com/noticia-1')
       
     end
