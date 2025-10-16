@@ -2,17 +2,13 @@ require 'net/http'
 require 'uri'
 require 'rss'
 require 'httparty'
+require 'cgi'
 
 class GoogleNewsService
   class << self
     def fetch(location:)
       uri = google_news_uri(location:)
       response = HTTParty.get(uri, follow_redirects: true)
-
-      # Debug
-      puts "URL: #{uri}"
-      puts "Status: #{response.code}"
-      puts "Body (primeiros 500 chars): #{response.body[0..500]}"
 
       rss = RSS::Parser.parse(response.body)
 
@@ -36,7 +32,20 @@ class GoogleNewsService
 
     def strip_html(html)
       # Remove tags HTML básicas
-      html.gsub(/<[^>]*>/, '').strip
+      text = html.gsub(/<[^>]*>/, '').strip
+      # Decodifica entidades HTML (&nbsp; &amp; etc)
+      text = CGI.unescapeHTML(text)
+
+      # Remove entidades HTML comuns
+      text.gsub!('&nbsp;', ' ')
+      text.gsub!('&amp;', '&')
+      text.gsub!('&quot;', '"')
+      text.gsub!('&apos;', "'")
+      text.gsub!('&lt;', '<')
+      text.gsub!('&gt;', '>')
+      
+      # Remove espaços múltiplos
+      text.gsub(/\s+/, ' ').strip
     end
 
   end
