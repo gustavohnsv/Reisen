@@ -12,5 +12,5 @@ Dado que existe um aviso com o título "Reunião de grupo" e o corpo "Reunião a
 Cenário: Visualizar avisos importantes na página inicial
 Quando acesso a página inicial
 Então devo ver o texto "Avisos importantes"
-E devo ver um aviso com o título "Reunião de grupo"
+E devo ver um aviso com o texto "Reunião de grupo"
 E devo ver o texto "Reunião amanhã às 10h"
