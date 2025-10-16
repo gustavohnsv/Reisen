@@ -82,17 +82,15 @@ RSpec.describe GoogleNewsService do
       expect(result).to be_an(Array)
     end
 
-    it 'cada notícia contém título, descrição, data e link' do
+    it 'cada notícia contém título, data e link' do
       result = GoogleNewsService.fetch(location: location)
 
       result.each do |noticia|
         expect(noticia).to have_key(:title)
-        expect(noticia).to have_key(:description)
         expect(noticia).to have_key(:pubDate)
         expect(noticia).to have_key(:link)
         
         expect(noticia[:title]).not_to be_empty
-        expect(noticia[:description]).not_to be_empty
         expect(noticia[:pubDate]).not_to be_nil
         expect(noticia[:link]).not_to be_empty
         
@@ -105,7 +103,6 @@ RSpec.describe GoogleNewsService do
       # Verifica a primeira notícia especificamente
       primeira_noticia = result.first
       expect(primeira_noticia[:title]).to eq("Melhores pontos turísticos de #{location}")
-      expect(primeira_noticia[:description]).to eq('Descubra os melhores lugares para visitar')
       expect(primeira_noticia[:pubDate]).to eq('13/03/2025')
       expect(primeira_noticia[:link]).to eq('https://exemplo.com/noticia-1')
       

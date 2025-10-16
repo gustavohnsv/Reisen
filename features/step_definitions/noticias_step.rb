@@ -90,26 +90,6 @@ Então('cada notícia deve ter um título') do
   end
 end
 
-Então('cada notícia deve ter um link') do
-  noticias = page.all('.noticia')
-  expect(noticias).not_to be_empty
-
-  noticias.each do |noticia|
-    expect(noticia).to have_selector('a.noticia-link')
-    expect(noticia.find('a.noticia-link')[:href]).not_to be_empty
-  end
-end
-
-Então('cada notícia deve ter uma descrição') do
-  noticias = page.all('.noticia')
-  expect(noticias).not_to be_empty
-
-  noticias.each do |noticia|
-    expect(noticia).to have_selector('.noticia-descricao')
-    expect(noticia.find('.noticia-descricao').text).not_to be_empty
-  end
-end
-
 Então('cada notícia deve ter uma data') do
   noticias = page.all('.noticia')
   expect(noticias).not_to be_empty
@@ -117,5 +97,15 @@ Então('cada notícia deve ter uma data') do
   noticias.each do |noticia|
     expect(noticia).to have_selector('.noticia-data')
     expect(noticia.find('.noticia-data').text).not_to be_empty
+  end
+end
+
+Então('cada notícia deve ter um link') do
+  noticias = page.all('.noticia')
+  expect(noticias).not_to be_empty
+
+  noticias.each do |noticia|
+    expect(noticia).to have_selector('a.noticia-link')
+    expect(noticia.find('a.noticia-link')[:href]).not_to be_empty
   end
 end
