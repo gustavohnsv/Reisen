@@ -44,3 +44,5 @@ coverage/
 config/master.key
 config/credentials/test.key
 config/credentials/*.key
+/vendor/bundle
+.bundle/
