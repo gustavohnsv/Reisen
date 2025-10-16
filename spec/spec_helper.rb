@@ -16,6 +16,7 @@
 require 'simplecov'
 require 'simplecov-lcov'
 require 'coveralls'
+require 'webmock/rspec'
 
 
 SimpleCov.formatters = [

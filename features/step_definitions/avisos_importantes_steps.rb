@@ -3,8 +3,8 @@ Dado('que existe um aviso com o título {string} e o corpo {string} marcado como
   Notice.create!(title: titulo, body: corpo, visible: true)
 end
 
-Então('devo ver um aviso com o título {string}') do |titulo|
-  expect(page).to have_content(titulo)
+Então('devo ver um aviso com o texto {string}') do |texto|
+  expect(page).to have_content(texto)
 end
 
 Então('devo ver o texto {string}') do |texto|
