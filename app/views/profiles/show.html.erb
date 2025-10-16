@@ -1,20 +1,74 @@
-<h1> Logado como: <%=  @user.name %> </h1>
-<span> Atualmente na página: profiles#show </span>
-<% if @user.avatar.attached? %>
-  <div class="profile-avatar">
-    <%# Show the original blob; variants may require image_processing gem in the environment %>
-    <%= image_tag url_for(@user.avatar), alt: "Avatar de "+@user.name %>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-10 col-md-6 mx-auto">
+      <div class="card p-4 shadow-sm">
+        <div class="d-flex align-items-start">
+          <div class="me-4 flex-shrink-0">
+            <% if @user.avatar.attached? %>
+              <%= image_tag url_for(@user.avatar), alt: "Avatar de #{@user.name}", class: "rounded-circle", style: "width:96px; height:96px; object-fit:cover;" %>
+            <% else %>
+              <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:96px; height:96px; font-size:32px;">
+                <%= @user.name.to_s[0]&.upcase %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="flex-grow-1">
+            <h2 class="mb-0"><%= @user.name %></h2>
+            <small class="text-muted d-block mb-2"><%= @user.email %></small>
+
+            <% unless controller.action_name == 'edit' %>
+              <div class="d-flex flex-wrap gap-2">
+                <%= link_to "Editar Perfil", (defined?(edit_profile_path) ? edit_profile_path(@user) : "#"), class: "btn btn-outline-primary btn-sm" %>
+                <%= button_to "Novo roteiro", new_script_path, method: :get, class: "btn btn-primary btn-sm", form: { class: "d-inline" } %>
+                <%= button_to "Nova checklist", new_checklist_path, method: :get, class: "btn btn-secondary btn-sm", form: { class: "d-inline" } %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <% unless controller.action_name == 'edit' %>
+          <hr class="my-4">
+
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Roteiros</h5>
+              <% if @scripts.present? && @scripts.any? %>
+                <ul class="list-unstyled">
+                  <% @scripts.each do |s| %>
+                    <li class="mb-2">
+                      <%= link_to s.title, script_path(s), class: "text-decoration-none" %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <p class="text-muted mb-0">Nenhum roteiro encontrado.</p>
+              <% end %>
+            </div>
+
+            <div class="col-md-6">
+              <h5>Checklists</h5>
+              <% if @checklists.present? && @checklists.any? %>
+                <ul class="list-unstyled">
+                  <% @checklists.each do |c| %>
+                    <li class="mb-2">
+                      <%= link_to c.title, checklist_path(c), class: "text-decoration-none" %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <p class="text-muted mb-0">Nenhuma checklist encontrada.</p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="mt-3 text-end">
+          <% if user_signed_in? %>
+            <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-link text-danger" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-<% end %>
-<%= button_to "Novo roteiro", new_script_path, method: :get %>
-<%= button_to "Nova checklist", new_checklist_path, method: :get %>
-<% unless @scripts.nil? %>
-  <div style="display: flex; flex-direction: column">
-  <% @scripts&.each do |s| %>
-    <%= link_to s.title, script_path(s.id), method: :get %>
-  <% end %>
-  </div>
-<% end %>
-<% if user_signed_in? %>
-  <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" } %>
-<% end %>
+</div>

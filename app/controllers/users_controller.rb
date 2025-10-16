@@ -6,15 +6,25 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @user.update(user_params)
-        # If the remove_avatar checkbox was checked, purge the attachment
-        if params[:user] && params[:user][:remove_avatar] == '1'
-          @user.avatar.purge
-        end
+    # dup para manipular sem enviar flag inválida ao update
+    filtered_params = user_params.dup
+
+    # Não sobrescrever senha se campos vierem vazios
+    if filtered_params[:password].present? == false && filtered_params[:password_confirmation].present? == false
+      filtered_params.delete(:password)
+      filtered_params.delete(:password_confirmation)
+    end
+
+    # remover flag (não é coluna do model) antes do update
+    filtered_params.delete(:remove_avatar)
+
+    if @user.update(filtered_params)
+      # remover attachment separadamente
+      if params[:user] && params[:user][:remove_avatar] == '1'
+        @user.avatar.purge_later
+      end
       redirect_to profile_path(@user), notice: 'Usuário atualizado com sucesso.'
     else
-      # Render the profiles edit form where errors and the avatar field are displayed
-      @user = @user
       render 'profiles/edit', status: :unprocessable_entity
     end
   end
@@ -27,17 +37,13 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    # Define o usuário como o usuário atual
-    @user = User.find params[:id]
-    unless @user == current_user
-      redirect_to root_path, alert: "Acesso negado"
-    end
-    rescue ActiveRecord::RecordNotFound => _
-      redirect_to root_path
+    @user = User.find(params[:id])
+    redirect_to root_path, alert: "Acesso negado" unless @user == current_user
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path
   end
 
   def user_params
-    # Define quais parâmetros podem ser atualizados do usuário
-  params.require(:user).permit(:name, :email, :password, :password_confirmation, :avatar, :remove_avatar)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :avatar)
   end
 end

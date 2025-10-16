@@ -16,7 +16,7 @@ Dado('que eu estou na página principal e não tenho uma conta') do
 end
 
 Quando('clicar em {string}') do |string|
-  click_button string
+  click_on string, match: :first
 end
 
 Então('devo ser redirecionado para a tela de cadastro') do

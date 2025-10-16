@@ -10,9 +10,17 @@ Funcionalidade: Acessar roteiro compartilhado
     # Quando: Ação que o usuário irá fazer
     # Então: Resultado esperado da ação
 
-    #Cenário: Acesso bem-sucedido ao roteiro com usuário logado
-    #    Dado que sou um participante da viagem
-    #    E o documento compartilhado existe
-    #    Quando eu visito a página de perfil
-    #    Quando eu clico no botão "Acessar plano"
-    #    Então eu devo ser redirecionado ao documento compartilhado
+    Contexto:
+      Dado que meu nome é "John Doe"
+      E que meu email é "johndoe@example.com"
+      E que minha senha é "password"
+      E que eu tenho uma conta
+      E que tenho um roteiro chamado "Viagem para Paris"
+      E estou logado
+      E que estou no meu perfil
+
+    Cenário: Acessar roteiro logado
+      Dado que eu estou na página de perfil
+      E que vejo um roteiro chamado "Viagem para Paris"
+      Quando clicar no link "Viagem para Paris"
+      Então devo ser redirecionado para o roteiro "Viagem para Paris"

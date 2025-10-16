@@ -69,7 +69,8 @@ end
 
 ### Helper placeholders (implemente no seu test helper/factory)
 def create_user_and_add_to_group(username, group_name)
-  user = User.find_by(email: "#{username}@example.com") || User.create!(username: username, display_name: username.capitalize, email: "#{username}@example.com")
+  # The application stores display name in `name`, not `username`.
+  user = User.find_by(email: "#{username}@example.com") || User.create!(name: username, email: "#{username}@example.com", password: 'password123')
   # NOTE: this project doesn't have a Group model scaffold in the workspace;
   # if you have a Group model, adapt the code below to attach the user to the group.
   user
@@ -111,7 +112,7 @@ def create_browser_session(username)
   end
 
   session = Capybara::Session.new(driver_name)
-  user = (username == @user1.username ? @user1 : @user2)
+  user = (username == @user1.name ? @user1 : @user2)
   login_as(user, scope: :user, run_callbacks: false)
   if defined?(perfil_documento_path) && @perfil
     session.visit perfil_documento_path(@perfil.id, @document.id)

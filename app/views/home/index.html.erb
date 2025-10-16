@@ -1,26 +1,29 @@
-<div class="container mt-5">
+<div class="container mt-5" style="max-width: 720px;">
   <header class="text-center mb-4">
     <h1 class="display-4 text-primary">Reisen</h1>
-    <p class="lead">Planejador de Viagens Colaborativo</p>
+    <p class="lead text-muted">Planejador de Viagens Colaborativo</p>
   </header>
 
-  <main class="card p-4 shadow-sm text-center">
+  <main class="card p-4 p-md-5 shadow-sm text-center">
     <h2 class="h4 mb-3">Bem-vindo</h2>
     <p>Sistema de planejamento de viagens em desenvolvimento.</p>
-    <%= button_to "Sign Up", new_user_registration_path, method: :get %>
-    <%= button_to "Login", new_user_session_path, method: :get %>
+
+    <div class="d-grid gap-2 col-8 mx-auto mt-4">
+      <%= button_to "Sign Up", new_user_registration_path, method: :get, class: "btn btn-primary btn-lg w-100" %>
+      <%= button_to "Login", new_user_session_path, method: :get, class: "btn btn-outline-secondary btn-lg w-100" %>
+    </div>
+
     <% if @notices.present? %>
-      <section class="mt-4">
-        <h3 class="h5 text-danger">Avisos importantes</h3>
-        <div class="notices-list">
-          <% @notices.each do |notice| %>
-            <article class="important-notice card p-3 mb-2">
-              <h4 class="h6"><%= notice.title %></h4>
-              <p class="mb-0"><%= truncate(notice.body, length: 200) %></p>
-            </article>
-          <% end %>
-        </div>
-      </section>
+      <hr class="my-4"> <section class="mt-4 text-start"> <h3 class="h5 text-center text-body-secondary mb-3">Avisos importantes</h3>
+    <div class="notices-list">
+      <% @notices.each do |notice| %>
+        <article class="alert alert-info">
+          <h4 class="alert-heading h6"><%= notice.title %></h4>
+          <p class="mb-0"><%= truncate(notice.body, length: 200) %></p>
+        </article>
+      <% end %>
+    </div>
+  </section>
     <% end %>
   </main>
 </div>

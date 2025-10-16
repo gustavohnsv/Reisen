@@ -1,6 +1,12 @@
 <h1> Logado como: <%=  @script.user.name %> </h1>
 <h1> <%= @script.title %> </h1>
 <span> Atualmente na página: scritps#show </span>
-<% @airlines.each do |name, link| %>
+<% @airlines&.each do |name, link| %>
   <a href="<%= link %>" target="_blank"> <%= name %> </a>
 <% end %>
+<button type="button"
+        data-controller="clipboard"
+        data-action="click->clipboard#copy"
+        data-clipboard-content-value="<%= script_url(@script, token: @script.shareable_token) %>">
+  Copiar link de compartilhamento
+</button>

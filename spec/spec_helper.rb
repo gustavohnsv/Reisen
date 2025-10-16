@@ -14,14 +14,15 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'simplecov'
+require 'simplecov-lcov'
 require 'coveralls'
 require 'webmock/rspec'
 
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-])
+  SimpleCov::Formatter::LcovFormatter
+]
 SimpleCov.start 'rails'
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

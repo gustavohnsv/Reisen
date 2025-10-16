@@ -11,6 +11,7 @@ class ProfilesController < ApplicationController
                  .left_outer_joins(:participants)
                  .where('scripts.user_id = :id OR participants.user_id = :id', id: @user.id)
                  .distinct
+    @checklists = current_user.checklists
   rescue ActiveRecord::RecordNotFound => _
       redirect_to root_path
   end

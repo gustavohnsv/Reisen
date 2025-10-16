@@ -10,7 +10,15 @@ Funcionalidade: Acesso roteiro compartilhado como convidado
     # Quando: Ação que o usuário irá fazer
     # Então: Resultado esperado da ação
 
-  #Cenário: Acesso bem-sucedido ao roteiro sem usuário logado
-  #  Dado que existe um documento compartilhado
-  #  Quando eu acessar o link público do documento
-  #  Então eu devo ver o conteúdo do documento
+  Contexto:
+    Dado que existe um token para o roteiro "Viagem para Paris" de "John Doe"
+
+  Cenário: Acesso ao roteiro sem login
+    Dado que eu estou na página principal e não tenho uma conta
+    Quando eu visitar o link para o roteiro de "John Doe"
+    Então devo ser redirecionado para a tela do roteiro de "John Doe"
+
+  Cenário: Acesso ao roteiro sem login com token incorreto
+    Dado que eu estou na página principal e não tenho uma conta
+    Quando eu visitar o link para o roteiro de "John Doe" sem o token
+    Então devo ser redirecionado para a página principal
