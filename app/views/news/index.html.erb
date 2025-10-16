@@ -1,0 +1,16 @@
+<h1>Notícias de Turismo</h1>
+
+<% if @news.present? %>
+  <div class="noticias-container">
+    <% @news.each do |noticia| %>
+      <div class="noticia">
+        <h2 class="noticia-titulo"><%= noticia[:title] %></h2>
+        <p class="noticia-descricao"><%= noticia[:description] %></p>
+        <p class="noticia-data"><%= noticia[:pubDate] %></p>
+        <a href="<%= noticia[:link] %>" class="noticia-link" target="_blank">Ler mais</a>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>Nenhuma notícia encontrada.</p>
+<% end %>

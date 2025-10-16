@@ -35,6 +35,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+gem "rss"
+
+gem "httparty"
+
 # GRUPO DE PRODUÇÃO (PARA O HEROKU)
 group :production do
   gem "pg"
@@ -60,6 +64,7 @@ group :development, :test do
   gem "reek", require: false
   gem "faker"
   gem "launchy"
+  gem "webmock"
 end
 
 group :development do

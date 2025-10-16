@@ -39,4 +39,6 @@ Rails.application.routes.draw do
   if Rails.env.development?
     get '/dev_login', to: 'dev#login'
   end
+
+  get '/news', to: 'news#index'
 end

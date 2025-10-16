@@ -41,3 +41,5 @@ coverage/
 .idea/
 
 /config/credentials/test.key
+Gemfile
+Gemfile

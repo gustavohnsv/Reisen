@@ -15,6 +15,7 @@
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'simplecov'
 require 'coveralls'
+require 'webmock/rspec'
 
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
