@@ -65,11 +65,4 @@
     <%= f.submit 'Salvar', class: "btn btn-primary" %>
   </div>
 <% end %>
-
-<%# Botões fora do form — ficam lado a lado com gap, use botão pequeno para não atrapalhar layout %>
-<div class="mt-3">
-  <div class="d-flex gap-2 align-items-center">
-    <%= button_to "Novo roteiro", new_script_path, method: :get, class: "btn btn-primary btn-sm" %>
-    <%= button_to "Nova checklist", new_checklist_path, method: :get, class: "btn btn-secondary btn-sm" %>
-  </div>
 </div>
