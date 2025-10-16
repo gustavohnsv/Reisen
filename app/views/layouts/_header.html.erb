@@ -1,3 +1,4 @@
+<%# filepath: /home/kaique/Área de Trabalho/Reisen/app/views/layouts/_header.html.erb %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <%= image_tag "reisen-logo.png", style: "filter: invert(1); height: 2rem; transform: scale(1.5)" %>
@@ -5,15 +6,45 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <% if user_signed_in? %>
-            <%= link_to "Perfil", profile_path(current_user), class: "nav-link" %>
-          <% else %>
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <% if current_user.avatar.attached? %>
+                <%= image_tag url_for(current_user.avatar), class: "rounded-circle", style: "height:28px; width:28px; object-fit:cover; margin-right:8px;" %>
+              <% end %>
+              <span><%= current_user.name %></span>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+              <li class="px-3 py-2">
+                <div class="d-flex align-items-center">
+                  <% if current_user.avatar.attached? %>
+                    <%= image_tag url_for(current_user.avatar), class: "rounded-circle me-2", style: "height:56px; width:56px; object-fit:cover;" %>
+                  <% else %>
+                    <div class="rounded-circle bg-secondary me-2" style="width:56px; height:56px;"></div>
+                  <% end %>
+                  <div>
+                    <strong><%= current_user.name %></strong><br>
+                    <small class="text-muted"><%= current_user.email %></small>
+                  </div>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= link_to "Meu Perfil", profile_path(current_user), class: "dropdown-item" %></li>
+              <li><%= link_to "Editar Perfil", edit_profile_path(current_user), class: "dropdown-item" %></li>
+              <li>
+                <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item", data: { confirm: "Tem certeza?" } %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
             <%= link_to "Login", new_user_session_path, class: "nav-link" %>
-          <% end %>
-        </li>
+          </li>
+        <% end %>
       </ul>
     </div>
   </div>
