@@ -12,4 +12,9 @@
  *
  *= require_tree .
  *= require_self
+ *= require material_icons
  */
+
+.field_with_errors {
+    display: inline;
+}

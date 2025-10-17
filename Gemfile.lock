@@ -241,6 +241,8 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
+    material_icons (4.0.0)
+      railties (>= 3.2)
     matrix (0.4.3)
     memoist3 (1.0.0)
     mini_mime (1.1.5)
@@ -481,6 +483,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   launchy
+  material_icons
   pg (~> 1.1)
   puma (>= 7.0.3)
   rails (~> 7.1.3)

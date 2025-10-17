@@ -14,16 +14,16 @@ Rails.application.routes.draw do
   get 'my_profile', to: 'profiles#my_profile'
 
   resources :scripts, except: [:index] do
-    resources :comments, only: [:create, :destroy]
-    resources :spents, only: [:create]
-    resources :items, only: [:create, :update, :destroy]
+    resources :comments, only: [:create, :destroy], controller: 'scripts/comments'
+    resources :spents, only: [:create], controller: 'scripts/spents'
+    resources :script_items, only: [:create, :update, :destroy], controller: 'scripts/items'
     member do
       get :news
     end
   end
 
   resources :checklists, except: [:index] do
-    resources :items, only: [:create, :update, :destroy]
+    resources :checklist_items, only: [:create, :update, :destroy], controller: 'checklists/items'
   end
 
   # Rotas destinadas ao ambiente de testes

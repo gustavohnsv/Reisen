@@ -3,6 +3,7 @@ class ChecklistsController < ApplicationController
   before_action :set_checklist, only: [:show, :edit, :update, :destroy]
   def show
     # Já tem os dados da checklist devido ao 'before_action :set_checklist'
+    @item = @checklist.checklist_items.build
   end
 
   def new
@@ -44,6 +45,9 @@ class ChecklistsController < ApplicationController
   end
 
   def checklist_params
-    params.require(:checklist).permit(:title)
+    params.require(:checklist).permit(
+      :title,
+      checklist_items_attributes: [:id, :description, :_destroy]
+      )
   end
 end

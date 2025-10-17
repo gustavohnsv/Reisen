@@ -1,0 +1,17 @@
+<%= form_with(model: [checklist, item], data: {controller: 'autosave'}) do |f1| %>
+  <%= f1.check_box :check, data: {action: "change->autosave#save"}, id: "edit-item-check_#{item.id}" %>
+<% end %>
+<%= form_with(model: [checklist, item], data: {controller: 'autosave'}) do |f2| %>
+    <%#= f2.label :description %>
+    <%= f2.text_field :description,
+                     value: item.description,
+                     autofocus: false,
+                     autocomplete: "description" ,
+                     data: {action: "blur->autosave#save"},
+                      id: "edit-item-description_#{item.id}"
+    %>
+    <%= f2.button do %>
+      <%= content_tag(:i, "check", class: "material-icons") %>
+    <% end %>
+<% end %>
+<%= button_to content_tag(:i, "close", class: "material-icons"), [checklist, item], method: :delete %>
