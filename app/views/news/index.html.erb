@@ -1,16 +1,27 @@
-<h1>Notícias de Turismo</h1>
+<div class="container mt-4">
+  <h1 class="mb-4 text-center">Notícias de Turismo</h1>
 
-<% if @news.present? %>
-  <div class="noticias-container">
-    <% @news.each do |noticia| %>
-      <div class="noticia">
-        <h2 class="noticia-titulo"><%= noticia[:title] %></h2>
-        <p class="noticia-descricao"><%= noticia[:description] %></p>
-        <p class="noticia-data"><%= noticia[:pubDate] %></p>
-        <a href="<%= noticia[:link] %>" class="noticia-link" target="_blank">Ler mais</a>
-      </div>
-    <% end %>
-  </div>
-<% else %>
-  <p>Nenhuma notícia encontrada.</p>
-<% end %>
+  <form method="get" action="/news" class="mb-3 text-center">
+  <input type="text" name="location" placeholder="Buscar por local..." class="form-control d-inline w-50">
+  <button type="submit" class="btn btn-success">Buscar</button>
+  </form>
+
+  <% if @news.present? %>
+    <div class="row">
+      <% @news.each do |article| %>
+        <div class="col-md-6 col-lg-4 mb-4 noticia">
+          <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title noticia-titulo"><%= article[:title] %></h5>
+              <p class="card-text text-muted small noticia-data"><%= article[:pubDate] %></p>
+
+              <a href="<%= article[:link] %>" target="_blank" class="btn btn-sm btn-primary noticia-link">Ler mais</a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-muted">Nenhuma notícia encontrada.</p>
+  <% end %>
+</div>
