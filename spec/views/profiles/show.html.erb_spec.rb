@@ -8,6 +8,7 @@ RSpec.describe "profiles/show.html.erb", type: :view do
       email: 'johnsmith@example.com',
       password: 'password',
       password_confirmation: 'password',
+      confirmed_at: Time.current
     )
   end
 

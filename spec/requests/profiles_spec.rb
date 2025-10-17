@@ -5,7 +5,8 @@ RSpec.describe "Profiles", type: :request do
     name: 'John Smith',
     email: 'johnsmith@example.com',
     password: 'password',
-    password_confirmation: 'password'
+    password_confirmation: 'password',
+    confirmed_at: Time.current,
   )}
 
   describe 'GET /profiles/:id' do

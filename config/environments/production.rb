@@ -94,4 +94,23 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # Use https:// se o seu site no Heroku tiver SSL (o que é o padrão).
+  config.action_mailer.default_url_options = { host: 'https://reisen-rails.tech' }
+
+  # Informa ao Rails para não engolir erros de envio de e-mail em produção.
+  config.action_mailer.raise_delivery_errors = true
+
+  # Diz para o Rails usar o protocolo SMTP.
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = {
+    :user_name            => ENV['SMTP_USERNAME'],
+    :password             => ENV['SMTP_PASSWORD'],
+    :domain               => ENV['SMTP_DOMAIN'],
+    :address              => ENV['SMTP_SERVER'],
+    :port                 => ENV['SMTP_PORT'],
+    :authentication       => :plain,
+    :enable_starttls_auto => true
+  }
 end

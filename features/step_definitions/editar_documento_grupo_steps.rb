@@ -70,7 +70,7 @@ end
 ### Helper placeholders (implemente no seu test helper/factory)
 def create_user_and_add_to_group(username, group_name)
   # The application stores display name in `name`, not `username`.
-  user = User.find_by(email: "#{username}@example.com") || User.create!(name: username, email: "#{username}@example.com", password: 'password123')
+  user = User.find_by(email: "#{username}@example.com") || FactoryBot.create(:user, name: username, email: "#{username}@example.com", password: 'password123')
   # NOTE: this project doesn't have a Group model scaffold in the workspace;
   # if you have a Group model, adapt the code below to attach the user to the group.
   user

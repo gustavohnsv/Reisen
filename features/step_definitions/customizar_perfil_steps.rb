@@ -2,7 +2,7 @@ Dado('que estou logado como {string}') do |username|
   # Ensure user exists (this app stores display name in `name`) and sign in
   user = User.find_by(name: username)
   unless user
-    user = User.create!(name: username, email: "#{username}@teste.com", password: 'password123')
+    user = FactoryBot.create(:user, name: username, email: "#{username}@teste.com", password: 'password123', password_confirmation: 'password123')
   end
   # keep user available to later steps
   @current_user = user
@@ -71,7 +71,7 @@ Então('devo ver uma mensagem de erro indicando que o nome de usuário não pode
 end
 
 Dado('que já existe um usuário com nome {string}') do |nome|
-  User.create!(name: nome, email: "#{nome}@teste.com", password: 'password123')
+  FactoryBot.create(:user, name: nome, email: "#{nome}@teste.com", password: 'password123', password_confirmation: 'password123')
 end
 
 Então('devo ver uma mensagem de erro indicando que o nome de usuário já está em uso') do

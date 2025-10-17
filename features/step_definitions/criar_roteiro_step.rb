@@ -1,5 +1,5 @@
 Dado('que eu tenho uma conta') do
-  @user = User.create!(name: @name, email: @email, password: @password, password_confirmation: @password)
+  @user = FactoryBot.create(:user, name: @name, email: @email, password: @password, password_confirmation: @password)
   expect(@user).to_not be_nil
 end
 

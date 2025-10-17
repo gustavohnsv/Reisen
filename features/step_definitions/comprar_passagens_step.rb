@@ -1,5 +1,5 @@
 Dado('que tenho um roteiro chamado {string}') do |string|
-  @script = @user.scripts.create!(title: string)
+  @script = FactoryBot.create(:script, title: string, user: @user)
   expect(@script).to_not be_nil
 end
 
