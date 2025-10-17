@@ -1,7 +1,7 @@
 Dado('que existe um token para o roteiro {string} de {string}') do |title, name|
-  @user = User.create!(name: name, email: "a@example.com", password: "123456", password_confirmation: "123456")
+  @user = FactoryBot.create(:user, name: name, email: "a@example.com", password: "123456", password_confirmation: "123456")
   expect(@user).to_not be_nil
-  @script = @user.scripts.create!(title: title)
+  @script = FactoryBot.create(:script, title: title, user: @user)
   expect(@script).to_not be_nil
   @script_token = @script.shareable_token
   expect(@script_token).to_not be_nil

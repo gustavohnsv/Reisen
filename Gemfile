@@ -48,6 +48,9 @@ group :development, :test do
   gem "sqlite3", "~> 1.4"
 end
 
+group :development do
+  gem "letter_opener"
+end
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -68,6 +71,7 @@ group :development, :test do
   gem "faker"
   gem "launchy"
   gem "webmock"
+  gem "pry-rails"
 end
 
 group :development do

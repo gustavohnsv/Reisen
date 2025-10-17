@@ -19,4 +19,7 @@ Rails.application.configure do
   config.active_storage.service = :test
   config.action_mailer.delivery_method = :test
   config.active_support.deprecation = :stderr
+
+  # Importante para os links de confirmação do Devise funcionarem
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 end

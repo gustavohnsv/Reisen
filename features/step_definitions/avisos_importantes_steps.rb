@@ -1,6 +1,6 @@
 Dado('que existe um aviso com o título {string} e o corpo {string} marcado como visível') do |titulo, corpo|
   # cria uma instância persistente no banco para a feature sem depender do FactoryBot
-  Notice.create!(title: titulo, body: corpo, visible: true)
+  FactoryBot.create(:notice, title: titulo, body: corpo, visible: true)
 end
 
 Então('devo ver um aviso com o texto {string}') do |texto|

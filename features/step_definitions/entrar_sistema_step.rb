@@ -37,7 +37,7 @@ Então('devo ser redirecionado para a tela de perfil') do
 end
 
 Dado('que eu estou na página principal e tenho uma conta') do
-  @user = User.create!(name: @name, email: @email, password: @password, password_confirmation: @password)
+  @user = FactoryBot.create(:user, name: @name, email: @email, password: @password, password_confirmation: @password)
   expect(@user).to_not be_nil
   visit root_path
 end

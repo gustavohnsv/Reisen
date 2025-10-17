@@ -1,5 +1,5 @@
 Dado('que tenho uma checklist chamada {string}') do |checklist_title|
-  @checklist = @user.checklists.create!(title: checklist_title)
+  @checklist = FactoryBot.create(:checklist, title: checklist_title, user: @user)
   expect(@checklist).to_not be_nil
 end
 
@@ -20,7 +20,7 @@ Então('devo ser redirecionado para a checklist {string}') do |string|
 end
 
 Dado('que tenho um item da checklist chamado {string}') do |desc|
-  @item = @checklist.checklist_items.create!(description: desc)
+  @item = FactoryBot.create(:checklist_item, description: desc, checklist: @checklist)
 end
 
 Quando('preencher o campo com ID {string} do item da checklist {string} com {string}') do |id, checklist_title, desc|
