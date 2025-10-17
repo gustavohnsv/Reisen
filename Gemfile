@@ -36,6 +36,8 @@ gem "rss"
 
 gem "httparty"
 
+gem "material_icons"
+
 # Grupo para produção (Heroku)
 group :production do
   gem "pg", "~> 1.1"

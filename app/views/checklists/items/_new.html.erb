@@ -1,0 +1,11 @@
+<%= form_with(model: [checklist, item]) do |f| %>
+  <%#= f.label :description %>
+  <%= f.text_field :description,
+                   autofocus: true,
+                   autocomplete: "description",
+                   id: 'new-item-description'
+  %>
+  <%= f.button do %>
+    <%= content_tag(:i, "add", class: "material-icons") %>
+  <% end %>
+<% end %>

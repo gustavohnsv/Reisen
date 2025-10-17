@@ -1,3 +1,11 @@
-<h1> Logado como: <%=  @checklist.user.name %> </h1>
 <h1> <%= @checklist.title %> </h1>
-<span> Atualmente na página: checklists#show </span>
+<div>
+<% @checklist.checklist_items&.each do |i| %>
+  <div class="d-flex flex-row align-items-center">
+    <% if i.id.present? %>
+      <%= render "checklists/items/edit", checklist: @checklist, item: i %>
+    <% end %>
+  </div>
+<% end %>
+<%= render "checklists/items/new", checklist: @checklist, item: @item %>
+</div>

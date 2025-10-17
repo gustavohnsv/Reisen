@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :checklist_item do
-    description { "MyText" }
-    user { nil }
+    sequence(:description) { |n| "Item #{n}" }
     checklist { nil }
+    check { false }
   end
 end
