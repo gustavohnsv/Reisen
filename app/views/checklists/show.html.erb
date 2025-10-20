@@ -1,11 +1,27 @@
-<h1> <%= @checklist.title %> </h1>
-<div>
-<% @checklist.checklist_items&.each do |i| %>
-  <div class="d-flex flex-row align-items-center">
-    <% if i.id.present? %>
-      <%= render "checklists/items/edit", checklist: @checklist, item: i %>
-    <% end %>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+
+      <%= render "checklists/edit", checklist: @checklist %>
+      <!-- <h1 class="h3 mb-3"><%= @checklist.title %></h1> -->
+
+      <div class="card shadow-sm">
+        <ul class="list-group list-group-flush">
+
+          <% @checklist.checklist_items&.each do |i| %>
+            <% if i.persisted? %>
+              <li class="list-group-item p-2"> <%# p-2 para uma lista mais compacta %>
+                <%= render "checklists/items/edit", checklist: @checklist, item: i %>
+              </li>
+            <% end %>
+          <% end %>
+
+          <li class="list-group-item p-2 bg-body-tertiary"> <%# bg-body-tertiary é o "cinza claro" do BS5 %>
+            <%= render "checklists/items/new", checklist: @checklist, item: @item %>
+          </li>
+        </ul>
+      </div>
+
+    </div>
   </div>
-<% end %>
-<%= render "checklists/items/new", checklist: @checklist, item: @item %>
 </div>

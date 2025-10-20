@@ -6,7 +6,7 @@ RSpec.describe "Home", type: :request do
       FactoryBot.create(:notice, title: "Reunião de grupo", body: "Reunião amanhã às 10h", visible: true)
       get root_path
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Avisos importantes')
+      expect(response.body).to include('Avisos Importantes')
       expect(response.body).to include('Reunião de grupo')
     end
 

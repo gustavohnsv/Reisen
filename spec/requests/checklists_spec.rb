@@ -41,7 +41,8 @@ RSpec.describe "Checklists", type: :request do
       end
       it 'não atualiza o título da checklist' do
         patch checklist_path(checklist.id), params: {checklist: {title: ''}}
-        expect(response).to render_template(:edit)
+        expect(response).to have_http_status(:unprocessable_content)
+        #expect(response).to render_template(:edit)
       end
     end
   end
@@ -77,18 +78,18 @@ RSpec.describe "Checklists", type: :request do
       end
     end
   end
-  describe 'GET /checklists/:id/edit' do
-    context 'usuário está logado' do
-      before do
-        sign_in(user)
-      end
-      it 'acessa a página de edição de checklist com sucesso' do
-        get edit_checklist_path(checklist.id)
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:edit)
-      end
-    end
-  end
+  #describe 'GET /checklists/:id/edit' do -> 'edit' substituída para uma partial
+  #  context 'usuário está logado' do
+  #    before do
+  #      sign_in(user)
+  #    end
+  #    it 'acessa a página de edição de checklist com sucesso' do
+  #      get edit_checklist_path(checklist.id)
+  #      expect(response).to have_http_status(:success)
+  #      expect(response).to render_template(:edit)
+  #    end
+  #  end
+  #end
   describe 'DELETE /checklists/:id' do
     context 'usuário está logado' do
       before do

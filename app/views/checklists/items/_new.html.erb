@@ -1,11 +1,22 @@
-<%= form_with(model: [checklist, item]) do |f| %>
-  <%#= f.label :description %>
-  <%= f.text_field :description,
-                   autofocus: true,
-                   autocomplete: "description",
-                   id: 'new-item-description'
-  %>
-  <%= f.button do %>
-    <%= content_tag(:i, "add", class: "material-icons") %>
+<div class="d-flex align-items-center" style="min-height: 2.5rem;">
+
+  <div class="me-2" style="width: 1.75rem;"></div>
+
+  <%= form_with(model: [checklist, item], class: "flex-grow-1 me-2") do |f| %>
+    <div class="input-group input-group-sm">
+      <%= f.text_field :description,
+                       autofocus: false,
+                       autocomplete: "description",
+                       id: 'new-item-description',
+                       class: "form-control shadow-none",
+                       placeholder: "Adicionar novo item..."
+      %>
+      <%= f.button class: "btn btn-sm btn-outline-primary" do %>
+        <i class="material-icons fs-6">add</i>
+      <% end %>
+    </div>
   <% end %>
-<% end %>
+
+  <div style="width: 1.5rem;"></div>
+
+</div>

@@ -14,7 +14,8 @@ RSpec.describe "checklists/show.html.erb", type: :view do
   end
 
   it 'deve conter o nome da checklist' do
-    expect(rendered).to have_content(checklist.title)
+    expect(rendered).to have_field("edit-title", with: checklist.title)
+    #expect(rendered).to have_content(checklist.title)
   end
     #it 'deve conter o proprietário da checklist' do
     #expect(rendered).to have_content(user.name)

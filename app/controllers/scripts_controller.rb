@@ -27,7 +27,8 @@ class ScriptsController < ApplicationController
     if @script&.update(script_params)
       redirect_to @script, notice: "Roteiro editado com sucesso"
     else
-      render :edit, status: :unprocessable_content
+      head :unprocessable_content
+      #render :edit, status: :unprocessable_content
     end
   end
 

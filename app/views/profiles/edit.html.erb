@@ -1,68 +1,99 @@
-<h1>Editar Perfil</h1>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 col-lg-10 mx-auto">
 
-<%= render 'profiles/shared/error_messages', object: @user %>
+      <div class="card shadow">
+        <div class="card-body p-4 p-md-5">
 
-<%= form_with model: @user, url: user_path(@user), local: true,
-              html: { multipart: true, data: { controller: "avatar-preview" } } do |f| %>
+          <h2 class="text-center fw-light mb-4">Editar Perfil</h2>
 
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "erro") %> proibiu este usuário de ser salvo:</h2>
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+          <%= render 'profiles/shared/error_messages', object: @user %>
 
-  <div class="field mb-3">
-    <%= f.label :name, 'Nome', class: "form-label" %><br>
-    <%= f.text_field :name, id: "user_name", class: "form-control" %>
-  </div>
+          <%= form_with model: @user, url: user_path(@user), local: true,
+                        html: { multipart: true, data: { controller: "avatar-preview" } } do |f| %>
 
-  <div class="field mb-3">
-    <%# campo adicional "username" (tests costumam procurar por campos de nome de usuário) %>
-    <%= f.label :username, 'Nome de usuário / Username', class: "form-label" %><br>
-    <%= f.text_field :username, id: "user_username", class: "form-control" %>
-  </div>
+            <div class="row">
 
-  <div class="field mb-3">
-    <%= f.label :email, 'Email', class: "form-label" %><br>
-    <%= f.email_field :email, id: "user_email", class: "form-control" %>
-  </div>
+              <div class="col-12 col-md-4 text-center">
 
-  <div class="field mb-3">
-    <%= f.label :avatar, 'Imagem de Perfil', class: "form-label" %><br>
-    <%= f.file_field :avatar, data: { action: "change->avatar-preview#preview" }, class: "form-control" %>
-  </div>
+                <label class="form-label mb-2">Imagem de Perfil</label>
 
-  <% if @user.avatar.attached? %>
-    <div class="field mb-3">
-      <p>Preview atual:</p>
+                <div class="mb-3 mx-auto" style="width: 200px; height: 200px; position: relative;">
 
-      <%# proteger chamadas a url_for/variant quando o blob ainda não está persistido %>
-      <% if @user.avatar.blob&.persisted? && @user.avatar.variable? %>
-        <%= image_tag url_for(@user.avatar.variant(resize_to_limit: [200, 200])), id: "avatar-preview", alt: "Preview avatar", class: "img-thumbnail" %>
-      <% elsif @user.avatar.blob&.persisted? %>
-        <%= image_tag url_for(@user.avatar), id: "avatar-preview", alt: "Preview avatar", class: "img-thumbnail" %>
-      <% else %>
-        <p class="text-muted">(imagem disponível após salvar)</p>
-      <% end %>
+                  <%
+                    has_avatar = @user.avatar.attached? && @user.avatar.blob&.persisted?
+                    if has_avatar
+                      image_url = url_for(@user.avatar)
+                    end
+                  %>
 
-      <div class="form-check mt-2">
-       <%= f.check_box :remove_avatar, { class: "form-check-input", id: "user_remove_avatar" }, '1', '0' %>
-       <%= f.label :remove_avatar, 'Remover imagem atual', class: "form-check-label", for: "user_remove_avatar" %>
+                  <div id="avatar-placeholder"
+                       class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center <%= 'd-none' if has_avatar %>"
+                       style="width: 200px; height: 200px; background-color: var(--bs-body-tertiary);">
+                    <i class="bi bi-person-fill" style="font-size: 5rem; color: var(--bs-secondary-color);"></i>
+                  </div>
+
+                  <% if has_avatar %>
+                    <img id="avatar-preview"
+                         src="<%= image_url %>"
+                         class="img-thumbnail rounded-circle"
+                         style="width: 200px; height: 200px; object-fit: cover;"
+                         alt="Avatar do usuário" />
+                  <% else %>
+                    <img id="avatar-preview"
+                         src=""
+                         class="img-thumbnail rounded-circle d-none"
+                         style="width: 200px; height: 200px; object-fit: cover; position: absolute; top: 0; left: 0;"
+                         alt="Preview do avatar" />
+                  <% end %>
+
+                </div>
+
+                <%= f.file_field :avatar, data: { action: "change->avatar-preview#preview" }, class: "form-control form-control-sm" %>
+
+                <% if has_avatar %>
+                  <div class="form-check text-center mt-2 d-inline-flex align-items-center gap-2">
+                    <%= f.check_box :remove_avatar, { class: "form-check-input", id: "user_remove_avatar" }, '1', '0' %>
+                    <%= f.label :remove_avatar, 'Remover imagem', class: "form-check-label", for: "user_remove_avatar" %>
+                  </div>
+                <% end %>
+
+              </div>
+
+              <div class="col-12 col-md-8">
+
+                <div class="mb-3">
+                  <%= f.label :name, 'Nome Completo', class: "form-label" %>
+                  <%= f.text_field :name, id: "user_name", class: "form-control" %>
+                </div>
+
+                <div class="mb-3">
+                  <%= f.label :username, 'Nome de usuário', class: "form-label" %>
+                  <%= f.text_field :username, id: "user_username", class: "form-control" %>
+                  <div class="form-text">
+                    Este será seu nome público no site (ex: @seu_usuario).
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <%= f.label :email, 'Email', class: "form-label" %>
+                  <%= f.email_field :email, id: "user_email", class: "form-control" %>
+                </div>
+              </div>
+
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-end align-items-center gap-3">
+              <%= link_to "Cancelar", profile_path(@user), class: "btn btn-outline-secondary" %>
+              <%= f.submit 'Salvar Alterações', class: "btn btn-primary px-4" %>
+            </div>
+
+          <% end %>
+
+        </div>
       </div>
     </div>
-  <% else %>
-    <div id="avatar-preview-container" class="mb-3">
-      <img id="avatar-preview" style="display:none; max-width:200px; border-radius:8px;" alt="Preview avatar" />
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit 'Salvar', class: "btn btn-primary" %>
   </div>
-<% end %>
 </div>

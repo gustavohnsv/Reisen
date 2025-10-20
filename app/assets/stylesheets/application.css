@@ -18,3 +18,73 @@
 .field_with_errors {
     display: inline;
 }
+
+.hero-section {
+    height: calc(100vh - 112px);
+    min-height: 600px;
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1950");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    color: #ffffff;
+
+    padding: 0 1.5rem;
+}
+
+.hero-title {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-lead {
+    font-weight: 300;
+    font-size: 1.5rem;
+    max-width: 650px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hero-actions {
+    width: 100%;
+    max-width: 350px;
+}
+
+@media (min-width: 576px) {
+    .hero-actions {
+        width: auto;
+        max-width: none;
+    }
+}
+
+.hero-actions .btn-lg {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+}
+
+.hero-actions .btn-primary {
+    /*
+      background-color: #007bff;
+      border-color: #007bff;
+    */
+}
+
+.hero-actions .btn-outline-light {
+    border-width: 2px;
+}
+
+.notices-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+[data-bs-theme="dark"] .bg-dark {
+    background-color: #343a40 !important;
+}

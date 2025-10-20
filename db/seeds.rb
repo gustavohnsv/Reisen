@@ -19,6 +19,7 @@ main_user = User.create!(
   email: "testuser@example.com",
   password: "123456",
   password_confirmation: "123456",
+  confirmed_at: Time.current
 )
 
 Script.create!(

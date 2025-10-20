@@ -1,9 +1,16 @@
 <div class="container mt-4">
   <h1 class="mb-4 text-center">Notícias de Turismo</h1>
 
+  <% country_names = ISO3166::Country.all_translated('pt-BR').map { |name, _code| name }.sort %>
+
   <form method="get" action="/news" class="mb-3 text-center">
-  <input type="text" name="location" placeholder="Buscar por local..." class="form-control d-inline w-50">
-  <button type="submit" class="btn btn-success">Buscar</button>
+    <%= select_tag :location,
+                   options_for_select(country_names, params[:location]),
+                   include_blank: 'Selecione um país ou digite um local...',
+                   class: 'form-control d-inline w-50',
+                   data: { controller: 'tom-select' } %>
+
+    <button type="submit" class="btn btn-success">Buscar</button>
   </form>
 
   <% if @news.present? %>

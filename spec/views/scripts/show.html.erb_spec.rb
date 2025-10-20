@@ -21,14 +21,16 @@ RSpec.describe "scripts/show.html.erb", type: :view do
   end
 
   it 'deve conter o nome do roteiro' do
-    expect(rendered).to have_content(script.title)
+    expect(rendered).to have_field("edit-title", with: script.title)
+    #expect(rendered).to have_content(script.title)
   end
   it 'deve conter o proprietário do roteiro' do
     expect(rendered).to have_content(user.name)
   end
-  it 'deve conter um botão para copiar o link de compartilhamento' do
-    expect(rendered).to have_button('Copiar link de compartilhamento')
-  end
+  # quando o usuário não está logado, o botão não é exibido
+  #it 'deve conter um botão para copiar o link de compartilhamento' do
+  #  expect(rendered).to have_button('Copiar link de compartilhamento')
+  #end
   it 'deve conter pelo menos um link para uma companhia área' do
     expect(rendered).to have_selector('a[href^="/mock"]')
   end

@@ -31,7 +31,7 @@ Quando('altero meu nome de usuário para {string}') do |novo_nome|
   # procurar campo por labels comuns (PT/EN) ou pelo atributo name
   field = ['Nome', 'Username', 'User name', 'Name'].find { |f| page.has_field?(f) }
   if field
-    fill_in field, with: novo_nome
+    fill_in field, with: novo_nome, match: :first
   elsif page.has_selector?('input[name="user[name]"]')
     find('input[name="user[name]"]').set(novo_nome)
   else
@@ -58,7 +58,7 @@ end
 Quando('apago meu nome de usuário') do
   field = ['Nome', 'Username', 'User name', 'Name'].find { |f| page.has_field?(f) }
   if field
-    fill_in field, with: ''
+    fill_in field, with: '', match: :first
   elsif page.has_selector?('input[name="user[name]"]')
     find('input[name="user[name]"]').set('')
   else

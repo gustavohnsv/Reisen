@@ -17,7 +17,8 @@ Funcionalidade: Entrar no sistema
 
     Cenário: Criar conta
       Dado que eu estou na página principal e não tenho uma conta
-      Quando clicar em "Sign Up"
+      Quando clicar em "Criar conta"
+      #Quando clicar em "Sign Up"
       Então devo ser redirecionado para a tela de cadastro
       Quando preencher o campo "Name" com "John Doe"
       E preencher o campo "Email" com "johndoe@example.com"

@@ -58,7 +58,8 @@ RSpec.describe "Scripts", type: :request do
       end
       it 'não atualiza o título do roteiro' do
         patch script_path(script.id), params: {script: {title: ''}}
-        expect(response).to render_template(:edit)
+        expect(response).to have_http_status(:unprocessable_content)
+        #expect(response).to render_template(:edit)
       end
       it 'não atualiza o título do roteiro pois não é o proprietário' do
         other_user = FactoryBot.create(:user)
@@ -101,18 +102,18 @@ RSpec.describe "Scripts", type: :request do
       end
     end
   end
-  describe 'GET /scripts/:id/edit' do
-    context 'usuário está logado' do
-      before do
-        sign_in(user)
-      end
-      it 'acessa a página de edição do roteiro com sucesso' do
-        get edit_script_path(script.id)
-        expect(response).to have_http_status(:success)
-        expect(response).to render_template(:edit)
-      end
-    end
-  end
+  #describe 'GET /scripts/:id/edit' do -> 'edit' substituída para uma partial
+  #  context 'usuário está logado' do
+  #    before do
+  #      sign_in(user)
+  #    end
+  #    it 'acessa a página de edição do roteiro com sucesso' do
+  #      get edit_script_path(script.id)
+  #      expect(response).to have_http_status(:success)
+  #      expect(response).to render_template(:edit)
+  #    end
+  #  end
+  #end
   describe 'DELETE /scripts/:id' do
     context 'usuário está logado' do
       before do

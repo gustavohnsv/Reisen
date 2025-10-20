@@ -1,29 +1,49 @@
-<div class="container mt-5" style="max-width: 720px;">
-  <header class="text-center mb-4">
-    <h1 class="display-4 text-primary">Reisen</h1>
-    <p class="lead text-muted">Planejador de Viagens Colaborativo</p>
+<div class="hero-section">
+
+  <header class="mb-4">
+    <h1 class="hero-title display-1 text-uppercase">Reisen</h1>
+    <p class="hero-lead">
+      Seu roteiro dos sonhos, construído em conjunto.
+    </p>
   </header>
 
-  <main class="card p-4 p-md-5 shadow-sm text-center">
-    <h2 class="h4 mb-3">Bem-vindo</h2>
-    <p>Sistema de planejamento de viagens em desenvolvimento.</p>
+  <main>
+    <div class="hero-actions d-grid gap-3 d-sm-flex justify-content-sm-center">
+      <%= button_to "Criar conta",
+                    new_user_registration_path,
+                    method: :get,
+                    class: "btn btn-primary btn-lg" %>
 
-    <div class="d-grid gap-2 col-8 mx-auto mt-4">
-      <%= button_to "Sign Up", new_user_registration_path, method: :get, class: "btn btn-primary btn-lg w-100" %>
-      <%= button_to "Login", new_user_session_path, method: :get, class: "btn btn-outline-secondary btn-lg w-100" %>
+      <%= button_to "Fazer Login",
+                    new_user_session_path,
+                    method: :get,
+                    class: "btn btn-outline-light btn-lg" %>
     </div>
+  </main>
 
-    <% if @notices.present? %>
-      <hr class="my-4"> <section class="mt-4 text-start"> <h3 class="h5 text-center text-body-secondary mb-3">Avisos importantes</h3>
-    <div class="notices-list">
-      <% @notices.each do |notice| %>
-        <article class="alert alert-info">
-          <h4 class="alert-heading h6"><%= notice.title %></h4>
-          <p class="mb-0"><%= truncate(notice.body, length: 200) %></p>
-        </article>
-      <% end %>
+</div>
+
+<% if @notices.present? %>
+  <section class="notices-section bg-body-tertiary">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+          <h2 class="h3 text-center text-body-secondary mb-4">
+            Avisos Importantes
+          </h2>
+
+          <div class="notices-list">
+            <% @notices.each do |notice| %>
+              <article class="alert alert-info shadow-sm border-0">
+                <h3 class="alert-heading h6"><%= notice.title %></h3>
+                <p class="mb-0"><%= truncate(notice.body, length: 200) %></p>
+              </article>
+            <% end %>
+          </div>
+
+        </div>
+      </div>
     </div>
   </section>
-    <% end %>
-  </main>
-</div>
+<% end %>

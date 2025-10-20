@@ -9,11 +9,11 @@ RSpec.describe "home/index.html.erb", type: :view do
     expect(rendered).to include('Reisen')
   end
 
-  it 'exibe o subtítulo' do
-    expect(rendered).to include('Planejador de Viagens Colaborativo')
-  end
+  #it 'exibe o subtítulo' do
+  #  expect(rendered).to include('Planejador de Viagens Colaborativo')
+  #end
 
-  it 'exibe mensagem de boas-vindas' do 
-    expect(rendered).to include('Bem-vindo')
-  end
+  #it 'exibe mensagem de boas-vindas' do
+  #  expect(rendered).to include('Bem-vindo')
+  #end
 end

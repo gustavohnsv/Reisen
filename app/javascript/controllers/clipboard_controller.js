@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="clipboard"
 export default class extends Controller {
     static values = { content: String }
 
@@ -19,8 +18,8 @@ export default class extends Controller {
         const originalText = this.element.innerText
         this.element.innerText = "Copiado!"
 
-        setTimeout(() => {
-            this.element.innerText = originalText
-        }, 2000)
+        //setTimeout(() => {
+        //    this.element.innerText = originalText
+        //}, 2000)
     }
 }

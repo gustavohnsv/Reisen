@@ -1,12 +1,82 @@
-<h1> Logado como: <%=  @script.user.name %> </h1>
-<h1> <%= @script.title %> </h1>
-<span> Atualmente na página: scritps#show </span>
-<% @airlines&.each do |name, link| %>
-  <a href="<%= link %>" target="_blank"> <%= name %> </a>
-<% end %>
-<button type="button"
-        data-controller="clipboard"
-        data-action="click->clipboard#copy"
-        data-clipboard-content-value="<%= script_url(@script, token: @script.shareable_token) %>">
-  Copiar link de compartilhamento
-</button>
+<!--
+<div class="container mt-4">
+  <div class="alert alert-info small p-2 mb-3">
+    Logado como: <strong><%= @script.user.name %></strong>
+  </div>
+</div>
+-->
+
+<div class="container">
+  <div class="row g-5 p-2 mt-3">
+
+    <div class="col-md-9">
+      <article>
+        <%= render "scripts/edit", script: @script %>
+        <!-- <h1 class="display-5 mb-2"><%= @script.title %></h1> -->
+        <p class="text-muted fs-5 mb-4">
+          Organizado por: <%= @script.user.name %>
+          (FUNCIONALIDADES EM PROGRESSO)
+        </p>
+
+        <!-- EM PROGRESSO, FUNCIONALIDADE NÃO IMPLEMENTADA -->
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+
+            <h5 class="card-title">Dia 1: Chegada e Acomodação</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus, sed maximus massa eleifend.</p>
+            <hr class="my-4">
+            <h5 class="card-title">Dia 2: Pontos Turísticos</h5>
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.</p>
+            <p>Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+          </div>
+        </div>
+
+      </article>
+    </div>
+
+    <div class="col-md-3">
+      <div class="position-sticky" style="top: 2rem;">
+
+        <div class="card shadow-sm mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Compre sua passagem!</h5>
+          </div>
+          <% if @airlines.present? && @airlines.any? %>
+            <ul class="list-group list-group-flush">
+              <% @airlines.each do |name, link| %>
+                <a href="<%= link %>" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                  <span><%= name %></span>
+                  <i class="material-icons opacity-50" style="font-size: 1.2rem;">launch</i>
+                </a>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="card-body">
+              <p class="text-muted small mb-0">Nenhum link rápido adicionado.</p>
+            </div>
+          <% end %>
+        </div>
+
+        <% if current_user.present? %>
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title fs-6">Compartilhar</h5>
+              <p class="card-text text-muted small">
+                Copie o link para convidar outros viajantes para este roteiro.
+              </p>
+              <button type="button"
+                      class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                      data-controller="clipboard"
+                      data-action="click->clipboard#copy"
+                      data-clipboard-content-value="<%= script_url(@script, token: @script.shareable_token) %>">
+                <i class="material-icons" style="font-size: 1.2rem;">content_copy</i>
+                Copiar Link
+              </button>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,8 @@ class Checklists::ItemsController < ApplicationController
     if @item&.save
       redirect_to @checklist #, notice: 'Item criado com sucesso'
     else
-      render 'checklists/show', status: :unprocessable_content
+      head :unprocessable_content
+      #render 'checklists/show', status: :unprocessable_content
     end
   end
 

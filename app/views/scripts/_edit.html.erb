@@ -1,0 +1,10 @@
+<%= form_with(model: script, data: {controller: 'autosave'}, class: "me-2") do |f| %>
+  <%= f.text_field :title,
+                   value: script.title,
+                   autocomplete: "title",
+                   data: {action: "blur->autosave#save"},
+                   id: "edit-title",
+                   class: "display-5 mb-2 border-0 bg-transparent shadow-none",
+                   style: "outline: none;"
+  %>
+<% end %>

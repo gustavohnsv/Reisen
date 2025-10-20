@@ -52,7 +52,8 @@ RSpec.describe "Checklists::Items", type: :request do
             checklist_item: {description: ''}
           }
         }.to change(ChecklistItem, :count).by(0)
-        expect(response).to render_template('checklists/show')
+        expect(response).to have_http_status(:unprocessable_content)
+        #expect(response).to render_template('checklists/show')
       end
     end
   end

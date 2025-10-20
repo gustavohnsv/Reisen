@@ -27,7 +27,8 @@ class ChecklistsController < ApplicationController
     if @checklist&.update(checklist_params)
       redirect_to @checklist, notice: 'Checklist atualizada com sucesso'
     else
-      render :edit, status: :unprocessable_content
+      head :unprocessable_content
+      #render :edit, status: :unprocessable_content
     end
   end
 
