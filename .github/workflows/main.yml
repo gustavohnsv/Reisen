@@ -80,7 +80,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Qlty.sh analysis and report coverage
-        uses: qltysh/qlty-action@v2
+        uses: qlty-sh/qlty-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           coverage_token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
