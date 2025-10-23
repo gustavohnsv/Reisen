@@ -24,8 +24,9 @@ class GoogleNewsService
     private
 
     def google_news_uri(location:)
-      query = location ? "Turismo+#{location}" : "Turismo"
+      query = URI.encode_www_form_component(location) ? "Turismo+#{URI.encode_www_form_component(location)}" : "Turismo"
       url = "https://news.google.com/rss/search?q=#{query}&hl=pt-BR"
+      print url
       URI(url)
     end
 

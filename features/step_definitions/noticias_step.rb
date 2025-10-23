@@ -59,7 +59,7 @@ def google_news_rss_xml(location)
 end
 
 def stub_google_news_rss(location)
-  url = "https://news.google.com/rss/search?q=Turismo+#{location}&hl=pt-BR"
+  url = "https://news.google.com/rss/search?q=Turismo+#{URI.encode_www_form_component(location)}&hl=pt-BR"
 
   stub_request(:get, url)
     .to_return(

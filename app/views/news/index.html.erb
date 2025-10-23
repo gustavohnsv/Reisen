@@ -1,16 +1,20 @@
 <div class="container mt-4">
   <h1 class="mb-4 text-center">Notícias de Turismo</h1>
 
-  <% country_names = ISO3166::Country.all_translated('pt-BR').map { |name, _code| name }.sort %>
+  <% country_names = ISO3166::Country.all.map { |country| country.translation('pt-br') }.sort %>
 
   <form method="get" action="/news" class="mb-3 text-center">
-    <%= select_tag :location,
-                   options_for_select(country_names, params[:location]),
-                   include_blank: 'Selecione um país ou digite um local...',
-                   class: 'form-control d-inline w-50',
-                   data: { controller: 'tom-select' } %>
-
-    <button type="submit" class="btn btn-success">Buscar</button>
+    <div class="d-inline-block w-50">
+      <%= select_tag :location,
+                     options_for_select(country_names, params[:location]),
+                     include_blank: 'Selecione um país ou digite um local...',
+                     class: 'form-control',
+                     data: {
+                       controller: 'tom-select',
+                       tom_select_create_value: 'true'
+                     } %>
+    </div>
+    <button type="submit" class="btn btn-success ms-2">Buscar</button>
   </form>
 
   <% if @news.present? %>

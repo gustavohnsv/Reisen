@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe GoogleNewsService do
   describe '.fetch' do
-    let(:location) { 'Lisboa' }
+    let(:location) { URI.encode_www_form_component('Lisboa') }
     let(:google_news_url) do
       "https://news.google.com/rss/search?q=Turismo+#{location}&hl=pt-BR"
     end
