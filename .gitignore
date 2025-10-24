@@ -37,6 +37,9 @@
 # Coverage folder
 coverage/
 
+# Qlty
+/.qlty/
+
 # JetBrains IDE's folder
 .idea/
 
