@@ -39,7 +39,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.3
+          ruby-version: 3.4.5
           bundler-cache: true
 
       - name: Setup Database
@@ -83,4 +83,5 @@ jobs:
         uses: qltysh/qlty-action/coverage@v2
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+
           files: 'coverage/lcov/*.lcov'
