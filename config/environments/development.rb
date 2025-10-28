@@ -78,9 +78,12 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
-  # Configuração para o Letter Opener
+  # Mailer: mantém Letter Opener em dev e adiciona default_url_options para gerar links absolutos
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
+  config.action_mailer.perform_caching = false
+  config.action_mailer.default_url_options = { host: 'www.example.com', protocol: 'http' }
+
 
   # Importante para os links de confirmação do Devise funcionarem
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
