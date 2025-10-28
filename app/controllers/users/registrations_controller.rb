@@ -1,7 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   def create
-    puts 'Acessando controller customizado'
-
     build_resource(sign_up_params)
 
     unless Rails.env.production?

@@ -3,23 +3,46 @@
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
 
       <%= render "checklists/edit", checklist: @checklist %>
-      <!-- <h1 class="h3 mb-3"><%= @checklist.title %></h1> -->
-
       <div class="card shadow-sm">
         <ul class="list-group list-group-flush">
 
-          <% @checklist.checklist_items&.each do |i| %>
-            <% if i.persisted? %>
-              <li class="list-group-item p-2"> <%# p-2 para uma lista mais compacta %>
+          <% persisted_items = @checklist.checklist_items.select(&:persisted?) %>
+
+          <% if persisted_items.any? %>
+            <% persisted_items.each do |i| %>
+              <li class="list-group-item p-2">
                 <%= render "checklists/items/edit", checklist: @checklist, item: i %>
               </li>
             <% end %>
+          <% else %>
+            <li class="list-group-item text-center text-muted p-4">
+              <i class="material-icons" style="font-size: 2rem;">check_box_outline_blank</i>
+              <p class="mb-0 mt-2">Esta lista ainda não tem itens.</p>
+            </li>
           <% end %>
 
-          <li class="list-group-item p-2 bg-body-tertiary"> <%# bg-body-tertiary é o "cinza claro" do BS5 %>
+          <li class="list-group-item p-2 bg-body-tertiary">
             <%= render "checklists/items/new", checklist: @checklist, item: @item %>
           </li>
         </ul>
+      </div>
+
+      <% if @checklist.user == current_user %>
+        <div class="mt-3 d-flex justify-content-end">
+          <%= link_to checklist_path(@checklist.id),
+                      method: :delete,
+                      class: "btn btn-outline-danger d-inline-flex align-items-center gap-2 w-100 justify-content-center",
+                      data: { turbo_method: :delete,
+                              turbo_confirm: "Tem certeza que deseja excluir esta lista? Esta ação é irreversível." } do %>
+            <i class="material-icons" style="font-size: 1.2rem;">delete_outline</i>
+            <span>Excluir Checklist</span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="p-2 text-muted d-flex align-items-center" style="font-size: 0.8rem;">
+        <i class="material-icons me-2" style="font-size: 1rem;">autorenew</i>
+        As alterações são salvas automaticamente ao sair do campo.
       </div>
 
     </div>
