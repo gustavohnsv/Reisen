@@ -13,7 +13,6 @@
  *= require_tree .
  *= require_self
  *= require material_icons
- *= require tom-select
  */
 
 .field_with_errors {

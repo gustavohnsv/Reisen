@@ -1,43 +1,113 @@
-<!--
-<div class="container mt-4">
-  <div class="alert alert-info small p-2 mb-3">
-    Logado como: <strong><%= @script.user.name %></strong>
-  </div>
-</div>
--->
-
 <div class="container">
-  <div class="row g-5 p-2 mt-3">
+  <div class="row g-4 g-lg-5 p-2 mt-3">
 
-    <div class="col-md-9">
+    <%
+      owner = @script&.user
+      participants = @script&.participants&.includes(:user).where.not(user_id: owner&.id)
+      grouped_items = @script&.script_items&.order(date_time_start: :asc).group_by { |item| item.date_time_start&.to_date }
+      item_for_new_form = (@item.nil? || @item.persisted?) ? @script&.script_items&.build : @item
+    %>
+
+
+    <div class="col-lg-8">
       <article>
+
         <%= render "scripts/edit", script: @script %>
-        <!-- <h1 class="display-5 mb-2"><%= @script.title %></h1> -->
+
         <p class="text-muted fs-5 mb-4">
-          Organizado por: <%= @script.user.name %>
-          (FUNCIONALIDADES EM PROGRESSO)
-        </p>
+          Organizado por: <strong><%= owner.name %></strong> </p>
 
-        <!-- EM PROGRESSO, FUNCIONALIDADE NÃO IMPLEMENTADA -->
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
+        <hr class="my-4">
 
-            <h5 class="card-title">Dia 1: Chegada e Acomodação</h5>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus, sed maximus massa eleifend.</p>
-            <hr class="my-4">
-            <h5 class="card-title">Dia 2: Pontos Turísticos</h5>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.</p>
-            <p>Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+        <% if grouped_items.any? %>
+          <div class="accordion" id="scriptDaysAccordion">
+
+            <% grouped_items.select { |date, _| date.present? }.sort.each_with_index do |(date, items), index| %>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-day-<%= index %>">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-day-<%= index %>" aria-expanded="true" aria-controls="collapse-day-<%= index %>">
+                    <span class="fs-5 fw-bold">Dia <%= index + 1 %></span>
+                    <span class="text-muted ms-3 d-none d-sm-inline"><%= l(date, format: :long) %></span>
+                  </button>
+                </h2>
+                <div id="collapse-day-<%= index %>" class="accordion-collapse collapse show" aria-labelledby="heading-day-<%= index %>">
+                  <div class="accordion-body">
+                    <% items.each do |i| %>
+                      <%= render "scripts/items/edit", script: @script, item: i %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
+            <% if (items_sem_data = grouped_items[nil])&.any? %>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-unscheduled">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-unscheduled" aria-expanded="true" aria-controls="collapse-unscheduled">
+                    <span class="fs-5 fw-bold">Itens Sem Data</span>
+                  </button>
+                </h2>
+                <div id="collapse-unscheduled" class="accordion-collapse collapse show" aria-labelledby="heading-unscheduled">
+                  <div class="accordion-body">
+                    <% items_sem_data.each do |i| %>
+                      <%= render "scripts/items/edit", script: @script, item: i %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+
           </div>
-        </div>
-
+        <% else %>
+          <div class="text-center p-5 bg-body-tertiary rounded-3 border">
+            <i class="material-icons" style="font-size: 3rem;">event_note</i>
+            <h5 class="mt-3">Este roteiro ainda não tem itens</h5>
+            <p class="text-muted">
+              Use o botão "Adicionar Novo Item" para começar a planejar.
+            </p>
+          </div>
+        <% end %>
       </article>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-lg-4">
       <div class="position-sticky" style="top: 2rem;">
 
-        <div class="card shadow-sm mb-3">
+        <button type="button"
+                class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
+                data-bs-toggle="modal"
+                data-bs-target="#newItemModal">
+          <i class="material-icons" style="font-size: 1.2rem;">add</i>
+          <span>Adicionar Novo Item</span>
+        </button>
+
+        <% if @script&.user == current_user %>
+          <%= link_to script_path(@script&.id),
+                      class: "btn btn-outline-danger w-100 mb-4 d-flex align-items-center justify-content-center gap-2",
+                      data: { turbo_method: :delete,
+                              turbo_confirm: "Tem certeza que deseja excluir este roteiro? Esta ação é irreversível." } do %>
+            <i class="material-icons" style="font-size: 1.2rem;">delete_outline</i>
+            <span>Excluir Roteiro</span>
+          <% end %>
+        <% end %>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Participantes</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <%= owner.name %> <span class="badge bg-primary rounded-pill">Organizador</span>
+            </li>
+            <% participants.each do |participant| %>
+              <li class="list-group-item">
+                <%= participant.user.name %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+
+        <div class="card shadow-sm mb-4">
           <div class="card-header">
             <h5 class="mb-0">Compre sua passagem!</h5>
           </div>
@@ -61,7 +131,7 @@
           <div class="card shadow-sm">
             <div class="card-body">
               <h5 class="card-title fs-6">Compartilhar</h5>
-              <p class="card-text text-muted small">
+              <p class="text-muted small">
                 Copie o link para convidar outros viajantes para este roteiro.
               </p>
               <button type="button"
@@ -76,6 +146,25 @@
           </div>
         <% end %>
 
+        <p class="text-muted mt-3 mb-0 d-flex align-items-center" style="font-size: 0.8rem;">
+          <i class="material-icons me-2" style="font-size: 1rem;">autorenew</i>
+          As alterações são salvas automaticamente ao sair do campo.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newItemModalLabel">Adicionar Novo Item ao Roteiro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= render "scripts/items/new", script: @script, item: item_for_new_form %>
       </div>
     </div>
   </div>
