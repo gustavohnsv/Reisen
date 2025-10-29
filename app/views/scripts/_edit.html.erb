@@ -1,10 +1,12 @@
-<%= form_with(model: script, data: {controller: 'autosave'}, class: "me-2") do |f| %>
+<% readonly_script = (@permission_level != :owner) %>
+
+<%= form_with(model: script, data: {controller: (readonly_script ? nil : 'autosave')}, class: "me-2") do |f| %>
   <%= f.text_field :title,
                    value: script.title,
                    autocomplete: "title",
-                   data: {action: "blur->autosave#save"},
+                   data: {action: (readonly_script ? nil : "blur->autosave#save")},
                    id: "edit-title",
                    class: "display-5 mb-2 border-0 bg-transparent shadow-none w-100",
-                   style: "outline: none;"
-  %>
+                   style: "outline: none;",
+                   readonly: readonly_script %>
 <% end %>

@@ -1,7 +1,13 @@
 class Scripts::ItemsController < ApplicationController
 
+  include ScriptPermissions
+
   before_action :set_script
   before_action :set_script_item, only: [:update, :destroy]
+
+  before_action :set_script_permissions
+  before_action :authorize_write_items_access!
+
   def create
     @item = @script&.script_items&.new(script_item_params)
     @item.user = current_user if current_user
