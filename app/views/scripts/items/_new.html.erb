@@ -1,0 +1,44 @@
+<%= form_with(model: [script, item]) do |f| %>
+
+  <div class="mb-3">
+    <%= f.text_field :title,
+                     class: 'form-control',
+                     placeholder: 'Título (Ex: Jantar no Restaurante X)',
+                     id: 'new-item-title' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.text_area :description,
+                    class: 'form-control',
+                    rows: 3,
+                    placeholder: 'Descrição (Ex: Reservar mesa para as 20h)',
+                    id: 'new-item-description' %>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6 mb-3">
+      <%= f.text_field :location,
+                       class: 'form-control',
+                       placeholder: 'Localização',
+                       id: 'new-item-location' %>
+    </div>
+    <div class="col-md-6 mb-3">
+      <%= f.datetime_field :date_time_start,
+                           class: 'form-control',
+                           id: 'new-item-date-time-start' %>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.number_field :estimated_cost,
+                       class: 'form-control',
+                       placeholder: 'Custo estimado (Ex: 150.00)',
+                       step: 0.01,
+                       id: 'new-item-estimated-cost' %>
+  </div>
+
+  <%= hidden_field_tag :token, params[:token] if params[:token].present? %>
+
+  <%= f.button "Adicionar Item", class: 'btn btn-primary w-100', id: 'add' %>
+
+<% end %>

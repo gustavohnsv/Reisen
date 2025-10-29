@@ -37,7 +37,7 @@ Funcionalidade: Item na checklist
     Então devo ser redirecionado para a checklist "Preparaçao para a viagem"
     Dado que eu estou na página da checklist "Preparaçao para a viagem"
     E que vejo um item de checklist chamado "Fazer compras" com o seu ID
-    Quando preencher o campo com ID "edit-item-description" com o nome "Fazer compras" para "Fazer mais compras"
+    Quando preencher o campo do item da checklist com ID "edit-item-description" com o nome "Fazer compras" para "Fazer mais compras"
     E clicar em "check"
     Entao devo ver o item "Fazer mais compras" na pagina da checklist "Preparacao para a viagem" com o seu ID
 

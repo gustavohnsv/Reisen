@@ -1,27 +1,18 @@
 <div class="container mt-4">
   <h1 class="mb-4 text-center">Notícias de Turismo</h1>
 
-  <% country_names = ISO3166::Country.all.map { |country| country.translation('pt-br') }.sort %>
-
-  <form method="get" action="/news" class="mb-3 text-center">
-    <div class="d-inline-block w-50">
-      <%= select_tag :location,
-                     options_for_select(country_names, params[:location]),
-                     include_blank: 'Selecione um país ou digite um local...',
-                     class: 'form-control',
-                     data: {
-                       controller: 'tom-select',
-                       tom_select_create_value: 'true'
-                     } %>
+  <form method="get" action="/news" class="mb-3">
+    <div class="input-group w-75 mx-auto">
+      <input type="text" name="location" placeholder="Buscar por local..." class="form-control" style="outline: none; box-shadow: none">
+      <button type="submit" class="btn btn-success">Buscar</button>
     </div>
-    <button type="submit" class="btn btn-success ms-2">Buscar</button>
   </form>
 
   <% if @news.present? %>
     <div class="row">
       <% @news.each do |article| %>
         <div class="col-md-6 col-lg-4 mb-4 noticia">
-          <div class="card h-100 shadow-sm border-0">
+          <div class="card h-100 shadow border-0">
             <div class="card-body">
               <h5 class="card-title noticia-titulo"><%= article[:title] %></h5>
               <p class="card-text text-muted small noticia-data"><%= article[:pubDate] %></p>

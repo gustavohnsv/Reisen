@@ -2,6 +2,7 @@
 
 import "@hotwired/turbo-rails"
 import "controllers"
+import "bootstrap"
 
 const THEME_KEY = 'user-theme';
 const LIGHT_ICON = 'bi-sun-fill';

@@ -4,6 +4,7 @@ class ScriptsController < ApplicationController
   before_action :check_ownership, only: [:edit, :update]
   def show
     @airlines = airlines
+    @item = @script&.script_items&.build
   end
 
   def new
@@ -41,7 +42,7 @@ class ScriptsController < ApplicationController
     redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 
-  private
+  protected
 
   def set_script
     if current_user
@@ -61,7 +62,17 @@ class ScriptsController < ApplicationController
   end
 
   def script_params
-    params.require(:script).permit(:title)
+    params.require(:script).permit(
+      :title,
+      script_items_attributes: [
+        :id,
+        :title,
+        :description,
+        :location,
+        :date_time_start,
+        :estimated_cost,
+        :_destroy]
+    )
   end
 
   def check_ownership
@@ -70,6 +81,7 @@ class ScriptsController < ApplicationController
     end
   end
 
+  private
   def airlines
     {
       "Latam" => "https://www.latamairlines.com/br/pt",

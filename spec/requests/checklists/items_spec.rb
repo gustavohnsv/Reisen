@@ -25,7 +25,7 @@ RSpec.describe "Checklists::Items", type: :request do
         expect(item.reload.check).to eq(true)
         expect(response).to redirect_to(checklist_path(checklist.id))
       end
-      it 'nao atualiza o titulo da checklist' do
+      it 'nao atualiza o titulo do item' do
         patch checklist_checklist_item_path(checklist.id, item.id), params: {
           checklist_item: {description: ''}
         }

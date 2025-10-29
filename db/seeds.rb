@@ -15,8 +15,15 @@ User.destroy_all
 
 puts "Criando usuários, roteiros e checklists"
 main_user = User.create!(
-  name: "Usuário teste",
-  email: "testuser@example.com",
+  name: "John Doe",
+  email: "johndoe@example.com",
+  password: "123456",
+  password_confirmation: "123456",
+  confirmed_at: Time.current
+)
+second_user = User.create!(
+  name: "John Smith",
+  email: "johnsmith@example.com",
   password: "123456",
   password_confirmation: "123456",
   confirmed_at: Time.current
@@ -27,9 +34,25 @@ Script.create!(
   user: main_user
 )
 
+second_script = Script.create!(
+  title: "Viagem para " + Faker::Address::street_name,
+  user: second_user
+)
+
+Participant.create!(
+  user: main_user,
+  script: second_script
+)
+
 Checklist.create!(
   title: Faker::Lorem.sentence,
   user: main_user
 )
 
-puts "Usuário criado: {name=Usuário teste, email=testuser@example.com, password=123456}"
+puts "Usuários criados!"
+
+User.all.each do |user|
+  puts user.name
+  puts user.email
+  puts '123456'
+end

@@ -12,7 +12,7 @@
   <% end %>
 
   <%= form_with(model: [checklist, item], data: {controller: 'autosave'}, class: "flex-grow-1 me-2") do |f2| %>
-    <div class="input-group input-group-sm"> <%# 'sm' para ser mais compacto %>
+    <div class="input-group input-group-sm">
       <%= f2.text_field :description,
                         value: item.description,
                         autocomplete: "description",
@@ -23,7 +23,7 @@
       %>
 
       <%= f2.button class: "btn btn-sm btn-outline-secondary" do %>
-        <i class="material-icons fs-6">check</i> <%# fs-6 para ícone pequeno %>
+        <i class="material-icons fs-6">check</i>
       <% end %>
     </div>
   <% end %>
