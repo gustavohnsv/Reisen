@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_27_190106) do
-ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_27_210025) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -88,18 +87,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
   end
 
   create_table "script_items", force: :cascade do |t|
-    t.string "title"
-    t.integer "user_id"
-    t.integer "script_id", null: false
     t.datetime "created_at", null: false
+    t.datetime "date_time_start"
+    t.string "description"
+    t.decimal "estimated_cost", precision: 10, scale: 2
+    t.string "location"
     t.integer "script_id", null: false
     t.string "title"
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
-    t.string "description"
-    t.string "location"
-    t.datetime "date_time_start"
-    t.decimal "estimated_cost", precision: 10, scale: 2
+    t.integer "user_id"
     t.index ["script_id"], name: "index_script_items_on_script_id"
     t.index ["user_id"], name: "index_script_items_on_user_id"
   end
