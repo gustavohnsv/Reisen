@@ -23,7 +23,15 @@ SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
   SimpleCov::Formatter::LcovFormatter
 ]
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  # Não inclui na cobertura código que não é de negócio
+  add_filter %r{^/config/}
+  add_filter %r{^/vendor/}
+  add_filter %r{^/app/channels/}
+  add_filter %r{^/app/jobs/}
+  add_filter %r{^/app/mailers/}
+  add_filter %r{^/app/helpers/}
+end
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
