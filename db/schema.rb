@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_30_020000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -48,6 +48,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
     t.index ["checklist_id"], name: "index_checklist_items_on_checklist_id"
   end
 
+  create_table "checklist_participants", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "checklist_id", null: false
+    t.string "role", default: "collaborator", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checklist_id", "user_id"], name: "index_checklist_participants_on_checklist_and_user", unique: true
+    t.index ["checklist_id"], name: "index_checklist_participants_on_checklist_id"
+    t.index ["user_id"], name: "index_checklist_participants_on_user_id"
+  end
+
   create_table "checklists", force: :cascade do |t|
     t.string "title"
     t.integer "user_id", null: false
@@ -72,6 +83,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
     t.integer "script_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "role", default: "collaborator", null: false
     t.index ["script_id"], name: "index_participants_on_script_id"
     t.index ["user_id"], name: "index_participants_on_user_id"
   end
@@ -141,6 +153,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "checklist_items", "checklists"
+  add_foreign_key "checklist_participants", "checklists"
+  add_foreign_key "checklist_participants", "users"
   add_foreign_key "checklists", "users"
   add_foreign_key "notices", "users"
   add_foreign_key "participants", "scripts"

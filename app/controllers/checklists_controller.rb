@@ -1,9 +1,14 @@
 class ChecklistsController < ApplicationController
+  include ChecklistPermissions
+
   before_action :authenticate_user!
   before_action :set_checklist, only: [:show, :edit, :update, :destroy]
+  before_action :set_checklist_permissions, only: [:show]
   def show
     # Já tem os dados da checklist devido ao 'before_action :set_checklist'
     @item = @checklist.checklist_items.build
+    # Expose permission level to views (owner/collaborator/read_only or nil)
+    @checklist_permission_level ||= (@checklist.user == current_user ? :owner : nil)
   end
 
   def new
