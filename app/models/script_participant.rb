@@ -1,4 +1,4 @@
-class Participant < ApplicationRecord
+class ScriptParticipant < ApplicationRecord
   belongs_to :user
   belongs_to :script
   ROLES = %w[collaborator read_only].freeze

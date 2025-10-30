@@ -6,9 +6,9 @@ class ChecklistsController < ApplicationController
   before_action :set_checklist_permissions, only: [:show]
   def show
     # Já tem os dados da checklist devido ao 'before_action :set_checklist'
-    @item = @checklist.checklist_items.build
+    @item = @checklist&.checklist_items.build
     # Expose permission level to views (owner/collaborator/read_only or nil)
-    @checklist_permission_level ||= (@checklist.user == current_user ? :owner : nil)
+    @checklist_permission_level ||= (@checklist&.user == current_user ? :owner : nil)
   end
 
   def new
@@ -45,7 +45,11 @@ class ChecklistsController < ApplicationController
   private
 
   def set_checklist
-    @checklist = current_user.checklists.find(params[:id])
+    @checklist = Checklist
+                .joins("LEFT JOIN checklist_participants ON checklist_participants.checklist_id = checklists.id")
+                .where("checklists.user_id = ? OR checklist_participants.user_id = ?", current_user.id, current_user.id)
+                .distinct
+                .find(params[:id])
     rescue ActiveRecord::RecordNotFound => _
       redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end

@@ -6,7 +6,7 @@
       <div class="card shadow-sm">
         <ul class="list-group list-group-flush">
 
-          <% persisted_items = @checklist.checklist_items.select(&:persisted?) %>
+          <% persisted_items = @checklist&.checklist_items.select(&:persisted?) %>
 
           <% if persisted_items.any? %>
             <% persisted_items.each do |i| %>
@@ -37,7 +37,7 @@
       <%# Participants and invite panel (owner only) %>
       <%
         owner = @checklist&.user
-        participants = @checklist&.checklist_participants&.includes(:user)&.where.not(user_id: owner&.id)
+        participants = @checklist&.checklist_participants&.includes(:user)&.where&.not(user_id: owner&.id)
       %>
 
       <div class="card shadow-sm mt-4">
@@ -46,23 +46,26 @@
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item d-flex justify-content-between align-items-center">
-            <%= owner.name %> <span class="badge bg-primary rounded-pill">Organizador</span>
+            <div>
+              <%= owner&.name %>
+              <span class="badge bg-primary rounded-pill ms-2">Organizador</span>
+            </div>
           </li>
           <% participants&.each do |participant| %>
             <li class="list-group-item d-flex justify-content-between align-items-center">
               <div>
                 <%= participant.user.name %>
                 <% if participant.role == 'read_only' %>
-                  <span class="badge bg-secondary ms-2">Visualizador</span>
+                  <span class="badge bg-secondary rounded-pill ms-2">Visualizador</span>
                 <% else %>
-                  <span class="badge bg-info ms-2">Colaborador</span>
+                  <span class="badge bg-info rounded-pill ms-2">Colaborador</span>
                 <% end %>
               </div>
-              <% if @checklist.user == current_user %>
+              <% if @checklist_permission_level == :owner %>
                 <%= link_to checklist_participant_path(@checklist, participant),
                             method: :delete,
                             class: "btn btn-sm btn-outline-danger",
-                            data: { confirm: "Remover participante?" } do %>
+                            data: { turbo_method: :delete, turbo_confirm: "Remover participante?" } do %>
                   <i class="material-icons" style="font-size: 1rem;">person_remove</i>
                 <% end %>
               <% end %>
@@ -71,9 +74,9 @@
         </ul>
       </div>
 
-      <% if @checklist.user == current_user %>
+      <% if @checklist&.user == current_user %>
         <div class="mt-3 d-flex justify-content-end">
-          <%= link_to checklist_path(@checklist.id),
+          <%= link_to checklist_path(@checklist&.id),
                       method: :delete,
                       class: "btn btn-outline-danger d-inline-flex align-items-center gap-2 w-100 justify-content-center",
                       data: { turbo_method: :delete,
@@ -84,7 +87,7 @@
         </div>
       <% end %>
 
-      <% if @checklist.user == current_user %>
+      <% if @checklist&.user == current_user %>
         <div class="card shadow-sm mb-4 mt-3">
           <div class="card-header">
             <h5 class="mb-0">Convidar Participante</h5>

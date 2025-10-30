@@ -36,8 +36,8 @@ class Scripts::ItemsController < ApplicationController
   def set_script
     if current_user
       @script = Script
-                  .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
-                  .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
+                  .joins("LEFT JOIN script_participants ON script_participants.script_id = scripts.id")
+                  .where("scripts.user_id = ? OR script_participants.user_id = ?", current_user.id, current_user.id)
                   .distinct
                   .find(params[:script_id])
     elsif params[:token].present?

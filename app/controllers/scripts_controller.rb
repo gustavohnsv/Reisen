@@ -7,8 +7,7 @@ class ScriptsController < ApplicationController
 
   before_action :set_script_permissions, only: [:show, :update, :destroy]
   before_action :authorize_read_access!, only: [:show]
-  # permitir que owner edite o documento
-  before_action :authorize_write_access!, only: [:edit, :update]
+  before_action :authorize_owner_access!, only: [:edit, :update]
   def show
     @airlines = airlines
     @item = @script&.script_items&.build
@@ -54,8 +53,8 @@ class ScriptsController < ApplicationController
   def set_script
     if current_user
       @script = Script
-                  .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
-                  .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
+                  .joins("LEFT JOIN script_participants ON script_participants.script_id = scripts.id")
+                  .where("scripts.user_id = ? OR script_participants.user_id = ?", current_user.id, current_user.id)
                   .distinct
                   .find(params[:id])
     elsif params[:token].present?

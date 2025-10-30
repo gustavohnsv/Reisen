@@ -34,7 +34,13 @@ class Checklists::ItemsController < ApplicationController
   end
 
   def set_checklist
-    @checklist = current_user.checklists.find(params[:checklist_id])
+    @checklist = Checklist
+                   .joins("LEFT JOIN checklist_participants ON checklist_participants.checklist_id = checklists.id")
+                   .where("checklists.user_id = ? OR checklist_participants.user_id = ?", current_user.id, current_user.id)
+                   .distinct
+                   .find(params[:checklist_id])
+  rescue ActiveRecord::RecordNotFound => _
+    redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 
   def set_checklist_item

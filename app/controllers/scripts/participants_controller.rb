@@ -17,23 +17,23 @@ class Scripts::ParticipantsController < ApplicationController
       redirect_to script_path(@script), alert: "Usuário não encontrado" and return
     end
 
-    if @script.participants.exists?(user_id: user.id)
-      redirect_to script_path(@script), notice: "Usuário já é participante" and return
+    if @script&.script_participants&.exists?(user_id: user&.id)
+      redirect_to script_path(@script), alert: "Usuário já é participante" and return
     end
 
-    @script.participants.create!(user: user, role: role)
+    @script&.script_participants&.create!(user: user, role: role)
     redirect_to script_path(@script), notice: "Participante adicionado com sucesso"
-  rescue ActiveRecord::RecordInvalid => e
-    redirect_to script_path(@script), alert: e.message
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to script_path(@script), alert: e.message
   end
 
   def destroy
-    participant = @script.participants.find_by(id: params[:id])
+    participant = @script&.script_participants&.find_by(id: params[:id])
     unless participant
       redirect_to script_path(@script), alert: "Participante não encontrado" and return
     end
 
-    participant.destroy
+    participant&.destroy
     redirect_to script_path(@script), notice: "Participante removido"
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_30_020000) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_30_135738) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -77,17 +77,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_020000) do
     t.index ["user_id"], name: "index_notices_on_user_id"
   end
 
-  create_table "participants", force: :cascade do |t|
-    t.integer "permission"
-    t.integer "user_id", null: false
-    t.integer "script_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "role", default: "collaborator", null: false
-    t.index ["script_id"], name: "index_participants_on_script_id"
-    t.index ["user_id"], name: "index_participants_on_user_id"
-  end
-
   create_table "script_comments", force: :cascade do |t|
     t.text "content"
     t.integer "user_id", null: false
@@ -110,6 +99,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_020000) do
     t.decimal "estimated_cost", precision: 10, scale: 2
     t.index ["script_id"], name: "index_script_items_on_script_id"
     t.index ["user_id"], name: "index_script_items_on_user_id"
+  end
+
+  create_table "script_participants", force: :cascade do |t|
+    t.integer "permission"
+    t.integer "user_id", null: false
+    t.integer "script_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "role", default: "collaborator", null: false
+    t.index ["script_id"], name: "index_script_participants_on_script_id"
+    t.index ["user_id"], name: "index_script_participants_on_user_id"
   end
 
   create_table "script_spents", force: :cascade do |t|
@@ -157,12 +157,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_020000) do
   add_foreign_key "checklist_participants", "users"
   add_foreign_key "checklists", "users"
   add_foreign_key "notices", "users"
-  add_foreign_key "participants", "scripts"
-  add_foreign_key "participants", "users"
   add_foreign_key "script_comments", "scripts"
   add_foreign_key "script_comments", "users"
   add_foreign_key "script_items", "scripts"
   add_foreign_key "script_items", "users"
+  add_foreign_key "script_participants", "scripts"
+  add_foreign_key "script_participants", "users"
   add_foreign_key "script_spents", "scripts"
   add_foreign_key "script_spents", "users"
   add_foreign_key "scripts", "users"
