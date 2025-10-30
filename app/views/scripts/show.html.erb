@@ -106,12 +106,47 @@
               <%= owner.name %> <span class="badge bg-primary rounded-pill">Organizador</span>
             </li>
             <% participants.each do |participant| %>
-              <li class="list-group-item">
-                <%= participant.user.name %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <span><%= participant.user.name %></span>
+                  <% if participant.role == 'read_only' %>
+                    <span class="badge bg-secondary">Visualizador</span>
+                  <% else %>
+                    <span class="badge bg-info">Colaborador</span>
+                  <% end %>
+                </div>
+                <% if @permission_level == :owner %>
+                  <%= link_to script_participant_path(@script, participant),
+                              method: :delete,
+                              class: "btn btn-sm btn-outline-danger",
+                              data: { turbo_method: :delete, turbo_confirm: "Remover participante?" } do %>
+                    <i class="material-icons" style="font-size: 1rem;">person_remove</i>
+                  <% end %>
+                <% end %>
               </li>
             <% end %>
           </ul>
         </div>
+        <% if @permission_level == :owner %>
+          <div class="card shadow-sm mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Convidar Participante</h5>
+            </div>
+            <div class="card-body">
+              <%= form_with url: script_participants_path(@script), local: true do |f| %>
+                <div class="mb-2">
+                  <%= f.label :email, 'E-mail do usuário', class: 'form-label' %>
+                  <%= f.email_field :email, class: 'form-control', required: true, placeholder: 'usuario@exemplo.com' %>
+                </div>
+                <div class="mb-2">
+                  <%= f.label :role, 'Permissão', class: 'form-label' %>
+                  <%= f.select :role, options_for_select([['Pode editar', 'collaborator'], ['Apenas visualizar', 'read_only']], 'collaborator'), {}, class: 'form-select' %>
+                </div>
+                <%= f.submit 'Convidar', class: 'btn btn-primary w-100' %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <div class="card shadow-sm mb-4">
           <div class="card-header">

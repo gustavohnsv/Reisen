@@ -72,6 +72,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
     t.integer "script_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "role", default: "collaborator", null: false
     t.index ["script_id"], name: "index_participants_on_script_id"
     t.index ["user_id"], name: "index_participants_on_user_id"
   end
@@ -101,7 +102,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_27_210025) do
   end
 
   create_table "script_spents", force: :cascade do |t|
-    t.decimal "amount", precision: 8, scale: 2
+    t.decimal "amount"
     t.integer "user_id", null: false
     t.integer "script_id", null: false
     t.datetime "created_at", null: false
