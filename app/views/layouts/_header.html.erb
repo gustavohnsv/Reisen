@@ -14,6 +14,9 @@
           </button>
         </li>
         <li class="nav-item">
+          <%= link_to "Pesquisa", maps_search_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
           <%= link_to "Notícias", news_path, class: "nav-link" %>
         </li>
         <% if user_signed_in? %>
