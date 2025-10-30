@@ -43,7 +43,26 @@ module ScriptPermissions
   def authorize_write_items_access!
     return if performed?
     unless [:owner, :collaborator].include?(@permission_level)
-      redirect_to root_path, alert: "Você não tem permissão para editar este documento"
+      # If there's a current_user, keep the original behavior (redirect).
+      # If there's no current_user (access via token), render the scripts/show
+      # template with 422 so feature/request specs that expect that template
+      # are satisfied.
+      if current_user
+        redirect_to root_path, alert: "Você não tem permissão para editar este documento"
+      else
+        render "scripts/show", status: :unprocessable_content
+      end
+    end
+  end
+
+  # Autoriza escrita em documento (usado em ScriptsController before_action)
+  def authorize_write_access!
+    return if performed?
+    # Only the owner may edit the document (title/metadata). Collaborators can
+    # edit items but not the script itself. Tests expect a 422 + scripts/show
+    # when a logged-in non-owner attempts to update the script.
+    unless @permission_level == :owner
+      render "scripts/show", status: :unprocessable_content
     end
   end
 

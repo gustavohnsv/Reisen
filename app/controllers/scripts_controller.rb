@@ -7,7 +7,7 @@ class ScriptsController < ApplicationController
 
   before_action :set_script_permissions, only: [:show, :update, :destroy]
   before_action :authorize_read_access!, only: [:show]
-  # permitir que owner OU collaborator editem o documento
+  # permitir que owner edite o documento
   before_action :authorize_write_access!, only: [:edit, :update]
   def show
     @airlines = airlines
