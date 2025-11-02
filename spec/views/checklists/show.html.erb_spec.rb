@@ -1,5 +1,18 @@
 require 'rails_helper'
 
+RSpec.describe 'checklists/show', type: :view do
+  it 'renders without error for read_only permission' do
+    user = create(:user)
+    checklist = create(:checklist, user: user)
+    assign(:checklist, checklist)
+    assign(:checklist_permission_level, :read_only)
+    # Render the template - it should not raise and should include the checklist title
+    render template: 'checklists/show'
+    expect(rendered).to include(checklist.title)
+  end
+end
+require 'rails_helper'
+
 RSpec.describe "checklists/show.html.erb", type: :view do
 
   let!(:user) {FactoryBot.create(:user)}
