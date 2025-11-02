@@ -23,8 +23,8 @@ class Checklists::ParticipantsController < ApplicationController
 
     @checklist&.checklist_participants&.create!(user: user, role: role)
     redirect_to checklist_path(@checklist), notice: "Participante adicionado com sucesso"
-    rescue ActiveRecord::RecordInvalid => e
-      redirect_to checklist_path(@checklist), alert: e.message
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to checklist_path(@checklist), alert: e.message
   end
 
   def destroy
