@@ -1,7 +1,13 @@
 class Scripts::ItemsController < ApplicationController
 
+  include ScriptPermissions
+
   before_action :set_script
   before_action :set_script_item, only: [:update, :destroy]
+
+  before_action :set_script_permissions
+  before_action :authorize_write_items_access!
+
   def create
     @item = @script&.script_items&.new(script_item_params)
     @item.user = current_user if current_user
@@ -30,8 +36,8 @@ class Scripts::ItemsController < ApplicationController
   def set_script
     if current_user
       @script = Script
-                  .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
-                  .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
+                  .joins("LEFT JOIN script_participants ON script_participants.script_id = scripts.id")
+                  .where("scripts.user_id = ? OR script_participants.user_id = ?", current_user.id, current_user.id)
                   .distinct
                   .find(params[:script_id])
     elsif params[:token].present?

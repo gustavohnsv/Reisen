@@ -9,14 +9,16 @@ class User < ApplicationRecord
   
   has_many :scripts, dependent: :destroy
   has_many :checklists, dependent: :destroy
-  has_many :participants, dependent: :destroy
+  has_many :script_participants, dependent: :destroy
+  has_many :checklist_participants, dependent: :destroy
 
   has_many :script_comments, dependent: :destroy
   has_many :script_items, dependent: :destroy
   has_many :script_spents, dependent: :destroy
   has_many :checklist_items, dependent: :destroy
 
-  has_many :participated_scripts, through: :participants, source: :script
+  has_many :participated_scripts, through: :script_participants, source: :script
+  has_many :participated_checklists, through: :checklist_participants, source: :checklist
   has_one_attached :avatar
   validate :avatar_type_and_size
 

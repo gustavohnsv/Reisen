@@ -26,7 +26,7 @@ RSpec.describe "Scripts::Items", type: :request do
       it 'atualiza o título do item de outro roteiro pois é participante' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        FactoryBot.create(:participant, user: user, script: other_script)
+        FactoryBot.create(:script_participant, user: user, script: other_script)
         other_item = FactoryBot.create(:script_item, script: other_script)
         patch script_script_item_path(other_script.id, other_item.id), params: {
           script_item: {title: 'Item atualizado'}
@@ -47,17 +47,12 @@ RSpec.describe "Scripts::Items", type: :request do
       before do
         @token = script.shareable_token
       end
-      it 'atualiza apenas o título do item com sucesso' do
-        patch script_script_item_url(script.id, item.id, token: @token), params: {
-          script_item: {title: 'Item atualizado'}
-        }
-        expect(item.reload.title).to eq('Item atualizado')
-      end
       it 'não atualiza o título do item' do
         patch script_script_item_url(script.id, item.id, token: @token), params: {
           script_item: {title: ''}
         }
-        expect(response).to render_template('scripts/show')
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template("scripts/show")
       end
     end
     context 'usuário não está logado e não possui o token' do
@@ -116,14 +111,6 @@ RSpec.describe "Scripts::Items", type: :request do
         before do
           @token = script.shareable_token
         end
-        it 'o item do roteiro é criado com sucesso' do
-          expect {
-            post script_script_items_url(script.id, token: @token), params: {
-              script_item: @valid_params
-            }
-          }.to change(ScriptItem, :count).by(1)
-          expect(response).to redirect_to(script_url(script.id, token: @token))
-        end
         it 'o item do roteiro não é criado com sucesso' do
           expect {
             post script_script_items_url(script.id, token: @token), params: {
@@ -131,6 +118,7 @@ RSpec.describe "Scripts::Items", type: :request do
             }
           }.to change(ScriptItem, :count).by(0)
           expect(response).to have_http_status(:unprocessable_content)
+          expect(response).to render_template("scripts/show")
         end
       end
       context 'usuário não está logado e não possui o token' do
@@ -163,11 +151,12 @@ RSpec.describe "Scripts::Items", type: :request do
       before do
         @token = script.shareable_token
       end
-      it 'deleta o item com sucesso' do
+      it 'não deleta o item com sucesso' do
         expect {
           delete script_script_item_url(script.id, item.id, token: @token)
-        }.to change(ScriptItem, :count).by(-1)
-        expect(response).to redirect_to(script_url(script.id, token: @token))
+        }.to change(ScriptItem, :count).by(0)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template("scripts/show")
       end
     end
     context 'usuário não está logado e não possui o token' do
