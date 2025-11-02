@@ -23,8 +23,8 @@ class Scripts::ParticipantsController < ApplicationController
 
     @script&.script_participants&.create!(user: user, role: role)
     redirect_to script_path(@script), notice: "Participante adicionado com sucesso"
-    rescue ActiveRecord::RecordInvalid => e
-      redirect_to script_path(@script), alert: e.message
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to script_path(@script), alert: e.message
   end
 
   def destroy
