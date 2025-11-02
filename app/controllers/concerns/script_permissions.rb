@@ -54,7 +54,7 @@ module ScriptPermissions
   def authorize_owner_access!
     return if performed?
     unless @permission_level == :owner
-      render "scripts/show", alert: "Vocẽ não é o proprietário desse roteiro", status: :unprocessable_content
+      render "scripts/show", alert: "Você não é o proprietário desse roteiro", status: :unprocessable_content
     end
   end
 end
