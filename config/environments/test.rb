@@ -4,6 +4,11 @@
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
+  # Impede recarregamento de classes entre testes (recomendado)
+
+  config.cache_classes = true
+  config.eager_load = false
+  
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
@@ -21,6 +26,15 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
   config.cache_store = :null_store
+  config.action_controller.perform_caching = false
+  config.action_dispatch.show_exceptions = false
+  config.action_controller.allow_forgery_protection = false
+
+  # Permite qualquer host - resolve "Blocked hosts: www.example.com"
+  config.hosts.clear
+
+  # Evita problemas com Spring e threads
+  config.allow_concurrency = false
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable
