@@ -95,8 +95,9 @@ Rails.application.configure do
 
   # Informa ao Rails para não engolir erros de envio de e-mail em produção.
   config.action_mailer.raise_delivery_errors = true
-  
-  config.action_mailer.raise_delivery_method = :smtp
+
+  # Define o protocolo SMTP para entrega de e-mail
+  config.action_mailer.delivery_method = :smtp
 
   # Configurações para o servidor SMTP lidar com o e-mail
   config.action_mailer.smtp_settings = {
