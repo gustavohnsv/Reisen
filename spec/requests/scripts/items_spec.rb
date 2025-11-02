@@ -26,7 +26,7 @@ RSpec.describe "Scripts::Items", type: :request do
       it 'atualiza o título do item de outro roteiro pois é participante' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        FactoryBot.create(:participant, user: user, script: other_script)
+        FactoryBot.create(:script_participant, user: user, script: other_script)
         other_item = FactoryBot.create(:script_item, script: other_script)
         patch script_script_item_path(other_script.id, other_item.id), params: {
           script_item: {title: 'Item atualizado'}

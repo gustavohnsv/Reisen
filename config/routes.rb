@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :destroy], controller: 'scripts/comments'
     resources :spents, only: [:create], controller: 'scripts/spents'
     resources :script_items, only: [:create, :update, :destroy], controller: 'scripts/items'
+    resources :participants, only: [:create, :destroy], controller: 'scripts/participants'
     member do
       get :news
     end
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
 
   resources :checklists, except: [:index] do
     resources :checklist_items, only: [:create, :update, :destroy], controller: 'checklists/items'
+    resources :participants, only: [:create, :destroy], controller: 'checklists/participants'
   end
 
   # Rotas destinadas ao ambiente de testes

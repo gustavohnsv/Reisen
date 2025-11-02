@@ -1,0 +1,12 @@
+<div class="d-flex align-items-center" style="min-height: 2.5rem;">
+  <div class="me-2" style="width: 1.75rem;"></div>
+  <div class="flex-grow-1 me-2">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" disabled <%= 'checked' if item.check? %> />
+      <label class="form-check-label <%= 'text-decoration-line-through text-muted' if item.check? %>">
+        <%= item.description %>
+      </label>
+    </div>
+  </div>
+  <div style="width: 1.5rem;"></div>
+</div>

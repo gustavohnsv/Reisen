@@ -22,7 +22,7 @@ RSpec.describe "Scripts", type: :request do
       it 'acessa o roteiro de outro usuário e é participante' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        FactoryBot.create(:participant, user: user, script: other_script)
+        FactoryBot.create(:script_participant, user: user, script: other_script)
         get script_path(other_script.id)
         expect(response).to have_http_status(:success)
         expect(response.body).to include(other_script.title)
@@ -64,7 +64,7 @@ RSpec.describe "Scripts", type: :request do
       it 'não atualiza o título do roteiro pois não é o proprietário' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        FactoryBot.create(:participant, user: user, script: other_script)
+        FactoryBot.create(:script_participant, user: user, script: other_script)
         patch script_path(other_script.id), params: {script: {title: 'Roteiro atualizado'}}
         expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template("scripts/show")
@@ -117,7 +117,7 @@ RSpec.describe "Scripts", type: :request do
       it 'não é o proprietário e não deleta o roteiro' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        Participant.create(user: user, script: other_script)
+        ScriptParticipant.create(user: user, script: other_script)
         expect {
           delete script_path(other_script.id)
         }.to change(Script, :count).by(0)

@@ -10,6 +10,13 @@ class DevController < ApplicationController
       u.password_confirmation = 'password'
     end
 
+    # Em development, confirme o usuário se o Devise Confirmable estiver habilitado
+    if user.respond_to?(:confirm) && user.respond_to?(:confirmed?)
+      user.confirm unless user.confirmed?
+    elsif user.respond_to?(:confirmed_at)
+      user.update_column(:confirmed_at, Time.current) if user.confirmed_at.nil?
+    end
+
     sign_in(user)
     redirect_to root_path, notice: "Logado como #{user.email} (dev)"
   end

@@ -3,7 +3,7 @@
 
     <%
       owner = @script&.user
-      participants = @script&.participants&.includes(:user).where.not(user_id: owner&.id)
+      participants = @script&.script_participants&.includes(:user).where.not(user_id: owner&.id)
       grouped_items = @script&.script_items&.order(date_time_start: :asc).group_by { |item| item.date_time_start&.to_date }
       item_for_new_form = (@item.nil? || @item.persisted?) ? @script&.script_items&.build : @item
     %>
@@ -15,7 +15,7 @@
         <%= render "scripts/edit", script: @script %>
 
         <p class="text-muted fs-5 mb-4">
-          Organizado por: <strong><%= owner.name %></strong> </p>
+          Organizado por: <strong><%= owner&.name %></strong> </p>
 
         <hr class="my-4">
 
@@ -103,15 +103,53 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center">
-              <%= owner.name %> <span class="badge bg-primary rounded-pill">Organizador</span>
+              <div>
+                <%= owner&.name %>
+                <span class="badge bg-primary rounded-pill ms-2">Organizador</span>
+              </div>
             </li>
             <% participants.each do |participant| %>
-              <li class="list-group-item">
-                <%= participant.user.name %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <span><%= participant.user.name %></span>
+                  <% if participant.role == 'read_only' %>
+                    <span class="badge bg-secondary rounded-pill ms-2">Visualizador</span>
+                  <% else %>
+                    <span class="badge bg-info rounded-pill ms-2">Colaborador</span>
+                  <% end %>
+                </div>
+                <% if @permission_level == :owner %>
+                  <%= link_to script_participant_path(@script, participant),
+                              method: :delete,
+                              class: "btn btn-sm btn-outline-danger",
+                              data: { turbo_method: :delete, turbo_confirm: "Remover participante?" } do %>
+                    <i class="material-icons" style="font-size: 1rem;">person_remove</i>
+                  <% end %>
+                <% end %>
               </li>
             <% end %>
           </ul>
         </div>
+        <% if @permission_level == :owner %>
+          <div class="card shadow-sm mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Convidar Participante</h5>
+            </div>
+            <div class="card-body">
+              <%= form_with url: script_participants_path(@script), local: true do |f| %>
+                <div class="mb-2">
+                  <%= f.label :email, 'E-mail do usuário', class: 'form-label' %>
+                  <%= f.email_field :email, class: 'form-control', required: true, placeholder: 'usuario@exemplo.com' %>
+                </div>
+                <div class="mb-2">
+                  <%= f.label :role, 'Permissão', class: 'form-label' %>
+                  <%= f.select :role, options_for_select([['Pode editar', 'collaborator'], ['Apenas visualizar', 'read_only']], 'collaborator'), {}, class: 'form-select' %>
+                </div>
+                <%= f.submit 'Convidar', class: 'btn btn-primary w-100' %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <div class="card shadow-sm mb-4">
           <div class="card-header">
