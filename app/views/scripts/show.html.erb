@@ -3,7 +3,7 @@
 
     <%
       owner = @script&.user
-      participants = @script&.participants&.includes(:user).where.not(user_id: owner&.id)
+      participants = @script&.script_participants&.includes(:user).where.not(user_id: owner&.id)
       grouped_items = @script&.script_items&.order(date_time_start: :asc).group_by { |item| item.date_time_start&.to_date }
       item_for_new_form = (@item.nil? || @item.persisted?) ? @script&.script_items&.build : @item
     %>
@@ -15,7 +15,7 @@
         <%= render "scripts/edit", script: @script %>
 
         <p class="text-muted fs-5 mb-4">
-          Organizado por: <strong><%= owner.name %></strong> </p>
+          Organizado por: <strong><%= owner&.name %></strong> </p>
 
         <hr class="my-4">
 
@@ -63,7 +63,11 @@
             <i class="material-icons" style="font-size: 3rem;">event_note</i>
             <h5 class="mt-3">Este roteiro ainda não tem itens</h5>
             <p class="text-muted">
-              Use o botão "Adicionar Novo Item" para começar a planejar.
+              <% if [:owner, :collaborator].include?(@permission_level) %>
+                Use o botão "Adicionar Novo Item" para começar a planejar.
+              <% else %>
+                O organizador ainda não adicionou itens a este roteiro.
+              <% end %>
             </p>
           </div>
         <% end %>
@@ -73,15 +77,17 @@
     <div class="col-lg-4">
       <div class="position-sticky" style="top: 2rem;">
 
-        <button type="button"
-                class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
-                data-bs-toggle="modal"
-                data-bs-target="#newItemModal">
-          <i class="material-icons" style="font-size: 1.2rem;">add</i>
-          <span>Adicionar Novo Item</span>
-        </button>
+        <% if [:owner, :collaborator].include?(@permission_level) %>
+          <button type="button"
+                  class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newItemModal">
+            <i class="material-icons" style="font-size: 1.2rem;">add</i>
+            <span>Adicionar Novo Item</span>
+          </button>
+        <% end %>
 
-        <% if @script&.user == current_user %>
+        <% if @permission_level == :owner %>
           <%= link_to script_path(@script&.id),
                       class: "btn btn-outline-danger w-100 mb-4 d-flex align-items-center justify-content-center gap-2",
                       data: { turbo_method: :delete,
@@ -97,15 +103,53 @@
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center">
-              <%= owner.name %> <span class="badge bg-primary rounded-pill">Organizador</span>
+              <div>
+                <%= owner&.name %>
+                <span class="badge bg-primary rounded-pill ms-2">Organizador</span>
+              </div>
             </li>
             <% participants.each do |participant| %>
-              <li class="list-group-item">
-                <%= participant.user.name %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <span><%= participant.user.name %></span>
+                  <% if participant.role == 'read_only' %>
+                    <span class="badge bg-secondary rounded-pill ms-2">Visualizador</span>
+                  <% else %>
+                    <span class="badge bg-info rounded-pill ms-2">Colaborador</span>
+                  <% end %>
+                </div>
+                <% if @permission_level == :owner %>
+                  <%= link_to script_participant_path(@script, participant),
+                              method: :delete,
+                              class: "btn btn-sm btn-outline-danger",
+                              data: { turbo_method: :delete, turbo_confirm: "Remover participante?" } do %>
+                    <i class="material-icons" style="font-size: 1rem;">person_remove</i>
+                  <% end %>
+                <% end %>
               </li>
             <% end %>
           </ul>
         </div>
+        <% if @permission_level == :owner %>
+          <div class="card shadow-sm mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Convidar Participante</h5>
+            </div>
+            <div class="card-body">
+              <%= form_with url: script_participants_path(@script), local: true do |f| %>
+                <div class="mb-2">
+                  <%= f.label :email, 'E-mail do usuário', class: 'form-label' %>
+                  <%= f.email_field :email, class: 'form-control', required: true, placeholder: 'usuario@exemplo.com' %>
+                </div>
+                <div class="mb-2">
+                  <%= f.label :role, 'Permissão', class: 'form-label' %>
+                  <%= f.select :role, options_for_select([['Pode editar', 'collaborator'], ['Apenas visualizar', 'read_only']], 'collaborator'), {}, class: 'form-select' %>
+                </div>
+                <%= f.submit 'Convidar', class: 'btn btn-primary w-100' %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <div class="card shadow-sm mb-4">
           <div class="card-header">
@@ -146,26 +190,30 @@
           </div>
         <% end %>
 
-        <p class="text-muted mt-3 mb-0 d-flex align-items-center" style="font-size: 0.8rem;">
-          <i class="material-icons me-2" style="font-size: 1rem;">autorenew</i>
-          As alterações são salvas automaticamente ao sair do campo.
-        </p>
+        <% if [:owner, :collaborator].include?(@permission_level) %>
+          <p class="text-muted mt-3 mb-0 d-flex align-items-center" style="font-size: 0.8rem;">
+            <i class="material-icons me-2" style="font-size: 1rem;">autorenew</i>
+            As alterações são salvas automaticamente ao sair do campo.
+          </p>
+        <% end %>
 
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newItemModalLabel">Adicionar Novo Item ao Roteiro</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <%= render "scripts/items/new", script: @script, item: item_for_new_form %>
+<% if [:owner, :collaborator].include?(@permission_level) %>
+  <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newItemModalLabel">Adicionar Novo Item ao Roteiro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= render "scripts/items/new", script: @script, item: item_for_new_form %>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<% end %>

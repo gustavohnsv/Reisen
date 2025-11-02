@@ -1,7 +1,13 @@
 class ScriptsController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
+
+  include ScriptPermissions
+
+  before_action :authenticate_user!, only: [:new, :create]
   before_action :set_script, only: [:show, :edit, :update]
-  before_action :check_ownership, only: [:edit, :update]
+
+  before_action :set_script_permissions, only: [:show, :update, :destroy]
+  before_action :authorize_read_access!, only: [:show]
+  before_action :authorize_owner_access!, only: [:edit, :update]
   def show
     @airlines = airlines
     @item = @script&.script_items&.build
@@ -47,8 +53,8 @@ class ScriptsController < ApplicationController
   def set_script
     if current_user
       @script = Script
-                  .joins("LEFT JOIN participants ON participants.script_id = scripts.id")
-                  .where("scripts.user_id = ? OR participants.user_id = ?", current_user.id, current_user.id)
+                  .joins("LEFT JOIN script_participants ON script_participants.script_id = scripts.id")
+                  .where("scripts.user_id = ? OR script_participants.user_id = ?", current_user.id, current_user.id)
                   .distinct
                   .find(params[:id])
     elsif params[:token].present?
@@ -73,12 +79,6 @@ class ScriptsController < ApplicationController
         :estimated_cost,
         :_destroy]
     )
-  end
-
-  def check_ownership
-    unless @script&.user == current_user
-      redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
-    end
   end
 
   private

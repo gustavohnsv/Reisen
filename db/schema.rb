@@ -48,6 +48,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_27_210025) do
     t.index ["checklist_id"], name: "index_checklist_items_on_checklist_id"
   end
 
+  create_table "checklist_participants", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "checklist_id", null: false
+    t.string "role", default: "collaborator", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checklist_id", "user_id"], name: "index_checklist_participants_on_checklist_and_user", unique: true
+    t.index ["checklist_id"], name: "index_checklist_participants_on_checklist_id"
+    t.index ["user_id"], name: "index_checklist_participants_on_user_id"
+  end
+
   create_table "checklists", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "title"
@@ -64,16 +75,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_27_210025) do
     t.integer "user_id"
     t.boolean "visible", default: false, null: false
     t.index ["user_id"], name: "index_notices_on_user_id"
-  end
-
-  create_table "participants", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.integer "permission"
-    t.integer "script_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
-    t.index ["script_id"], name: "index_participants_on_script_id"
-    t.index ["user_id"], name: "index_participants_on_user_id"
   end
 
   create_table "script_comments", force: :cascade do |t|
@@ -98,6 +99,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_27_210025) do
     t.integer "user_id"
     t.index ["script_id"], name: "index_script_items_on_script_id"
     t.index ["user_id"], name: "index_script_items_on_user_id"
+  end
+
+  create_table "script_participants", force: :cascade do |t|
+    t.integer "permission"
+    t.integer "user_id", null: false
+    t.integer "script_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "role", default: "collaborator", null: false
+    t.index ["script_id"], name: "index_script_participants_on_script_id"
+    t.index ["user_id"], name: "index_script_participants_on_user_id"
   end
 
   create_table "script_spents", force: :cascade do |t|
@@ -143,12 +155,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_27_210025) do
   add_foreign_key "checklist_items", "checklists"
   add_foreign_key "checklists", "users"
   add_foreign_key "notices", "users"
-  add_foreign_key "participants", "scripts"
-  add_foreign_key "participants", "users"
   add_foreign_key "script_comments", "scripts"
   add_foreign_key "script_comments", "users"
   add_foreign_key "script_items", "scripts"
   add_foreign_key "script_items", "users"
+  add_foreign_key "script_participants", "scripts"
+  add_foreign_key "script_participants", "users"
   add_foreign_key "script_spents", "scripts"
   add_foreign_key "script_spents", "users"
   add_foreign_key "scripts", "users"

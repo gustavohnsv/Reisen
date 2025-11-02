@@ -22,7 +22,7 @@ RSpec.describe "Scripts", type: :request do
       it 'acessa o roteiro de outro usuário e é participante' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        FactoryBot.create(:participant, user: user, script: other_script)
+        FactoryBot.create(:script_participant, user: user, script: other_script)
         get script_path(other_script.id)
         expect(response).to have_http_status(:success)
         expect(response.body).to include(other_script.title)
@@ -64,9 +64,10 @@ RSpec.describe "Scripts", type: :request do
       it 'não atualiza o título do roteiro pois não é o proprietário' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        FactoryBot.create(:participant, user: user, script: other_script)
+        FactoryBot.create(:script_participant, user: user, script: other_script)
         patch script_path(other_script.id), params: {script: {title: 'Roteiro atualizado'}}
-        expect(response).to redirect_to(root_path)
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response).to render_template("scripts/show")
       end
     end
   end
@@ -102,18 +103,6 @@ RSpec.describe "Scripts", type: :request do
       end
     end
   end
-  #describe 'GET /scripts/:id/edit' do -> 'edit' substituída para uma partial
-  #  context 'usuário está logado' do
-  #    before do
-  #      sign_in(user)
-  #    end
-  #    it 'acessa a página de edição do roteiro com sucesso' do
-  #      get edit_script_path(script.id)
-  #      expect(response).to have_http_status(:success)
-  #      expect(response).to render_template(:edit)
-  #    end
-  #  end
-  #end
   describe 'DELETE /scripts/:id' do
     context 'usuário está logado' do
       before do
@@ -128,7 +117,7 @@ RSpec.describe "Scripts", type: :request do
       it 'não é o proprietário e não deleta o roteiro' do
         other_user = FactoryBot.create(:user)
         other_script = FactoryBot.create(:script, user: other_user)
-        Participant.create(user: user, script: other_script)
+        ScriptParticipant.create(user: user, script: other_script)
         expect {
           delete script_path(other_script.id)
         }.to change(Script, :count).by(0)
