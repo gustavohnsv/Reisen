@@ -61,4 +61,10 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = { host: 'www.example.com', protocol: 'http' }
+
+    # Permite qualquer host — resolve "Blocked hosts: www.example.com"
+  config.hosts.clear
+
+  # Evita problemas com Spring e threads
+  config.allow_concurrency = false
 end
