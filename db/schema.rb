@@ -10,26 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_30_135738) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_27_210025) do
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -40,11 +40,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_135738) do
   end
 
   create_table "checklist_items", force: :cascade do |t|
-    t.text "description"
+    t.boolean "check", default: false, null: false
     t.integer "checklist_id", null: false
     t.datetime "created_at", null: false
+    t.text "description"
     t.datetime "updated_at", null: false
-    t.boolean "check", default: false, null: false
     t.index ["checklist_id"], name: "index_checklist_items_on_checklist_id"
   end
 
@@ -60,43 +60,43 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_135738) do
   end
 
   create_table "checklists", force: :cascade do |t|
-    t.string "title"
-    t.integer "user_id", null: false
     t.datetime "created_at", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["user_id"], name: "index_checklists_on_user_id"
   end
 
   create_table "notices", force: :cascade do |t|
-    t.string "title", null: false
     t.text "body", null: false
-    t.boolean "visible", default: false, null: false
-    t.integer "user_id"
     t.datetime "created_at", null: false
+    t.string "title", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.boolean "visible", default: false, null: false
     t.index ["user_id"], name: "index_notices_on_user_id"
   end
 
   create_table "script_comments", force: :cascade do |t|
     t.text "content"
-    t.integer "user_id", null: false
-    t.integer "script_id", null: false
     t.datetime "created_at", null: false
+    t.integer "script_id", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["script_id"], name: "index_script_comments_on_script_id"
     t.index ["user_id"], name: "index_script_comments_on_user_id"
   end
 
   create_table "script_items", force: :cascade do |t|
-    t.string "title"
-    t.integer "user_id"
-    t.integer "script_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "description"
-    t.string "location"
     t.datetime "date_time_start"
+    t.string "description"
     t.decimal "estimated_cost", precision: 10, scale: 2
+    t.string "location"
+    t.integer "script_id", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
     t.index ["script_id"], name: "index_script_items_on_script_id"
     t.index ["user_id"], name: "index_script_items_on_user_id"
   end
@@ -114,37 +114,37 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_30_135738) do
 
   create_table "script_spents", force: :cascade do |t|
     t.decimal "amount", precision: 8, scale: 2
-    t.integer "user_id", null: false
-    t.integer "script_id", null: false
     t.datetime "created_at", null: false
+    t.integer "script_id", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["script_id"], name: "index_script_spents_on_script_id"
     t.index ["user_id"], name: "index_script_spents_on_user_id"
   end
 
   create_table "scripts", force: :cascade do |t|
-    t.string "title"
-    t.integer "user_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "shareable_token"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["shareable_token"], name: "index_scripts_on_shareable_token", unique: true
     t.index ["user_id"], name: "index_scripts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "name"
+    t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "name"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.string "unconfirmed_email"
+    t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

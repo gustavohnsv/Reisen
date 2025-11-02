@@ -45,4 +45,8 @@ Rails.application.routes.draw do
   end
 
   get '/news', to: 'news#index'
+  
+  # Página simples para montar URL do Google Maps (search)
+  get 'maps/search', to: 'maps#search'
+  post 'maps/search', to: 'maps#submit', as: :maps_search_submit
 end
