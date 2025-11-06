@@ -1,6 +1,7 @@
 class ScriptsController < ApplicationController
 
   include ScriptPermissions
+  include ScriptShowVariables
 
   before_action :authenticate_user!, only: [:new, :create]
   before_action :set_script, only: [:show, :edit, :update]
@@ -8,9 +9,10 @@ class ScriptsController < ApplicationController
   before_action :set_script_permissions, only: [:show, :update, :destroy]
   before_action :authorize_read_access!, only: [:show]
   before_action :authorize_owner_access!, only: [:edit, :update]
+
+  before_action :set_show_variables, only: [:show]
   def show
     @airlines = airlines
-    @item = @script&.script_items&.build
   end
 
   def new
@@ -48,7 +50,7 @@ class ScriptsController < ApplicationController
     redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 
-  protected
+  private
 
   def set_script
     if current_user
@@ -77,11 +79,19 @@ class ScriptsController < ApplicationController
         :location,
         :date_time_start,
         :estimated_cost,
-        :_destroy]
+        :_destroy
+      ],
+      script_spends_attributes: [
+        :id,
+        :amount,
+        :date,
+        :category,
+        :quantity,
+        :_destroy
+      ]
     )
   end
 
-  private
   def airlines
     {
       "Latam" => "https://www.latamairlines.com/br/pt",

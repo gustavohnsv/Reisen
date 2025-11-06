@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_30_135738) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -112,14 +112,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_30_135738) do
     t.index ["user_id"], name: "index_script_participants_on_user_id"
   end
 
-  create_table "script_spents", force: :cascade do |t|
+  create_table "script_spends", force: :cascade do |t|
     t.decimal "amount", precision: 8, scale: 2
+    t.integer "category", default: 1
     t.datetime "created_at", null: false
+    t.date "date"
+    t.integer "quantity", default: 1
     t.integer "script_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.index ["script_id"], name: "index_script_spents_on_script_id"
-    t.index ["user_id"], name: "index_script_spents_on_user_id"
+    t.index ["script_id"], name: "index_script_spends_on_script_id"
+    t.index ["user_id"], name: "index_script_spends_on_user_id"
   end
 
   create_table "scripts", force: :cascade do |t|
@@ -161,7 +164,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_30_135738) do
   add_foreign_key "script_items", "users"
   add_foreign_key "script_participants", "scripts"
   add_foreign_key "script_participants", "users"
-  add_foreign_key "script_spents", "scripts"
-  add_foreign_key "script_spents", "users"
+  add_foreign_key "script_spends", "scripts"
+  add_foreign_key "script_spends", "users"
   add_foreign_key "scripts", "users"
 end

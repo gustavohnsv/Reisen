@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe "spents/destroy.html.erb", type: :view do
+RSpec.describe ScriptSpend, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

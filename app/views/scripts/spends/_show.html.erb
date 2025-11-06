@@ -1,0 +1,13 @@
+<%
+  day = items.first.date_time_start.strftime("%Y-%m-%d")
+  budget = items.sum { |item| item.estimated_cost || 0 }
+  day_spends = script.script_spends.where(date: day)
+%>
+
+<span> Orçamento total: <%= budget %> </span>
+<div class="d-flex flex-column">
+<% day_spends.each do |spend| %>
+  <span> Gasto: <%= spend.amount %> </span>
+  <span> Registrado por: <%= User.find_by(id: spend.user_id)&.name %></span>
+<% end %>
+</div>

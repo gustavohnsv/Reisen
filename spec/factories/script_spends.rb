@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :script_spent do
+  factory :script_spend do
     amount { "9.99" }
     user { nil }
     script { nil }

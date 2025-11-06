@@ -16,8 +16,8 @@ Rails.application.routes.draw do
   get 'my_profile', to: 'profiles#my_profile'
 
   resources :scripts, except: [:index] do
-    resources :comments, only: [:create, :destroy], controller: 'scripts/comments'
-    resources :spents, only: [:create], controller: 'scripts/spents'
+    resources :script_comments, only: [:create, :destroy], controller: 'scripts/comments'
+    resources :script_spends, only: [:create, :destroy], controller: 'scripts/spends'
     resources :script_items, only: [:create, :update, :destroy], controller: 'scripts/items'
     resources :participants, only: [:create, :destroy], controller: 'scripts/participants'
     member do

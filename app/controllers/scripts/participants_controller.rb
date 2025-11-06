@@ -1,8 +1,13 @@
 class Scripts::ParticipantsController < ApplicationController
   include ScriptPermissions
+  include ScriptShowVariables
 
+  before_action :set_script
   before_action :set_script_permissions
+
   before_action :authorize_owner_access!
+
+  before_action :set_show_variables, only: [:create, :destroy]
 
   def create
     # Expect params[:email] or params[:participant][:email]
@@ -35,5 +40,17 @@ class Scripts::ParticipantsController < ApplicationController
 
     participant&.destroy
     redirect_to script_path(@script), notice: "Participante removido"
+  end
+
+  private
+
+  def set_script
+    @script = Script
+                .joins("LEFT JOIN script_participants ON script_participants.script_id = scripts.id")
+                .where("scripts.user_id = ? OR script_participants.user_id = ?", current_user.id, current_user.id)
+                .distinct
+                .find(params[:script_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 end

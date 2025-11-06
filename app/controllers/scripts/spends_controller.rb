@@ -1,36 +1,27 @@
-class Scripts::ItemsController < ApplicationController
+class Scripts::SpendsController < ApplicationController
 
   include ScriptPermissions
   include ScriptShowVariables
 
   before_action :set_script
-  before_action :set_script_item, only: [:update, :destroy]
+  before_action :set_script_spend, only: [:destroy]
 
   before_action :set_script_permissions
   before_action :authorize_write_items_access!
 
+  before_action :set_show_variables, only: [:create, :destroy]
+
   def create
-    @item = @script&.script_items&.new(script_item_params)
-    @item.user_id = current_user.id
-    if @item&.save
-      redirect_to_script
+    @spend = @script&.script_spends&.new(script_spend_params)
+    @spend.user_id = current_user.id
+    if @spend.save
+      redirect_to_script(status: 200)
     else
       head :unprocessable_content
     end
   end
 
-  def update
-    if @item&.update(script_item_params)
-      redirect_to_script
-    else
-      set_show_variables
-      render 'scripts/show', status: :unprocessable_content
-    end
-  end
-
   def destroy
-    @item&.destroy
-    redirect_to_script
   end
 
   private
@@ -52,17 +43,16 @@ class Scripts::ItemsController < ApplicationController
     redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
   end
 
-  def set_script_item
-    @item = @script&.script_items&.find(params[:id])
+  def set_script_spend
+    @spend = @script&.script_spends&.find(params[:id])
   end
 
-  def script_item_params
-    params.require(:script_item).permit(
-      :title,
-      :description,
-      :location,
-      :date_time_start,
-      :estimated_cost,
+  def script_spend_params
+    params.require(:script_spend).permit(
+    :amount,
+    :date,
+    :category,
+    :quantity,
     )
   end
 

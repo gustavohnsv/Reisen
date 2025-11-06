@@ -1,28 +1,20 @@
 <div class="container">
   <div class="row g-4 g-lg-5 p-2 mt-3">
 
-    <%
-      owner = @script&.user
-      participants = @script&.script_participants&.includes(:user).where.not(user_id: owner&.id)
-      grouped_items = @script&.script_items&.order(date_time_start: :asc).group_by { |item| item.date_time_start&.to_date }
-      item_for_new_form = (@item.nil? || @item.persisted?) ? @script&.script_items&.build : @item
-    %>
-
-
     <div class="col-lg-8">
       <article>
 
         <%= render "scripts/edit", script: @script %>
 
         <p class="text-muted fs-5 mb-4">
-          Organizado por: <strong><%= owner&.name %></strong> </p>
+          Organizado por: <strong><%= @owner&.name %></strong> </p>
 
         <hr class="my-4">
 
-        <% if grouped_items.any? %>
+        <% if @grouped_items&.any? %>
           <div class="accordion" id="scriptDaysAccordion">
 
-            <% grouped_items.select { |date, _| date.present? }.sort.each_with_index do |(date, items), index| %>
+            <% @grouped_items.select { |date, _| date.present? }.sort.each_with_index do |(date, items), index| %>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="heading-day-<%= index %>">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-day-<%= index %>" aria-expanded="true" aria-controls="collapse-day-<%= index %>">
@@ -37,23 +29,7 @@
                     <% end %>
                   </div>
                 </div>
-              </div>
-            <% end %>
-
-            <% if (items_sem_data = grouped_items[nil])&.any? %>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="heading-unscheduled">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-unscheduled" aria-expanded="true" aria-controls="collapse-unscheduled">
-                    <span class="fs-5 fw-bold">Itens Sem Data</span>
-                  </button>
-                </h2>
-                <div id="collapse-unscheduled" class="accordion-collapse collapse show" aria-labelledby="heading-unscheduled">
-                  <div class="accordion-body">
-                    <% items_sem_data.each do |i| %>
-                      <%= render "scripts/items/edit", script: @script, item: i %>
-                    <% end %>
-                  </div>
-                </div>
+                <%= render "scripts/spends/show", script: @script, items: items %>
               </div>
             <% end %>
 
@@ -85,6 +61,13 @@
             <i class="material-icons" style="font-size: 1.2rem;">add</i>
             <span>Adicionar Novo Item</span>
           </button>
+          <button type="button"
+                  class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newSpendModal">
+            <i class="material-icons" style="font-size: 1.2rem;">add</i>
+            <span>Adicionar Novo Gasto</span>
+          </button>
         <% end %>
 
         <% if @permission_level == :owner %>
@@ -104,11 +87,11 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between align-items-center">
               <div>
-                <%= owner&.name %>
+                <%= @owner&.name %>
                 <span class="badge bg-primary rounded-pill ms-2">Organizador</span>
               </div>
             </li>
-            <% participants.each do |participant| %>
+            <% @participants&.each do |participant| %>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
                   <span><%= participant.user.name %></span>
@@ -211,7 +194,23 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <%= render "scripts/items/new", script: @script, item: item_for_new_form %>
+          <%= render "scripts/items/new", script: @script, item: @item %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if [:owner, :collaborator].include?(@permission_level) %>
+  <div class="modal fade" id="newSpendModal" tabindex="-1" aria-labelledby="newSpendModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newSpendModalLabel">Adicionar Novo Item ao Roteiro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= render "scripts/spends/new", script: @script, spend: @spend %>
         </div>
       </div>
     </div>

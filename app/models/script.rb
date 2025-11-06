@@ -8,7 +8,7 @@ class Script < ApplicationRecord
   has_many :script_participants, dependent: :destroy
   has_many :script_comments, dependent: :destroy
   has_many :script_items, dependent: :destroy
-  has_many :script_spents, dependent: :destroy
+  has_many :script_spends, dependent: :destroy
 
   has_many :users, through: :script_participants
 end

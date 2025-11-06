@@ -1,0 +1,38 @@
+<%= form_with(model: [script, spend]) do |f| %>
+
+  <%
+    category_list = [
+      ['Transporte', 'transporte'],
+      ['Acomodação', 'acomodacao'],
+      ['Alimentação', 'alimentacao'],
+      ['Atividades', 'atividades'],
+      ['Compras', 'compras'],
+      ['Outros', 'outros']
+    ]
+  %>
+
+  <div class="mb-3">
+    <%= f.number_field :amount,
+                     class: 'form-control',
+                     placeholder: 'Quantidade gasta (Ex: 150.00)',
+                     id: 'new-spend-amount' %>
+
+    <%= f.date_field :date,
+                         class: 'form-control',
+                         id: 'new-spend-date' %>
+
+    <%= f.select :category, category_list, { prompt: 'Selecione uma categoria' },
+                       class: 'form-control',
+                       id: 'new-spend-category'
+    %>
+
+    <%= f.number_field :quantity,
+                       class: 'form-control',
+                       placeholder: 'Quantidade (Ex: 2)',
+                       step: 1,
+                       id: 'new-spend-quantity' %>
+  </div>
+
+  <%= f.button "Adicionar Gasto", class: 'btn btn-primary w-100', id: 'add' %>
+
+<% end %>
