@@ -39,10 +39,7 @@ Rails.application.routes.draw do
     get '/mock/erro', to: 'mocks#erro'
   end
 
-  # Rota de desenvolvimento para auto-login rápido (APENAS em development)
-  if Rails.env.development?
-    get '/dev_login', to: 'dev#login'
-  end
+  # Rota de desenvolvimento para auto-login removida
 
   get '/news', to: 'news#index'
   
