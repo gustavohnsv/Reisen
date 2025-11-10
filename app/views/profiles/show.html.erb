@@ -18,7 +18,7 @@
             <small class="text-muted d-block mb-2"><%= @user.email %></small>
 
             <% unless controller.action_name == 'edit' %>
-              <div class="d-flex flex-wrap gap-2">
+              <div class="d-flex flex-wrap gap-2 profile-action-mobile">
                 <%= link_to "Editar Perfil", (defined?(edit_profile_path) ? edit_profile_path(@user) : "#"), class: "btn btn-outline-primary btn-sm" %>
                 <%= button_to "Novo roteiro", new_script_path, method: :get, class: "btn btn-primary btn-sm", form: { class: "d-inline" } %>
                 <%= button_to "Nova checklist", new_checklist_path, method: :get, class: "btn btn-secondary btn-sm", form: { class: "d-inline" } %>

@@ -23,7 +23,7 @@ main_user = User.create!(
 )
 second_user = User.create!(
   name: "John Smith",
-  email: "johnsmith@example.com",
+  email: " ",
   password: "123456",
   password_confirmation: "123456",
   confirmed_at: Time.current

@@ -18,6 +18,11 @@ function updateIcon(iconElement, theme) {
     }
 }
 
+function updateIconsForAll(theme) {
+    const icons = document.querySelectorAll('.theme-icon');
+    icons.forEach(icon => updateIcon(icon, theme));
+}
+
 function setTheme(theme) {
     const htmlElement = document.documentElement;
     const themeIcon = document.getElementById('theme-icon');
@@ -27,12 +32,12 @@ function setTheme(theme) {
         localStorage.removeItem(THEME_KEY);
 
         const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        if (themeIcon) updateIcon(themeIcon, systemTheme);
+        updateIconsForAll(systemTheme);
 
     } else {
         htmlElement.setAttribute('data-bs-theme', theme);
         localStorage.setItem(THEME_KEY, theme);
-        if (themeIcon) updateIcon(themeIcon, theme);
+        updateIconsForAll(theme);
     }
 }
 
@@ -52,12 +57,13 @@ document.addEventListener('turbo:load', () => {
     const savedTheme = localStorage.getItem(THEME_KEY);
     setTheme(savedTheme || 'auto');
 
-    const toggleButton = document.getElementById('theme-toggle');
-
-    if (toggleButton && !toggleButton.dataset.listenerAttached) {
-        toggleButton.addEventListener('click', toggleTheme);
-        toggleButton.dataset.listenerAttached = 'true';
-    }
+    const toggleButtons = document.querySelectorAll('.theme-toggle');
+    toggleButtons.forEach(btn => {
+        if (btn && !btn.dataset.listenerAttached) {
+            btn.addEventListener('click', toggleTheme);
+            btn.dataset.listenerAttached = 'true';
+        }
+    });
 });
 
 document.addEventListener("turbo:load", () => {
