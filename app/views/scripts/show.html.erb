@@ -11,10 +11,27 @@
 
         <hr class="my-4">
 
-        <% if @grouped_items&.any? %>
+        <%
+          # Cria um hash unificado com todas as datas (de itens e gastos)
+          all_dates = {}
+
+          # Adiciona datas dos itens agrupados
+          if @grouped_items&.any?
+            @grouped_items.each do |date, items|
+              all_dates[date] = { items: items } if date.present?
+            end
+          end
+
+          # Adiciona datas dos gastos que não têm itens
+          @script.script_spends.pluck(:date).uniq.compact.each do |date|
+            all_dates[date] ||= { items: [] }
+          end
+        %>
+
+        <% if all_dates.any? %>
           <div class="accordion" id="scriptDaysAccordion">
 
-            <% @grouped_items.select { |date, _| date.present? }.sort.each_with_index do |(date, items), index| %>
+            <% all_dates.select { |date, _| date.present? }.sort.each_with_index do |(date, data), index| %>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="heading-day-<%= index %>">
                   <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-day-<%= index %>" aria-expanded="true" aria-controls="collapse-day-<%= index %>">
@@ -24,12 +41,19 @@
                 </h2>
                 <div id="collapse-day-<%= index %>" class="accordion-collapse collapse show" aria-labelledby="heading-day-<%= index %>">
                   <div class="accordion-body">
-                    <% items.each do |i| %>
-                      <%= render "scripts/items/edit", script: @script, item: i %>
+                    <% if data[:items].any? %>
+                      <% data[:items].each do |i| %>
+                        <%= render "scripts/items/edit", script: @script, item: i %>
+                      <% end %>
+                    <% else %>
+                      <div class="text-center p-3 bg-body-secondary rounded mb-3">
+                        <i class="material-icons text-muted" style="font-size: 2rem;">event_available</i>
+                        <p class="text-muted small mb-0 mt-2">Nenhum item de roteiro para este dia</p>
+                      </div>
                     <% end %>
                   </div>
                 </div>
-                <%= render "scripts/spends/show", script: @script, items: items %>
+                <%= render "scripts/spends/show", script: @script, items: data[:items], date: date %>
               </div>
             <% end %>
 
@@ -96,9 +120,9 @@
                 <div class="d-flex align-items-center gap-2">
                   <span><%= participant.user.name %></span>
                   <% if participant.role == 'read_only' %>
-                    <span class="badge bg-secondary rounded-pill ms-2">Visualizador</span>
+                    <span class="badge bg-secondary rounded-pill">Visualizador</span>
                   <% else %>
-                    <span class="badge bg-info rounded-pill ms-2">Colaborador</span>
+                    <span class="badge bg-info rounded-pill">Colaborador</span>
                   <% end %>
                 </div>
                 <% if @permission_level == :owner %>
@@ -206,7 +230,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="newSpendModalLabel">Adicionar Novo Item ao Roteiro</h5>
+          <h5 class="modal-title" id="newSpendModalLabel">Adicionar Novo Gasto ao Roteiro</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

@@ -9,19 +9,26 @@ class Scripts::SpendsController < ApplicationController
   before_action :set_script_permissions
   before_action :authorize_write_items_access!
 
-  before_action :set_show_variables, only: [:create, :destroy]
+  before_action :set_show_variables, only: [:create]
 
   def create
     @spend = @script&.script_spends&.new(script_spend_params)
     @spend.user_id = current_user.id
     if @spend.save
-      redirect_to_script(status: 200)
+      redirect_to_script
     else
       head :unprocessable_content
     end
   end
 
   def destroy
+    @spend = @script&.script_spends&.find(params[:id])
+    if @spend.user_id == current_user.id
+      @spend&.destroy
+      redirect_to_script
+    else
+      redirect_to_script(alert: "Você não tem permissão para fazer isso")
+    end
   end
 
   private

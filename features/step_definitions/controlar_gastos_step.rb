@@ -12,6 +12,6 @@ Quando('selecionar o campo com ID {string} com {string}') do |id, value|
   select value, from: id
 end
 
-Então('devo receber OK') do
-  expect(page.status_code).to eq(200)
+Então('devo receber um código de resposta {string}') do |code|
+  expect(page.status_code).to eq(code.to_i)
 end

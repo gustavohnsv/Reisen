@@ -15,7 +15,7 @@
                     method: :delete,
                     class: "btn position-absolute text-danger bg-transparent border-0 p-0",
                     style: "top: 1rem; right: 1rem; z-index: 10;",
-                    form: { data: { confirm: "Tem certeza que deseja remover este item?" } } do %>
+                    data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja remover este item?" } do %>
         <span class="material-icons">close</span>
       <% end %>
     <% end %>

@@ -1,13 +1,193 @@
 <%
-  day = items.first.date_time_start.strftime("%Y-%m-%d")
+  # --- 1. Preparação dos Dados ---
+  # MUDANÇA: Agora aceita items vazios e recebe date como parâmetro
+  day = date || (items.any? ? items.first.date_time_start.to_date : nil)
+  return unless day # Só retorna se realmente não tiver data
+
   budget = items.sum { |item| item.estimated_cost || 0 }
-  day_spends = script.script_spends.where(date: day)
+
+  # --- 2. Busca e Agrupamento de Gastos (Otimizado) ---
+  day_spends = script.script_spends.includes(:user).where(date: day)
+
+  gastos_agrupados = day_spends.group_by(&:category).map do |category, spends|
+    por_usuario = spends.group_by { |s| s.user&.name || "Desconhecido" }
+                        .transform_values do |user_spends|
+      user_spends.sum { |spend| spend.amount * (spend.quantity || 1) }
+    end
+
+    total_categoria = por_usuario.values.sum
+
+    [category, {
+      total: total_categoria,
+      por_usuario: por_usuario
+    }]
+  end.to_h
+
+  total_gastos_dia = gastos_agrupados.values.sum { |data| data[:total] }
+
+  category_names = {
+    "transporte"  => "✈️ Transporte",
+    "acomodacao"  => "🏠 Acomodação",
+    "alimentacao" => "🍔 Alimentação",
+    "atividades"  => "🪁 Atividades",
+    "compras"     => "🛍️ Compras",
+    "outros"      => "⚙️ Outros"
+  }.freeze
+
+  # --- 3. Cálculos de UI ---
+  # MUDANÇA: Tratamento especial quando não há orçamento (sem itens)
+  budget_percentage = budget > 0 ? (total_gastos_dia / budget) * 100 : 0
+  modal_id = "gastosModal-#{day.to_s.gsub('-', '')}"
+
+  budget_color_class = if budget_percentage <= 50
+                         "bg-success"
+                       elsif budget_percentage <= 75
+                         "bg-warning"
+                       else
+                         "bg-danger"
+                       end
 %>
 
-<span> Orçamento total: <%= budget %> </span>
-<div class="d-flex flex-column">
-<% day_spends.each do |spend| %>
-  <span> Gasto: <%= spend.amount %> </span>
-  <span> Registrado por: <%= User.find_by(id: spend.user_id)&.name %></span>
-<% end %>
+<div class="card-body p-4">
+
+  <div class="mb-3">
+    <div class="d-flex justify-content-between mb-1">
+      <span class="small fw-bold">Orçamento Total do Dia</span>
+      <% if budget > 0 %>
+        <span class="small d-flex align-items-center gap-2"><%= number_to_currency(total_gastos_dia) %> / <%= number_to_currency(budget) %></span>
+      <% else %>
+        <span class="small d-flex align-items-center gap-2">
+          <%= number_to_currency(total_gastos_dia) %> /
+          <span class="badge bg-warning text-dark">Indefinido</span>
+        </span>
+      <% end %>
+    </div>
+    <% if budget > 0 %>
+      <div class="progress" style="height: 10px;" role="progressbar" aria-valuenow="<%= budget_percentage %>" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar <%= budget_color_class %>" style="width: <%= budget_percentage %>%;"></div>
+      </div>
+    <% else %>
+      <div class="alert alert-warning py-2 px-3 mb-0" role="alert">
+        <small class="d-flex align-items-center gap-2">
+          <i class="material-icons align-middle" style="font-size: 1rem;">info</i>
+          Sem itens de roteiro para este dia. Adicione itens para definir um orçamento.
+        </small>
+      </div>
+    <% end %>
+  </div>
+
+  <h6 class="small fw-bold">Gastos por Categoria (Total: <%= number_to_currency(total_gastos_dia) %>)</h6>
+
+  <div class="d-flex flex-column gap-3 mt-3">
+    <%
+      user_colors = ["bg-primary", "bg-info", "bg-success", "bg-secondary", "bg-warning", "bg-danger"]
+    %>
+
+    <% gastos_agrupados.sort.to_h.each do |categoria, dados| %>
+      <div>
+        <div class="d-flex justify-content-between">
+          <strong class="small"><%= category_names[categoria] %></strong>
+          <span class="small"><%= number_to_currency(dados[:total]) %></span>
+        </div>
+
+        <div class="progress" style="height: 8px;">
+          <%
+            category_total = dados[:total] > 0 ? dados[:total] : 1
+          %>
+
+          <% dados[:por_usuario].each_with_index do |(nome, total_usuario), index| %>
+            <%
+              user_percentage = (total_usuario / category_total) * 100
+              color = user_colors[index % user_colors.length]
+            %>
+            <div class="progress-bar <%= color %>"
+                 style="width: <%= user_percentage %>%;"
+                 role="progressbar"
+                 aria-valuenow="<%= user_percentage %>"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 title="<%= nome %>: <%= number_to_currency(total_usuario) %>">
+            </div>
+          <% end %>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3 mt-2">
+          <% dados[:por_usuario].each_with_index do |(nome, total), index| %>
+            <% color_class = user_colors[index % user_colors.length] %>
+            <small class="text-muted" style="font-size: 0.75em;">
+              <span class="d-inline-block rounded-circle <%= color_class %>"
+                    style="width: 10px; height: 10px; vertical-align: middle; margin-right: 4px;"></span>
+              <%= nome %> (<%= number_to_currency(total) %>)
+            </small>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <hr class="border-secondary my-3">
+
+  <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#<%= modal_id %>">
+    <i class="material-icons" style="font-size: 1rem; vertical-align: middle;">settings</i>
+    Gerenciar Gastos do Dia
+  </button>
+</div>
+
+
+<div class="modal fade" id="<%= modal_id %>" tabindex="-1" aria-labelledby="<%= modal_id %>Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white border-secondary">
+
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="<%= modal_id %>Label">Gastos: <%= l(day, format: :long) %></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="text-white-50 small">Aqui você pode ver todos os gastos deste dia e remover os que você registrou.</p>
+
+        <ul class="list-group list-group-flush">
+          <% day_spends.order(created_at: :desc).each do |spend| %>
+            <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center px-0">
+              <div>
+                <% quantity = spend.quantity || 1 %>
+                <strong><%= category_names[spend.category] %>: <%= number_to_currency(spend.amount * quantity) %></strong>
+                <br>
+                <% if quantity > 1 %>
+                  <small class="text-white-50 fst-italic">
+                    (<%= quantity %>x <%= number_to_currency(spend.amount) %>)
+                  </small>
+                  <br>
+                <% end %>
+                <small class="text-white-50">
+                  Registrado por: <%= spend.user == current_user ? "Você (#{spend.user&.name})" : spend.user&.name %>
+                </small>
+              </div>
+
+              <% if spend.user == current_user %>
+                <%= button_to script_script_spend_path(script.id, spend.id),
+                              method: :delete,
+                              class: "btn btn-sm btn-outline-danger border-2",
+                              title: "Remover gasto",
+                              form: { data: { turbo_confirm: "Tem certeza que deseja remover este gasto?" } } do %>
+                  <i class="material-icons" style="font-size: 1rem; vertical-align: middle;">delete</i>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+
+          <% if day_spends.empty? %>
+            <li class="list-group-item bg-dark text-white text-center text-white-50 px-0">
+              Nenhum gasto registrado para este dia.
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Fechar</button>
+      </div>
+
+    </div>
+  </div>
 </div>

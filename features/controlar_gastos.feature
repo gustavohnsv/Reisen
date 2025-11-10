@@ -10,6 +10,8 @@ Funcionalidade: Controlar gastos
     # Quando: Ação que o usuário irá fazer
     # Então: Resultado esperado da ação
 
+  # Controlar gastos deve depender de um item ou não?
+
   Contexto:
     Dado que meu nome é "John Doe"
     E que meu email é "johndoe@example.com"
@@ -32,7 +34,7 @@ Funcionalidade: Controlar gastos
     E selecionar o campo com ID "new-spend-category" com "Transporte"
     E preencher o campo com ID "new-spend-quantity" com "2"
     E clicar em "Adicionar Gasto"
-    Então devo receber OK
+    Então devo receber um código de resposta "200"
 
   Cenário: Remover um gasto da viagem
     Dado que eu estou na página de perfil
@@ -40,6 +42,6 @@ Funcionalidade: Controlar gastos
     Quando clicar no link "Viagem para Paris"
     Então devo ser redirecionado para o roteiro "Viagem para Paris"
     Dado que eu estou na página do roteiro "Viagem para Paris"
-    Quando clicar em "Gerenciar Gastos do Item"
-    E clicar em "Apagar"
-    Então devo receber OK
+    Quando clicar em "Gerenciar Gastos do Dia"
+    E clicar em "delete"
+    Então devo receber um código de resposta "200"

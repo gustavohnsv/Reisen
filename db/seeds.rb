@@ -39,7 +39,7 @@ second_script = Script.create!(
   user: second_user
 )
 
-Participant.create!(
+ScriptParticipant.create!(
   user: main_user,
   script: second_script
 )
