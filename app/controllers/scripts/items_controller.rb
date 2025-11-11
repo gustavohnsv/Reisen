@@ -1,6 +1,7 @@
 class Scripts::ItemsController < ApplicationController
 
   include ScriptPermissions
+  include ScriptShowVariables
 
   before_action :set_script
   before_action :set_script_item, only: [:update, :destroy]
@@ -10,7 +11,7 @@ class Scripts::ItemsController < ApplicationController
 
   def create
     @item = @script&.script_items&.new(script_item_params)
-    @item.user = current_user if current_user
+    @item.user_id = current_user.id
     if @item&.save
       redirect_to_script
     else
@@ -22,6 +23,7 @@ class Scripts::ItemsController < ApplicationController
     if @item&.update(script_item_params)
       redirect_to_script
     else
+      set_show_variables
       render 'scripts/show', status: :unprocessable_content
     end
   end
@@ -61,7 +63,6 @@ class Scripts::ItemsController < ApplicationController
       :location,
       :date_time_start,
       :estimated_cost,
-      :user_id
     )
   end
 

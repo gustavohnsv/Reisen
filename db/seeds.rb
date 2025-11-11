@@ -23,7 +23,7 @@ main_user = User.create!(
 )
 second_user = User.create!(
   name: "John Smith",
-  email: " ",
+  email: "johnsmith@example.com",
   password: "123456",
   password_confirmation: "123456",
   confirmed_at: Time.current
@@ -39,7 +39,7 @@ second_script = Script.create!(
   user: second_user
 )
 
-Participant.create!(
+ScriptParticipant.create!(
   user: main_user,
   script: second_script
 )

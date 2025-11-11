@@ -42,6 +42,7 @@ module ScriptPermissions
   def authorize_write_items_access!
     return if performed?
     unless [:owner, :collaborator].include?(@permission_level)
+      set_show_variables
       if current_user
         redirect_to root_path, alert: "Você não tem permissão para editar este roteiro", status: :unprocessable_content
       else
@@ -54,6 +55,7 @@ module ScriptPermissions
   def authorize_owner_access!
     return if performed?
     unless @permission_level == :owner
+      set_show_variables
       render "scripts/show", alert: "Você não é o proprietário desse roteiro", status: :unprocessable_content
     end
   end

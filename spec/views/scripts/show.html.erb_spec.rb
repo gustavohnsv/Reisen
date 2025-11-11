@@ -5,6 +5,7 @@ RSpec.describe "scripts/show.html.erb", type: :view do
   let!(:user) {FactoryBot.create(:user)}
   let!(:script) {FactoryBot.create(:script, user: user)}
   let!(:item) {FactoryBot.build(:script_item, script: script)}
+  let!(:spend) {FactoryBot.build(:script_spend, script: script)}
 
   let(:mocked_airlines) do
     {
@@ -19,7 +20,12 @@ RSpec.describe "scripts/show.html.erb", type: :view do
       assign(:user, user)
       assign(:script, script)
       assign(:item, item)
+      assign(:spend, spend)
+      assign(:owner, user)
+      assign(:participants, [])
+      assign(:grouped_items, {})
       assign(:airlines, mocked_airlines)
+      assign(:permission_level, :owner)
       allow(view).to receive(:current_user).and_return(user)
       render
     end

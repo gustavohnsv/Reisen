@@ -37,8 +37,6 @@
                        id: 'new-item-estimated-cost' %>
   </div>
 
-  <%= hidden_field_tag :token, params[:token] if params[:token].present? %>
-
   <%= f.button "Adicionar Item", class: 'btn btn-primary w-100', id: 'add' %>
 
 <% end %>
