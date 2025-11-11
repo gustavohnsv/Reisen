@@ -15,7 +15,7 @@ class Scripts::SpendsController < ApplicationController
     @spend = @script&.script_spends&.new(script_spend_params)
     @spend.user_id = current_user.id
     if @spend.save
-      redirect_to_script
+      redirect_to @script
     else
       head :unprocessable_content
     end
@@ -25,9 +25,11 @@ class Scripts::SpendsController < ApplicationController
     @spend = @script&.script_spends&.find(params[:id])
     if @spend.user_id == current_user.id
       @spend&.destroy
-      redirect_to_script
+      #redirect_to_script
+      redirect_to @script
     else
-      redirect_to_script(alert: "Você não tem permissão para fazer isso")
+      #redirect_to_script(alert: "Você não tem permissão para fazer isso")
+      redirect_to @script, alerta: "Você não tem permissão para fazer isso"
     end
   end
 
@@ -63,11 +65,11 @@ class Scripts::SpendsController < ApplicationController
     )
   end
 
-  def redirect_to_script(options = {})
-    if current_user
-      redirect_to @script, options
-    else
-      redirect_to script_path(@script&.id, token: params[:token]), options
-    end
-  end
+  #def redirect_to_script(options = {}) -> função defasada por conta do sistema de controle de permissão
+  #  if current_user
+  #    redirect_to @script, options
+  #  else
+  #    redirect_to script_path(@script&.id, token: params[:token]), options
+  #  end
+  #end
 end

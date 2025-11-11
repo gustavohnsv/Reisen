@@ -114,7 +114,7 @@ RSpec.describe "Scripts::Items", type: :request do
         it 'o item do roteiro não é criado com sucesso' do
           expect {
             post script_script_items_url(script.id, token: @token), params: {
-              script_item: @invalid_params
+              script_item: @valid_params
             }
           }.to change(ScriptItem, :count).by(0)
           expect(response).to have_http_status(:unprocessable_content)

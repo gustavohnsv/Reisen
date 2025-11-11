@@ -23,7 +23,7 @@
           end
 
           # Adiciona datas dos gastos que não têm itens
-          @script.script_spends.pluck(:date).uniq.compact.each do |date|
+          @script&.script_spends&.pluck(:date).uniq.compact.each do |date|
             all_dates[date] ||= { items: [] }
           end
         %>
