@@ -13,7 +13,15 @@
     <%= link_to "Notícias", news_path, class: "nav-link" %>
   </li>
 
-  <!-- Dev login entry removed -->
+  <% if Rails.env.development? %>
+    <li class="nav-item d-lg-none">
+      <div class="nav-link">
+        <small class="text-muted me-2">Dev:</small>
+        <!-- Substitua 1 pelo id do usuário de teste desejado -->
+        <%= link_to "Login as #1", dev_login_path(1), class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </li>
+  <% end %>
 
   <% if user_signed_in? %>
     <li class="nav-item dropdown">
@@ -39,7 +47,7 @@
           </div>
         </li>
         <li><hr class="dropdown-divider"></li>
-        <li><%= link_to "Meu Perfil", profile_path(current_user), class: "dropdown-item" %></li>
+        <li><%= link_to "Tela Inicial", profile_path(current_user), class: "dropdown-item" %></li>
         <li><%= link_to "Editar Perfil", edit_profile_path(current_user), class: "dropdown-item" %></li>
         <li>
           <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item", data: { confirm: "Tem certeza?" } %>

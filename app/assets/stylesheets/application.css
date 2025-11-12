@@ -396,27 +396,138 @@
 /* Mobile-only: keep profile action buttons on a centered single row, prevent label wrapping
    and allow a small horizontal scroll if the viewport is extremely narrow. This targets the
    action container inside the profile card without changing desktop layout. */
+/* ------------------------------------------------------------------ */
+/* Base Mobile Experience Enhancements                                */
+/* Inspirado em padrões de Instagram / Facebook / Obsidian mobile      */
+/* ------------------------------------------------------------------ */
+/* Estratégia: mobile-first ajustes suaves que não quebram desktop.   */
+/* - Aumenta tipografia base em telas <= 576px                        */
+/* - Botões e inputs com altura mínima maior                          */
+/* - Espaçamentos horizontais para evitar toques acidentais           */
+/* - Classes utilitárias para centralização de telas (login etc.)     */
+/* ------------------------------------------------------------------ */
+
+html { scroll-behavior: smooth; }
+
+@media (max-width: 576px) {
+    :root {
+        --mobile-font-scale: 1.06; /* fator leve para não causar quebra */
+        --mobile-btn-font: 1.05rem;
+        --mobile-heading-scale: 1.15;
+        --mobile-radius: 14px;
+        --mobile-spacing: 1rem;
+    }
+
+    body { font-size: calc(1rem * var(--mobile-font-scale)); }
+
+    h1, .h1 { font-size: calc(2.2rem * var(--mobile-heading-scale)); }
+    h2, .h2 { font-size: calc(1.9rem * var(--mobile-heading-scale)); }
+    h3, .h3 { font-size: calc(1.6rem * var(--mobile-heading-scale)); }
+    h4, .h4 { font-size: calc(1.4rem * var(--mobile-heading-scale)); }
+
+    p, .lead, .card-text, label, small { line-height: 1.4; }
+
+    .container, .container-fluid { padding-left: 1.1rem; padding-right: 1.1rem; }
+
+    /* Botões maiores e mais "touch-friendly" */
+    .btn, button[type=button], input[type=submit], .nav-link.btn {
+        min-height: 46px;
+        font-size: var(--mobile-btn-font);
+        border-radius: var(--mobile-radius);
+        padding: 0.75rem 1.15rem;
+    }
+
+    .btn-sm { min-height: 40px; padding: 0.55rem 0.9rem; }
+
+    /* Inputs com altura confortável */
+    .form-control, .form-select { min-height: 46px; font-size: 1.02rem; border-radius: var(--mobile-radius); }
+
+    /* Agrupamento vertical de formulários com mais respiro */
+    .card form .mb-3, form .mb-3 { margin-bottom: 1.15rem !important; }
+
+    /* Toasts mais legíveis em mobile */
+    .toast .toast-body { font-size: 0.95rem; }
+
+    /* Navbar: aumentar área de toque */
+    .navbar .nav-link { padding: 0.65rem 0.9rem; font-size: 1.02rem; }
+    .navbar-toggler { padding: 0.6rem 0.75rem; border-radius: var(--mobile-radius); }
+
+    /* Footer mais compacto mas legível */
+    footer p { font-size: 0.9rem; }
+
+    /* Utilitário para centralizar telas de autenticação */
+    .auth-centered-screen {
+        min-height: calc(100vh - 56px - 56px); /* desconta navbar + footer aproximados */
+        display: flex; align-items: center; justify-content: center;
+        padding: 1.25rem 0 1.75rem;
+    }
+
+    .auth-centered-screen .card { width: 100%; border-radius: var(--mobile-radius); }
+
+    /* Links secundários agrupados */
+    .auth-links-small a { display: inline-block; margin: 0.4rem 0.55rem; }
+
+    /* Melhor legibilidade do texto informativo */
+    .auth-hint { font-size: 0.85rem; line-height: 1.35; }
+
+    /* Suaviza sombra para evitar poluição visual em telas pequenas */
+    .card.shadow-sm { box-shadow: 0 4px 14px rgba(0,0,0,0.12) !important; }
+}
+
+/* Nav inferior fixa (opcional) - aparecerá se adicionarmos .mobile-bottom-nav no layout */
+@media (max-width: 576px) {
+    .mobile-bottom-nav {
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 1030;
+        background: var(--bs-body-bg); border-top: 1px solid rgba(0,0,0,0.08);
+        display: flex; justify-content: space-around; align-items: center;
+        padding: 0.35rem 0.25rem; height: 56px;
+    }
+    [data-bs-theme="dark"] .mobile-bottom-nav { border-color: rgba(255,255,255,0.12); }
+    .mobile-bottom-nav a { flex: 1; text-align: center; font-size: 0.75rem; text-decoration: none; color: inherit; }
+    .mobile-bottom-nav a .bi { display:block; font-size: 1.25rem; margin-bottom: 0.15rem; }
+    .mobile-bottom-nav a:active { filter: brightness(0.9); }
+}
+
+/* Acessibilidade: foco mais visível */
+.btn:focus, .nav-link:focus, .form-control:focus { outline: 2px solid #4dabf7; outline-offset: 2px; }
+
+/* Reduz transições pesadas para usuários com preferência */
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation-duration: 1ms !important; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Fim dos aprimoramentos mobile                                      */
+/* ------------------------------------------------------------------ */
 @media (max-width: 767.98px) {
-    /* Target the specific action container added to the profile view so desktop is untouched */
+    /* Em celulares: adotar estilo de tablet (colunar), sem rolagem horizontal */
+    .profile-header {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .profile-header .me-4 { margin-right: 0 !important; margin-bottom: 0.75rem !important; }
+
     .profile-action-mobile {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important; /* empilha botões */
+        align-items: stretch !important;
         justify-content: center !important;
-        flex-wrap: nowrap !important; /* keep buttons in one row when possible */
         gap: 0.5rem !important;
-        overflow-x: auto; /* allow gentle horizontal scroll instead of breaking text */
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 0.25rem; /* small space for scroll affordance */
+        overflow: visible !important; /* remove scroll horizontal */
+        padding-bottom: 0; 
     }
-
-    /* Ensure both anchors and button inputs don't wrap their label text */
+    /* Forms gerados por button_to ocupam 100% para o botão expandir */
+    .profile-action-mobile form { width: 100% !important; }
     .profile-action-mobile .btn,
-    .profile-action-mobile .d-inline,
-    .profile-action-mobile input[type="submit"] {
-        white-space: nowrap !important;
-        display: inline-block !important;
+    .profile-action-mobile input[type="submit"],
+    .profile-action-mobile .d-inline {
+        white-space: normal !important;
+        display: block !important;
+        width: 100% !important;      /* largura total do cartão */
+        text-align: center !important;
     }
-
-    /* If viewport is extremely narrow, allow the buttons to wrap as full-width rows to
-       avoid overflow that would push important content off-screen. */
 }
 
 @media (max-width: 360px) {

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-10 col-md-6 mx-auto">
       <div class="card p-4 shadow-sm">
-        <div class="d-flex align-items-start">
+        <div class="profile-header d-flex align-items-start">
           <div class="me-4 flex-shrink-0">
             <% if @user.avatar.attached? %>
               <%= image_tag url_for(@user.avatar), alt: "Avatar de #{@user.name}", class: "rounded-circle", style: "width:96px; height:96px; object-fit:cover;" %>
@@ -63,9 +63,9 @@
           </div>
         <% end %>
 
-        <div class="mt-3 text-end">
+        <div class="mt-3 text-center text-sm-end">
           <% if user_signed_in? %>
-            <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-link text-danger" %>
+            <%= button_to "Sair (Logout)", destroy_user_session_path, method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-outline-danger" %>
           <% end %>
         </div>
       </div>

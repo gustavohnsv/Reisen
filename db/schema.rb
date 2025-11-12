@@ -156,6 +156,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "checklist_items", "checklists"
+  add_foreign_key "checklist_participants", "checklists"
+  add_foreign_key "checklist_participants", "users"
   add_foreign_key "checklists", "users"
   add_foreign_key "notices", "users"
   add_foreign_key "script_comments", "scripts"
