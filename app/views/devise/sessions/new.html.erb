@@ -1,8 +1,8 @@
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-10 col-md-6 mx-auto">
-      <div class="card p-4 shadow-sm">
-        <h2 class="text-center mb-4">Log in</h2>
+<div class="container auth-centered-screen">
+  <div class="row w-100">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-5 mx-auto">
+      <div class="card p-4 p-sm-5 shadow-sm">
+        <h2 class="text-center mb-4 fw-semibold">Log in</h2>
 
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <div class="mb-3">
@@ -22,17 +22,17 @@
             </div>
           <% end %>
 
-          <div class="d-grid gap-2">
-            <%= f.submit "Log in", class: "btn btn-primary" %>
+          <div class="d-grid gap-2 mt-2">
+            <%= f.submit "Log in", class: "btn btn-primary btn-lg" %>
           </div>
         <% end %>
 
-        <div class="mt-4 text-center">
+        <div class="mt-4 text-center auth-links-small small">
           <%= render "devise/shared/links" %>
         </div>
         
-        <div class="mt-3 text-center text-muted small">
-          <p class="mb-0">Dica: crie uma conta e faça login para que seus roteiros e checklists fiquem salvos no servidor — assim você pode acessá-los de qualquer dispositivo. Use "Lembrar-me" para permanecer conectado em dispositivos pessoais.</p>
+        <div class="mt-3 text-center text-muted auth-hint">
+          <p class="mb-0">Crie uma conta para sincronizar roteiros e checklists em todos os dispositivos. Use "Lembrar-me" somente em dispositivos pessoais.</p>
         </div>
       </div>
     </div>

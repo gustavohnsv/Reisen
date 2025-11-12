@@ -38,9 +38,12 @@ Rails.application.routes.draw do
     get '/mock/azul', to: 'mocks#azul'
     get '/mock/erro', to: 'mocks#erro'
   end
-
-  # Rota de desenvolvimento para auto-login removida
-
+ 
+  if Rails.env.development?
+    # rota dev-only para login rápido: /dev/login/:id
+    get '/dev/login/:id', to: 'dev/auth#login_as', as: :dev_login
+  end
+  
   get '/news', to: 'news#index'
   
   # Página simples para montar URL do Google Maps (search)
