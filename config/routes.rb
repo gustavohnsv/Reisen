@@ -39,8 +39,8 @@ Rails.application.routes.draw do
     get '/mock/erro', to: 'mocks#erro'
   end
  
-  if Rails.env.development?
-    # rota dev-only para login rápido: /dev/login/:id
+  if Rails.env.development? || Rails.env.test?
+    # rota de login rápido disponível em desenvolvimento e testes: /dev/login/:id
     get '/dev/login/:id', to: 'dev/auth#login_as', as: :dev_login
   end
   
