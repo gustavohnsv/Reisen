@@ -1,0 +1,86 @@
+name: Ruby on Rails CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+        id: setup-chrome
+
+      - name: Setup ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.5
+          bundler-cache: true
+
+      - name: Setup Database
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+        run: |
+          # espera o Postgres ficar pronto (até ~30s)
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 && break
+            echo "waiting for postgres..."
+            sleep 1
+          done
+
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          # loga versão aplicada para facilitar debugging
+          bundle exec rails db:version
+
+      - name: Run RSpec tests
+        env:
+          RAILS_ENV: test
+          CI: true
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+        run: bundle exec rspec
+
+      - name: Run Cucumber
+        env:
+          RAILS_ENV: test
+          CI: true
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: bundle exec cucumber
+
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report coverage to Qlty.sh
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: 'coverage/lcov/*.lcov'

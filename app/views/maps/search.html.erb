@@ -1,0 +1,22 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <h1 class="h3 mb-3">Buscar no Google Maps</h1>
+
+      <% if flash[:alert].present? %>
+        <div class="alert alert-danger" role="alert"><%= flash[:alert] %></div>
+      <% end %>
+
+      <%= form_with url: maps_search_submit_path, method: :post, local: true, data: { turbo: false }, html: { target: '_blank' } do |f| %>
+        <div class="mb-3">
+          <label for="maps-query" class="form-label">O que você quer buscar?</label>
+          <input id="maps-query" name="query" type="text" class="form-control" placeholder="Ex.: Padarias perto de mim" />
+        </div>
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Buscar no Google Maps</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

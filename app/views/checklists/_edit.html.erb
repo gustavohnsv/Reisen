@@ -1,0 +1,10 @@
+<%= form_with(model: checklist, data: {controller: 'autosave'}, class: "me-2") do |f| %>
+  <%= f.text_field :title,
+                    value: checklist.title,
+                    autocomplete: "title",
+                    data: {action: "blur->autosave#save"},
+                    id: "edit-title",
+                    class: "h3 mb-3 border-0 bg-transparent shadow-none w-100",
+                    style: "outline: none;"
+  %>
+<% end %>

@@ -1,0 +1,100 @@
+<% readonly_item = (@permission_level == :read_only) %>
+
+<div class="card shadow-sm mb-3 position-relative">
+  <div class="card-body">
+
+    <% unless readonly_item %>
+      <button type="submit"
+              form="edit-item-form-<%= item.id %>"
+              class="btn position-absolute text-success bg-transparent border-0 p-0"
+              style="top: 1rem; right: 2.5rem; z-index: 10;">
+        <span class="material-icons">check</span>
+      </button>
+
+      <%= button_to [script, item],
+                    method: :delete,
+                    class: "btn position-absolute text-danger bg-transparent border-0 p-0",
+                    style: "top: 1rem; right: 1rem; z-index: 10;",
+                    data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja remover este item?" } do %>
+        <span class="material-icons">close</span>
+      <% end %>
+    <% end %>
+
+    <%= form_with(model: [script, item],
+                  id: "edit-item-form-#{item.id}",
+                  data: { controller: (readonly_item ? nil : 'autosave') }) do |f| %>
+
+      <%= hidden_field_tag :token, params[:token] if params[:token].present? %>
+
+      <div class="d-flex align-items-center text-muted small mb-3">
+        <i class="material-icons me-2" style="font-size: 1.1rem;">person_outline</i>
+        <span>Criado por: <strong><%= item.user&.name || "Usuário anônimo" %></strong></span>
+      </div>
+
+      <%= f.text_field :title,
+                       value: item.title,
+                       class: 'form-control form-control-lg border-0 fw-bold p-0 mb-2',
+                       placeholder: "Título do item",
+                       id: "edit-item-title_#{item.id}",
+                       data: { action: (readonly_item ? nil : "blur->autosave#save") },
+                       readonly: readonly_item %>
+
+      <%= f.text_area :description,
+                      value: item.description,
+                      class: 'form-control mb-3',
+                      rows: 2,
+                      placeholder: "Descrição",
+                      id: "edit-item-description_#{item.id}",
+                      data: { action: (readonly_item ? nil : "blur->autosave#save") },
+                      readonly: readonly_item %>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="material-icons" style="font-size: 1.2rem;">location_on</i>
+            </span>
+            <%= f.text_field :location,
+                             value: item.location,
+                             class: 'form-control',
+                             placeholder: 'Localização',
+                             id: "edit-item-location_#{item.id}",
+                             data: { action: (readonly_item ? nil : "blur->autosave#save") },
+                             readonly: readonly_item %>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="material-icons" style="font-size: 1.2rem;">calendar_today</i>
+            </span>
+            <%= f.datetime_field :date_time_start,
+                                 value: item.date_time_start,
+                                 class: 'form-control',
+                                 id: "edit-item-date-time-start_#{item.id}",
+                                 data: { action: (readonly_item ? nil : "blur->autosave#save") },
+                                 readonly: readonly_item %>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="material-icons" style="font-size: 1.2rem;">attach_money</i>
+            </span>
+            <%= f.number_field :estimated_cost,
+                               value: item.estimated_cost,
+                               class: 'form-control',
+                               placeholder: 'Custo estimado',
+                               step: 0.01,
+                               id: "edit-item-estimated-cost_#{item.id}",
+                               data: { action: (readonly_item ? nil : "blur->autosave#save") },
+                               readonly: readonly_item %>
+          </div>
+        </div>
+      </div>
+
+    <% end %>
+  </div>
+</div>

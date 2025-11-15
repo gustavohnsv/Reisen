@@ -1,0 +1,39 @@
+<div class="d-flex align-items-center" style="min-height: 2.5rem;">
+
+  <%= form_with(model: [checklist, item], data: {controller: 'autosave'}, class: "me-2") do |f1| %>
+    <div class="form-check">
+      <%= f1.check_box :check,
+                       data: {action: "change->autosave#save"},
+                       id: "edit-item-check_#{item.id}",
+                       class: "form-check-input"
+      %>
+      <label class="form-check-label d-none" for="edit-item-check_<%= item.id %>"></label>
+    </div>
+  <% end %>
+
+  <%= form_with(model: [checklist, item], data: {controller: 'autosave'}, class: "flex-grow-1 me-2") do |f2| %>
+    <div class="input-group input-group-sm">
+      <%= f2.text_field :description,
+                        value: item.description,
+                        autocomplete: "description",
+                        data: {action: "blur->autosave#save"},
+                        id: "edit-item-description_#{item.id}",
+                        class: "form-control border-0 bg-transparent shadow-none",
+                        style: (item.check? ? "text-decoration: line-through; color: var(--bs-secondary-color);" : "")
+      %>
+
+      <%= f2.button class: "btn btn-sm btn-outline-secondary" do %>
+        <i class="material-icons fs-6">check</i>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= button_to [checklist, item],
+                method: :delete,
+                class: "btn btn-sm btn-link text-danger p-0",
+                form_class: "d-flex",
+                data: { confirm: "Tem certeza?" } do %>
+    <i class="material-icons fs-5">close</i>
+  <% end %>
+
+</div>

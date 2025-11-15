@@ -1,0 +1,102 @@
+class ScriptsController < ApplicationController
+
+  include ScriptPermissions
+  include ScriptShowVariables
+
+  before_action :authenticate_user!, only: [:new, :create]
+  before_action :set_script, only: [:show, :edit, :update]
+
+  before_action :set_script_permissions, only: [:show, :update, :destroy]
+  before_action :authorize_read_access!, only: [:show]
+  before_action :authorize_owner_access!, only: [:edit, :update]
+
+  before_action :set_show_variables, only: [:show]
+  def show
+    @airlines = airlines
+  end
+
+  def new
+    @script = Script.new
+  end
+
+  def create
+    @script = current_user.scripts.new(script_params)
+    if @script&.save
+      redirect_to @script, notice: "Roteiro criado com sucesso"
+    else
+      render :new, status: :unprocessable_content
+    end
+  end
+
+  def edit
+    # Já tem os dados do roteiro devido ao 'before_action :set_script'
+  end
+
+  def update
+    if @script&.update(script_params)
+      redirect_to @script, notice: "Roteiro editado com sucesso"
+    else
+      head :unprocessable_content
+      #render :edit, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    if (@script = current_user.scripts.find(params[:id]))
+      @script&.destroy
+      redirect_to root_path, notice: "Roteiro deletado com sucesso"
+    end
+  rescue ActiveRecord::RecordNotFound => _
+    redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
+  end
+
+  private
+
+  def set_script
+    if current_user
+      @script = Script
+                  .joins("LEFT JOIN script_participants ON script_participants.script_id = scripts.id")
+                  .where("scripts.user_id = ? OR script_participants.user_id = ?", current_user.id, current_user.id)
+                  .distinct
+                  .find(params[:id])
+    elsif params[:token].present?
+      @script = Script.find_by(id: params[:id], shareable_token: params[:token])
+    end
+    if @script.nil?
+      redirect_to root_path, alert: 'Você não tem permissão para fazer isso' and return
+    end
+    rescue ActiveRecord::RecordNotFound => _
+      redirect_to root_path, alert: 'Você não tem permissão para fazer isso'
+  end
+
+  def script_params
+    params.require(:script).permit(
+      :title,
+      script_items_attributes: [
+        :id,
+        :title,
+        :description,
+        :location,
+        :date_time_start,
+        :estimated_cost,
+        :_destroy
+      ],
+      script_spends_attributes: [
+        :id,
+        :amount,
+        :date,
+        :category,
+        :quantity,
+        :_destroy
+      ]
+    )
+  end
+
+  def airlines
+    {
+      "Latam" => "https://www.latamairlines.com/br/pt",
+      "Gol" => "https://www.voegol.com.br/",
+      "Azul" => "https://www.voeazul.com.br/home/br/pt/home"
+    }
+  end
+end

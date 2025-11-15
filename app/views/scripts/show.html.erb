@@ -1,0 +1,242 @@
+<div class="container">
+  <div class="row g-4 g-lg-5 p-2 mt-3">
+
+    <div class="col-lg-8">
+      <article>
+
+        <%= render "scripts/edit", script: @script %>
+
+        <p class="text-muted fs-5 mb-4">
+          Organizado por: <strong><%= @owner&.name %></strong> </p>
+
+        <hr class="my-4">
+
+        <%
+          # Cria um hash unificado com todas as datas (de itens e gastos)
+          all_dates = {}
+
+          # Adiciona datas dos itens agrupados
+          if @grouped_items&.any?
+            @grouped_items.each do |date, items|
+              all_dates[date] = { items: items } if date.present?
+            end
+          end
+
+          # Adiciona datas dos gastos que não têm itens
+          @script&.script_spends&.pluck(:date).uniq.compact.each do |date|
+            all_dates[date] ||= { items: [] }
+          end
+        %>
+
+        <% if all_dates.any? %>
+          <div class="accordion" id="scriptDaysAccordion">
+
+            <% all_dates.select { |date, _| date.present? }.sort.each_with_index do |(date, data), index| %>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-day-<%= index %>">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-day-<%= index %>" aria-expanded="true" aria-controls="collapse-day-<%= index %>">
+                    <span class="fs-5 fw-bold">Dia <%= index + 1 %></span>
+                    <span class="text-muted ms-3 d-none d-sm-inline"><%= l(date, format: :long) %></span>
+                  </button>
+                </h2>
+                <div id="collapse-day-<%= index %>" class="accordion-collapse collapse show" aria-labelledby="heading-day-<%= index %>">
+                  <div class="accordion-body">
+                    <% if data[:items].any? %>
+                      <% data[:items].each do |i| %>
+                        <%= render "scripts/items/edit", script: @script, item: i %>
+                      <% end %>
+                    <% else %>
+                      <div class="text-center p-3 bg-body-secondary rounded mb-3">
+                        <i class="material-icons text-muted" style="font-size: 2rem;">event_available</i>
+                        <p class="text-muted small mb-0 mt-2">Nenhum item de roteiro para este dia</p>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+                <%= render "scripts/spends/show", script: @script, items: data[:items], date: date %>
+              </div>
+            <% end %>
+
+          </div>
+        <% else %>
+          <div class="text-center p-5 bg-body-tertiary rounded-3 border">
+            <i class="material-icons" style="font-size: 3rem;">event_note</i>
+            <h5 class="mt-3">Este roteiro ainda não tem itens</h5>
+            <p class="text-muted">
+              <% if [:owner, :collaborator].include?(@permission_level) %>
+                Use o botão "Adicionar Novo Item" para começar a planejar.
+              <% else %>
+                O organizador ainda não adicionou itens a este roteiro.
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+      </article>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="position-sticky" style="top: 2rem;">
+
+        <% if [:owner, :collaborator].include?(@permission_level) %>
+          <button type="button"
+                  class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newItemModal">
+            <i class="material-icons" style="font-size: 1.2rem;">add</i>
+            <span>Adicionar Novo Item</span>
+          </button>
+          <button type="button"
+                  class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#newSpendModal">
+            <i class="material-icons" style="font-size: 1.2rem;">add</i>
+            <span>Adicionar Novo Gasto</span>
+          </button>
+        <% end %>
+
+        <% if @permission_level == :owner %>
+          <%= link_to script_path(@script&.id),
+                      class: "btn btn-outline-danger w-100 mb-4 d-flex align-items-center justify-content-center gap-2",
+                      data: { turbo_method: :delete,
+                              turbo_confirm: "Tem certeza que deseja excluir este roteiro? Esta ação é irreversível." } do %>
+            <i class="material-icons" style="font-size: 1.2rem;">delete_outline</i>
+            <span>Excluir Roteiro</span>
+          <% end %>
+        <% end %>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Participantes</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <%= @owner&.name %>
+                <span class="badge bg-primary rounded-pill ms-2">Organizador</span>
+              </div>
+            </li>
+            <% @participants&.each do |participant| %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <span><%= participant.user.name %></span>
+                  <% if participant.role == 'read_only' %>
+                    <span class="badge bg-secondary rounded-pill">Visualizador</span>
+                  <% else %>
+                    <span class="badge bg-info rounded-pill">Colaborador</span>
+                  <% end %>
+                </div>
+                <% if @permission_level == :owner %>
+                  <%= link_to script_participant_path(@script, participant),
+                              method: :delete,
+                              class: "btn btn-sm btn-outline-danger",
+                              data: { turbo_method: :delete, turbo_confirm: "Remover participante?" } do %>
+                    <i class="material-icons" style="font-size: 1rem;">person_remove</i>
+                  <% end %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <% if @permission_level == :owner %>
+          <div class="card shadow-sm mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Convidar Participante</h5>
+            </div>
+            <div class="card-body">
+              <%= form_with url: script_participants_path(@script), local: true do |f| %>
+                <div class="mb-2">
+                  <%= f.label :email, 'E-mail do usuário', class: 'form-label' %>
+                  <%= f.email_field :email, class: 'form-control', required: true, placeholder: 'usuario@exemplo.com' %>
+                </div>
+                <div class="mb-2">
+                  <%= f.label :role, 'Permissão', class: 'form-label' %>
+                  <%= f.select :role, options_for_select([['Pode editar', 'collaborator'], ['Apenas visualizar', 'read_only']], 'collaborator'), {}, class: 'form-select' %>
+                </div>
+                <%= f.submit 'Convidar', class: 'btn btn-primary w-100' %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="card shadow-sm mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Compre sua passagem!</h5>
+          </div>
+          <% if @airlines.present? && @airlines.any? %>
+            <ul class="list-group list-group-flush">
+              <% @airlines.each do |name, link| %>
+                <a href="<%= link %>" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                  <span><%= name %></span>
+                  <i class="material-icons opacity-50" style="font-size: 1.2rem;">launch</i>
+                </a>
+              <% end %>
+            </ul>
+          <% else %>
+            <div class="card-body">
+              <p class="text-muted small mb-0">Nenhum link rápido adicionado.</p>
+            </div>
+          <% end %>
+        </div>
+
+        <% if current_user.present? %>
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title fs-6">Compartilhar</h5>
+              <p class="text-muted small">
+                Copie o link para convidar outros viajantes para este roteiro.
+              </p>
+              <button type="button"
+                      class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                      data-controller="clipboard"
+                      data-action="click->clipboard#copy"
+                      data-clipboard-content-value="<%= script_url(@script, token: @script.shareable_token) %>">
+                <i class="material-icons" style="font-size: 1.2rem;">content_copy</i>
+                Copiar Link
+              </button>
+            </div>
+          </div>
+        <% end %>
+
+        <% if [:owner, :collaborator].include?(@permission_level) %>
+          <p class="text-muted mt-3 mb-0 d-flex align-items-center" style="font-size: 0.8rem;">
+            <i class="material-icons me-2" style="font-size: 1rem;">autorenew</i>
+            As alterações são salvas automaticamente ao sair do campo.
+          </p>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if [:owner, :collaborator].include?(@permission_level) %>
+  <div class="modal fade" id="newItemModal" tabindex="-1" aria-labelledby="newItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newItemModalLabel">Adicionar Novo Item ao Roteiro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= render "scripts/items/new", script: @script, item: @item %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if [:owner, :collaborator].include?(@permission_level) %>
+  <div class="modal fade" id="newSpendModal" tabindex="-1" aria-labelledby="newSpendModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="newSpendModalLabel">Adicionar Novo Gasto ao Roteiro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <%= render "scripts/spends/new", script: @script, spend: @spend %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

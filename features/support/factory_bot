@@ -1,0 +1,10 @@
+# features/support/factory_bot.rb
+require 'factory_bot'
+
+# torna os métodos do FactoryBot (create, build, etc.) disponíveis no World do Cucumber
+World(FactoryBot::Syntax::Methods)
+
+# garante que factories sejam recarregadas entre execuções
+Before do
+  FactoryBot.reload
+end

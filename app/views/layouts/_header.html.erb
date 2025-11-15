@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <%= image_tag "reisen-logo.png", style: "filter: invert(1); height: 2rem; transform: scale(1.5)" %>
+    <%= link_to "Reisen", root_path, class: "navbar-brand" %>
+
+    <!-- Toggler opens offcanvas on mobile for a floating menu -->
+    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Desktop/Larger screens navigation (collapse on small, shown on lg+) -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <%= render 'layouts/nav_items' %>
+    </div>
+
+  <!-- Offcanvas mobile menu (floating panel) - hidden on large screens -->
+  <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="mobileMenuLabel">Menu</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="d-flex flex-column">
+          <%= render 'layouts/nav_items' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,49 @@
+<div class="hero-section">
+
+  <header class="mb-4">
+    <h1 class="hero-title display-1 text-uppercase">Reisen</h1>
+    <p class="hero-lead">
+      Seu roteiro dos sonhos, construído em conjunto.
+    </p>
+  </header>
+
+  <main>
+    <div class="hero-actions d-grid gap-3 d-sm-flex justify-content-sm-center">
+      <%= button_to "Criar conta",
+                    new_user_registration_path,
+                    method: :get,
+                    class: "btn btn-primary btn-lg" %>
+
+      <%= button_to "Fazer Login",
+                    new_user_session_path,
+                    method: :get,
+                    class: "btn btn-outline-light btn-lg" %>
+    </div>
+  </main>
+
+</div>
+
+<% if @notices.present? %>
+  <section class="notices-section bg-body-tertiary">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+          <h2 class="h3 text-center text-body-secondary mb-4">
+            Avisos Importantes
+          </h2>
+
+          <div class="notices-list">
+            <% @notices.each do |notice| %>
+              <article class="alert alert-info shadow-sm border-0">
+                <h3 class="alert-heading h6"><%= notice.title %></h3>
+                <p class="mb-0"><%= truncate(notice.body, length: 200) %></p>
+              </article>
+            <% end %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>

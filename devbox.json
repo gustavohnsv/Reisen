@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+  "packages": {
+    "bundler":    "latest",
+    "ruby":       "3.3",
+    "pkg-config": "latest",
+    "libyaml": {
+      "version": "latest",
+      "outputs": ["out", "dev"]
+    },
+    "gcc": "latest",
+    "gmp": "latest",
+    "gnumake": "latest",
+    "zlib": "latest"
+  },
+  "shell": {
+    "init_hook": [
+      "bundle check || bundle install"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <h1 class="mb-4 text-center">Notícias de Turismo</h1>
+
+  <form method="get" action="/news" class="mb-3">
+    <div class="input-group w-75 mx-auto">
+      <input type="text" name="location" placeholder="Buscar por local..." class="form-control" style="outline: none; box-shadow: none">
+      <button type="submit" class="btn btn-success">Buscar</button>
+    </div>
+  </form>
+
+  <% if @news.present? %>
+    <div class="row">
+      <% @news.each do |article| %>
+        <div class="col-md-6 col-lg-4 mb-4 noticia">
+          <div class="card h-100 shadow border-0">
+            <div class="card-body">
+              <h5 class="card-title noticia-titulo"><%= article[:title] %></h5>
+              <p class="card-text text-muted small noticia-data"><%= article[:pubDate] %></p>
+
+              <a href="<%= article[:link] %>" target="_blank" class="btn btn-sm btn-primary noticia-link">Ler mais</a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-muted">Nenhuma notícia encontrada.</p>
+  <% end %>
+</div>

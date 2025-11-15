@@ -1,0 +1,2 @@
+module Scripts::ParticipantsHelper
+end

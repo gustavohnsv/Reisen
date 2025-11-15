@@ -1,0 +1,99 @@
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 col-lg-10 mx-auto">
+
+      <div class="card shadow">
+        <div class="card-body p-4 p-md-5">
+
+          <h2 class="text-center fw-light mb-4">Editar Perfil</h2>
+
+          <%= render 'profiles/shared/error_messages', object: @user %>
+
+          <%= form_with model: @user, url: user_path(@user), local: true,
+                        html: { multipart: true, data: { controller: "avatar-preview" } } do |f| %>
+
+            <div class="row">
+
+              <div class="col-12 col-md-4 text-center">
+
+                <label class="form-label mb-2">Imagem de Perfil</label>
+
+                <div class="mb-3 mx-auto" style="width: 200px; height: 200px; position: relative;">
+
+                  <%
+                    has_avatar = @user.avatar.attached? && @user.avatar.blob&.persisted?
+                    if has_avatar
+                      image_url = url_for(@user.avatar)
+                    end
+                  %>
+
+                  <div id="avatar-placeholder"
+                       class="img-thumbnail rounded-circle d-flex align-items-center justify-content-center <%= 'd-none' if has_avatar %>"
+                       style="width: 200px; height: 200px; background-color: var(--bs-body-tertiary);">
+                    <i class="bi bi-person-fill" style="font-size: 5rem; color: var(--bs-secondary-color);"></i>
+                  </div>
+
+                  <% if has_avatar %>
+                    <img id="avatar-preview"
+                         src="<%= image_url %>"
+                         class="img-thumbnail rounded-circle"
+                         style="width: 200px; height: 200px; object-fit: cover;"
+                         alt="Avatar do usuário" />
+                  <% else %>
+                    <img id="avatar-preview"
+                         src=""
+                         class="img-thumbnail rounded-circle d-none"
+                         style="width: 200px; height: 200px; object-fit: cover; position: absolute; top: 0; left: 0;"
+                         alt="Preview do avatar" />
+                  <% end %>
+
+                </div>
+
+                <%= f.file_field :avatar, data: { action: "change->avatar-preview#preview" }, class: "form-control form-control-sm" %>
+
+                <% if has_avatar %>
+                  <div class="form-check text-center mt-2 d-inline-flex align-items-center gap-2">
+                    <%= f.check_box :remove_avatar, { class: "form-check-input", id: "user_remove_avatar" }, '1', '0' %>
+                    <%= f.label :remove_avatar, 'Remover imagem', class: "form-check-label", for: "user_remove_avatar" %>
+                  </div>
+                <% end %>
+
+              </div>
+
+              <div class="col-12 col-md-8">
+
+                <div class="mb-3">
+                  <%= f.label :name, 'Nome Completo', class: "form-label" %>
+                  <%= f.text_field :name, id: "user_name", class: "form-control" %>
+                </div>
+
+                <div class="mb-3">
+                  <%= f.label :username, 'Nome de usuário', class: "form-label" %>
+                  <%= f.text_field :username, id: "user_username", class: "form-control" %>
+                  <div class="form-text">
+                    Este será seu nome público no site (ex: @seu_usuario).
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <%= f.label :email, 'Email', class: "form-label" %>
+                  <%= f.email_field :email, id: "user_email", class: "form-control" %>
+                </div>
+              </div>
+
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-end align-items-center gap-3">
+              <%= link_to "Cancelar", profile_path(@user), class: "btn btn-outline-secondary" %>
+              <%= f.submit 'Salvar Alterações', class: "btn btn-primary px-4" %>
+            </div>
+
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

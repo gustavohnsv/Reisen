@@ -1,0 +1,118 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 col-md-10 col-lg-8 mx-auto">
+
+      <%= render "checklists/edit", checklist: @checklist %>
+      <div class="card shadow-sm">
+        <ul class="list-group list-group-flush">
+
+          <% persisted_items = @checklist&.checklist_items.select(&:persisted?) %>
+
+          <% if persisted_items.any? %>
+            <% persisted_items.each do |i| %>
+              <li class="list-group-item p-2">
+                <% if [:owner, :collaborator].include?(@checklist_permission_level) %>
+                  <%= render "checklists/items/edit", checklist: @checklist, item: i %>
+                <% else %>
+                  <%= render "checklists/items/readonly", checklist: @checklist, item: i %>
+                <% end %>
+              </li>
+            <% end %>
+          <% else %>
+            <li class="list-group-item text-center text-muted p-4">
+              <i class="material-icons" style="font-size: 2rem;">check_box_outline_blank</i>
+              <p class="mb-0 mt-2">Esta lista ainda não tem itens.</p>
+            </li>
+          <% end %>
+
+          <li class="list-group-item p-2 bg-body-tertiary">
+            <% if [:owner, :collaborator].include?(@checklist_permission_level) %>
+              <%= render "checklists/items/new", checklist: @checklist, item: @item %>
+            <% else %>
+              <div class="text-center text-muted p-2">Você não tem permissão para adicionar itens.</div>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+      <%# Participants and invite panel (owner only) %>
+      <%
+        owner = @checklist&.user
+        participants = @checklist&.checklist_participants&.includes(:user)&.where&.not(user_id: owner&.id)
+      %>
+
+      <div class="card shadow-sm mt-4">
+        <div class="card-header">
+          <h5 class="mb-0">Participantes</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <%= owner&.name %>
+              <span class="badge bg-primary rounded-pill ms-2">Organizador</span>
+            </div>
+          </li>
+          <% participants&.each do |participant| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <%= participant.user.name %>
+                <% if participant.role == 'read_only' %>
+                  <span class="badge bg-secondary rounded-pill ms-2">Visualizador</span>
+                <% else %>
+                  <span class="badge bg-info rounded-pill ms-2">Colaborador</span>
+                <% end %>
+              </div>
+              <% if @checklist_permission_level == :owner %>
+                <%= link_to checklist_participant_path(@checklist, participant),
+                            method: :delete,
+                            class: "btn btn-sm btn-outline-danger",
+                            data: { turbo_method: :delete, turbo_confirm: "Remover participante?" } do %>
+                  <i class="material-icons" style="font-size: 1rem;">person_remove</i>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <% if @checklist&.user == current_user %>
+        <div class="mt-3 d-flex justify-content-end">
+          <%= link_to checklist_path(@checklist&.id),
+                      method: :delete,
+                      class: "btn btn-outline-danger d-inline-flex align-items-center gap-2 w-100 justify-content-center",
+                      data: { turbo_method: :delete,
+                              turbo_confirm: "Tem certeza que deseja excluir esta lista? Esta ação é irreversível." } do %>
+            <i class="material-icons" style="font-size: 1.2rem;">delete_outline</i>
+            <span>Excluir Checklist</span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if @checklist&.user == current_user %>
+        <div class="card shadow-sm mb-4 mt-3">
+          <div class="card-header">
+            <h5 class="mb-0">Convidar Participante</h5>
+          </div>
+          <div class="card-body">
+            <%= form_with url: checklist_participants_path(@checklist), local: true do |f| %>
+              <div class="mb-2">
+                <%= f.label :email, 'E-mail do usuário', class: 'form-label' %>
+                <%= f.email_field :email, class: 'form-control', required: true, placeholder: 'usuario@exemplo.com' %>
+              </div>
+              <div class="mb-2">
+                <%= f.label :role, 'Permissão', class: 'form-label' %>
+                <%= f.select :role, options_for_select([['Pode editar', 'collaborator'], ['Apenas visualizar', 'read_only']], 'collaborator'), {}, class: 'form-select' %>
+              </div>
+              <%= f.submit 'Convidar', class: 'btn btn-primary w-100' %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="p-2 text-muted d-flex align-items-center" style="font-size: 0.8rem;">
+        <i class="material-icons me-2" style="font-size: 1rem;">autorenew</i>
+        As alterações são salvas automaticamente ao sair do campo.
+      </div>
+
+    </div>
+  </div>
+</div>

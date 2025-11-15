@@ -1,0 +1,543 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ *= require material_icons
+ */
+
+.field_with_errors {
+    display: inline;
+}
+
+.hero-section {
+    flex-grow: 1;
+    min-height: 600px;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1950");
+
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    color: #ffffff;
+
+    padding: 0 1.5rem;
+}
+
+/*
+ * Core hero styles preserved. Mobile-specific hero tweaks were removed per your request; we'll only
+ * apply the desktop navbar polish below.
+ */
+
+.hero-title {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-lead {
+    font-weight: 300;
+    font-size: 1.5rem;
+    max-width: 650px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hero-actions {
+    width: 100%;
+    max-width: 350px;
+}
+
+@media (min-width: 576px) {
+    .hero-actions {
+        width: auto;
+        max-width: none;
+    }
+}
+
+.hero-actions .btn-lg {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+}
+
+.hero-actions .btn-primary {
+        /* intentional no-op to preserve previous intent; not empty to avoid linter errors */
+        /* background-color and border-color intentionally inherited from Bootstrap */
+}
+/* Offcanvas adjustments for better visibility on mobile */
+.offcanvas.offcanvas-end {
+    width: 300px;
+    max-width: 85%;
+}
+
+.offcanvas .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+}
+
+/* Make the theme buttons consistent spacing */
+.btn[data-theme-toggle],
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Ensure the "Tema" label inside the offcanvas is visible (overrides the d-none d-lg-inline helper) */
+.offcanvas .d-none.d-lg-inline {
+    display: inline-block !important;
+}
+
+/* Make offcanvas size fit content more closely and ensure readable colors in light/dark themes */
+.offcanvas.offcanvas-end {
+    width: auto !important;
+    min-width: 160px;
+    max-width: 85%;
+    /* let content determine width but keep a sensible minimum */
+}
+
+/* Offcanvas background/color should follow theme: default (light) */
+.offcanvas {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Offcanvas when dark theme is active */
+[data-bs-theme="dark"] .offcanvas {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+/* Make nav links inside offcanvas inherit color and spacing */
+.offcanvas .nav-link {
+    color: inherit;
+    padding: 0.35rem 0;
+}
+
+/* Reduce extra vertical space in offcanvas */
+.offcanvas .navbar-nav {
+    gap: 0.25rem;
+}
+
+/* Double-safety: ensure the offcanvas kept hidden on desktop (in case some CSS interferes) */
+@media (min-width: 992px) {
+    .offcanvas.d-lg-none {
+        display: none !important;
+    }
+}
+
+/* Mobile offcanvas: smaller, rounded, and theme-aware */
+@media (max-width: 991.98px) {
+    .offcanvas.d-lg-none {
+        /* restored width to previous value */
+        width: 220px !important;
+        max-width: 85%;
+        min-width: 160px;
+        margin: 0.5rem;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.22);
+    }
+
+    .offcanvas.d-lg-none .offcanvas-header,
+    .offcanvas.d-lg-none .offcanvas-body {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    /* slightly smaller close button for the compact panel */
+    .offcanvas.d-lg-none .btn-close {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+    /* Make the offcanvas panel not full-height on mobile: position a bit below top and limit height
+       using viewport-relative units so it adapts to different screen sizes. */
+    .offcanvas.d-lg-none {
+        top: 1.5rem !important;      /* push panel down from very top */
+        bottom: auto !important;     /* disable full-bottom stretching */
+        height: auto !important;
+        max-height: 45vh;            /* use percentage of viewport height for responsive sizing */
+    }
+
+    /* Allow the body of the offcanvas to scroll if content exceeds the limited height.
+       Subtract an estimated header height (56px) from the viewport-based max-height. */
+    .offcanvas.d-lg-none .offcanvas-body {
+        max-height: calc(45vh - 56px);
+        overflow-y: auto;
+        padding-right: 0.25rem; /* small room for scrollbar */
+    }
+}
+
+/* Ensure all interactive elements inside the offcanvas inherit the panel's text color */
+.offcanvas .nav-link,
+.offcanvas .dropdown-item,
+.offcanvas .theme-toggle,
+.offcanvas .theme-icon {
+    color: inherit !important;
+}
+
+/* Dark theme: offcanvas background and text colors */
+[data-bs-theme="dark"] .offcanvas.d-lg-none {
+    background-color: #343a40 !important;
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .offcanvas.d-lg-none .btn-close {
+    filter: invert(1);
+}
+
+/* Light theme fallback: ensure readable text on light background */
+[data-bs-theme="light"] .offcanvas.d-lg-none {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Safety: ensure dropdown menu items inside offcanvas are visible in both themes */
+.offcanvas .dropdown-menu {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.offcanvas .dropdown-item {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Offcanvas entrance animation: small slide + fade for a sleeker feel */
+@keyframes offcanvasSlideFadeIn {
+    from { transform: translateX(10px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes offcanvasSlideFadeOut {
+    from { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(10px); opacity: 0; }
+}
+
+/* Apply animation when offcanvas opens (Bootstrap adds the .show class) */
+.offcanvas.d-lg-none.show {
+    animation: offcanvasSlideFadeIn 220ms ease-out both;
+}
+
+/* Make offcanvas menu items feel like compact tap targets: centered text, rounded, and slightly padded */
+@media (max-width: 991.98px) {
+    .offcanvas.d-lg-none .navbar-nav {
+        width: 100%;
+    }
+
+    .offcanvas.d-lg-none .nav-item {
+        width: 100%;
+    }
+
+    .offcanvas.d-lg-none .nav-link,
+    .offcanvas.d-lg-none .dropdown-item,
+    .offcanvas.d-lg-none .theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6rem 0.85rem;
+        margin: 0.35rem 0;
+        border-radius: 10px;
+        width: calc(100% - 1.6rem);
+        text-align: center;
+        font-size: 0.96rem;
+    }
+
+    /* Limit the visible line length of menu item text without changing panel width.
+       This forces wrapping earlier so each line shows fewer characters. Adjust max-width as needed. */
+    .offcanvas.d-lg-none .nav-link > span,
+    .offcanvas.d-lg-none .dropdown-item > span,
+    .offcanvas.d-lg-none .theme-toggle > span {
+        display: inline-block;
+        max-width: 120px; /* shorten line length here (adjust to taste) */
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    /* subtle hover/active background so items read like buttons */
+    .offcanvas.d-lg-none .nav-link:hover,
+    .offcanvas.d-lg-none .theme-toggle:hover,
+    .offcanvas.d-lg-none .dropdown-item:hover {
+        background-color: rgba(0,0,0,0.06);
+        text-decoration: none;
+    }
+
+    /* dark-theme hover contrast */
+    [data-bs-theme="dark"] .offcanvas.d-lg-none .nav-link:hover,
+    [data-bs-theme="dark"] .offcanvas.d-lg-none .theme-toggle:hover,
+    [data-bs-theme="dark"] .offcanvas.d-lg-none .dropdown-item:hover {
+        background-color: rgba(255,255,255,0.06);
+    }
+
+    /* ensure icons keep a small gap from centered text */
+    .offcanvas.d-lg-none .theme-icon {
+        margin-right: 0.5rem;
+    }
+
+    /* Make dropdown profile area inside the offcanvas look and align like the desktop card
+       - keep the inner profile block compact and centered
+       - make action links below appear as normal nav items */
+    .offcanvas .dropdown-menu {
+        /* show as a regular block inside the panel */
+        position: static !important;
+        display: block !important;
+        float: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: 100% !important;
+    }
+
+    .offcanvas .dropdown-menu > li.px-3.py-2 {
+        /* make the profile block look like the desktop card; use percentage so it scales */
+        background-color: rgba(255,255,255,0.03);
+        border-radius: 8px;
+        padding: 0.75rem !important;
+        margin: 0.25rem auto 0.5rem auto;
+        max-width: 90%; /* scale with panel width */
+        color: inherit;
+    }
+
+    /* Hide the profile card entirely inside the offcanvas (Dev User) */
+    .offcanvas .dropdown-menu > li.px-3.py-2 {
+        display: none !important;
+    }
+
+    .offcanvas .dropdown-menu .dropdown-divider {
+        margin: 0.5rem 0;
+    }
+
+    .offcanvas .dropdown-item {
+        /* keep nav-style appearance inside the panel */
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* ensure links in the profile card keep their color and spacing */
+    .offcanvas .dropdown-menu a,
+    .offcanvas .dropdown-menu .dropdown-item,
+    .offcanvas .dropdown-menu small {
+        color: inherit;
+    }
+
+    /* Inside the offcanvas we don't want the dropdown toggle (the clickable name/avatar)
+       to appear above the static menu — hide it so only the profile card/menu is shown. */
+    .offcanvas .dropdown-toggle {
+        display: none !important;
+    }
+
+    /* Hide the circular avatar image inside the offcanvas profile block (keep desktop avatar) */
+    .offcanvas .dropdown-menu img.rounded-circle,
+    .offcanvas .dropdown-menu .rounded-circle {
+        display: none !important;
+    }
+}
+
+.hero-actions .btn-outline-light {
+    border-width: 2px;
+}
+
+.notices-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+[data-bs-theme="dark"] .bg-dark {
+    background-color: #343a40 !important;
+}
+
+/*
+ * Desktop-only navbar polish requested:
+ * - reduce vertical padding so the top bar is sleeker
+ * - keep brand and nav item alignment consistent
+ * - preserve Bootstrap defaults elsewhere
+ */
+.navbar {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar .navbar-nav .nav-link {
+    padding: 0.35rem 0.6rem;
+}
+
+.theme-toggle {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* End of desktop-only tweaks. No mobile/offcanvas rules were added here to preserve previous mobile behavior. */
+
+
+/* Mobile-only: keep profile action buttons on a centered single row, prevent label wrapping
+   and allow a small horizontal scroll if the viewport is extremely narrow. This targets the
+   action container inside the profile card without changing desktop layout. */
+/* ------------------------------------------------------------------ */
+/* Base Mobile Experience Enhancements                                */
+/* Inspirado em padrões de Instagram / Facebook / Obsidian mobile      */
+/* ------------------------------------------------------------------ */
+/* Estratégia: mobile-first ajustes suaves que não quebram desktop.   */
+/* - Aumenta tipografia base em telas <= 576px                        */
+/* - Botões e inputs com altura mínima maior                          */
+/* - Espaçamentos horizontais para evitar toques acidentais           */
+/* - Classes utilitárias para centralização de telas (login etc.)     */
+/* ------------------------------------------------------------------ */
+
+html { scroll-behavior: smooth; }
+
+@media (max-width: 576px) {
+    :root {
+        --mobile-font-scale: 1.06; /* fator leve para não causar quebra */
+        --mobile-btn-font: 1.05rem;
+        --mobile-heading-scale: 1.15;
+        --mobile-radius: 14px;
+        --mobile-spacing: 1rem;
+    }
+
+    body { font-size: calc(1rem * var(--mobile-font-scale)); }
+
+    h1, .h1 { font-size: calc(2.2rem * var(--mobile-heading-scale)); }
+    h2, .h2 { font-size: calc(1.9rem * var(--mobile-heading-scale)); }
+    h3, .h3 { font-size: calc(1.6rem * var(--mobile-heading-scale)); }
+    h4, .h4 { font-size: calc(1.4rem * var(--mobile-heading-scale)); }
+
+    p, .lead, .card-text, label, small { line-height: 1.4; }
+
+    .container, .container-fluid { padding-left: 1.1rem; padding-right: 1.1rem; }
+
+    /* Botões maiores e mais "touch-friendly" */
+    .btn, button[type=button], input[type=submit], .nav-link.btn {
+        min-height: 46px;
+        font-size: var(--mobile-btn-font);
+        border-radius: var(--mobile-radius);
+        padding: 0.75rem 1.15rem;
+    }
+
+    .btn-sm { min-height: 40px; padding: 0.55rem 0.9rem; }
+
+    /* Inputs com altura confortável */
+    .form-control, .form-select { min-height: 46px; font-size: 1.02rem; border-radius: var(--mobile-radius); }
+
+    /* Agrupamento vertical de formulários com mais respiro */
+    .card form .mb-3, form .mb-3 { margin-bottom: 1.15rem !important; }
+
+    /* Toasts mais legíveis em mobile */
+    .toast .toast-body { font-size: 0.95rem; }
+
+    /* Navbar: aumentar área de toque */
+    .navbar .nav-link { padding: 0.65rem 0.9rem; font-size: 1.02rem; }
+    .navbar-toggler { padding: 0.6rem 0.75rem; border-radius: var(--mobile-radius); }
+
+    /* Footer mais compacto mas legível */
+    footer p { font-size: 0.9rem; }
+
+    /* Utilitário para centralizar telas de autenticação */
+    .auth-centered-screen {
+        min-height: calc(100vh - 56px - 56px); /* desconta navbar + footer aproximados */
+        display: flex; align-items: center; justify-content: center;
+        padding: 1.25rem 0 1.75rem;
+    }
+
+    .auth-centered-screen .card { width: 100%; border-radius: var(--mobile-radius); }
+
+    /* Links secundários agrupados */
+    .auth-links-small a { display: inline-block; margin: 0.4rem 0.55rem; }
+
+    /* Melhor legibilidade do texto informativo */
+    .auth-hint { font-size: 0.85rem; line-height: 1.35; }
+
+    /* Suaviza sombra para evitar poluição visual em telas pequenas */
+    .card.shadow-sm { box-shadow: 0 4px 14px rgba(0,0,0,0.12) !important; }
+}
+
+/* Nav inferior fixa (opcional) - aparecerá se adicionarmos .mobile-bottom-nav no layout */
+@media (max-width: 576px) {
+    .mobile-bottom-nav {
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 1030;
+        background: var(--bs-body-bg); border-top: 1px solid rgba(0,0,0,0.08);
+        display: flex; justify-content: space-around; align-items: center;
+        padding: 0.35rem 0.25rem; height: 56px;
+    }
+    [data-bs-theme="dark"] .mobile-bottom-nav { border-color: rgba(255,255,255,0.12); }
+    .mobile-bottom-nav a { flex: 1; text-align: center; font-size: 0.75rem; text-decoration: none; color: inherit; }
+    .mobile-bottom-nav a .bi { display:block; font-size: 1.25rem; margin-bottom: 0.15rem; }
+    .mobile-bottom-nav a:active { filter: brightness(0.9); }
+}
+
+/* Acessibilidade: foco mais visível */
+.btn:focus, .nav-link:focus, .form-control:focus { outline: 2px solid #4dabf7; outline-offset: 2px; }
+
+/* Reduz transições pesadas para usuários com preferência */
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation-duration: 1ms !important; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Fim dos aprimoramentos mobile                                      */
+/* ------------------------------------------------------------------ */
+@media (max-width: 767.98px) {
+    /* Em celulares: adotar estilo de tablet (colunar), sem rolagem horizontal */
+    .profile-header {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    .profile-header .me-4 { margin-right: 0 !important; margin-bottom: 0.75rem !important; }
+
+    .profile-action-mobile {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important; /* empilha botões */
+        align-items: stretch !important;
+        justify-content: center !important;
+        gap: 0.5rem !important;
+        overflow: visible !important; /* remove scroll horizontal */
+        padding-bottom: 0; 
+    }
+    /* Forms gerados por button_to ocupam 100% para o botão expandir */
+    .profile-action-mobile form { width: 100% !important; }
+    .profile-action-mobile .btn,
+    .profile-action-mobile input[type="submit"],
+    .profile-action-mobile .d-inline {
+        white-space: normal !important;
+        display: block !important;
+        width: 100% !important;      /* largura total do cartão */
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .profile-action-mobile {
+        flex-wrap: wrap !important;
+    }
+    .profile-action-mobile .btn,
+    .profile-action-mobile .d-inline {
+        width: 100%;
+        text-align: center;
+    }
+}
+

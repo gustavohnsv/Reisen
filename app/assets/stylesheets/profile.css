@@ -1,0 +1,18 @@
+.profile-avatar-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.profile-avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  background: #e9ecef;
+  color: #495057;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
