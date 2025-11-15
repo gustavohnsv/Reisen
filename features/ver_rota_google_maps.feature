@@ -23,8 +23,7 @@ Funcionalidade: Ver rota no Google Maps
     E que tenho um item do roteiro chamado "Museu B" com localização "Lyon, França"
     E que tenho um item do roteiro chamado "Hotel C" com localização "Marselha, França"
     Então devo ver um botão "Ver Rota no Google Maps" na sidebar
-    Quando clicar no botão "Ver Rota no Google Maps"
-    Então devo ser redirecionado para uma URL do Google Maps contendo os waypoints
+    E devo ser redirecionado para uma URL do Google Maps contendo os waypoints
 
   Cenário: Botão não aparece quando não há itens com localização
     Dado que eu estou na página de perfil
