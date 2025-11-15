@@ -1,0 +1,23 @@
+<!-- app/views/reviews/index.html.erb -->
+<div class="reviews-container">
+  <h2>Avaliações de <%= @reviewable.class.name %>: <%= @reviewable.try(:name) || @reviewable.try(:title) %></h2>
+  
+  <% if @reviewable.reviews.any? %>
+    <div class="reviews-summary">
+      <p>
+        <strong>Média:</strong> <%= @reviewable.average_rating %> / 5.0
+        (<%= @reviewable.reviews_count %> avaliações)
+      </p>
+    </div>
+
+    <div class="reviews-list">
+      <%= render @reviews %>
+    </div>
+  <% else %>
+    <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+  <% end %>
+
+  <% if user_signed_in? && !current_user.reviewed?(@reviewable) %>
+    <%= link_to "Avaliar", new_polymorphic_path([@reviewable, :review]), class: "btn btn-primary" %>
+  <% end %>
+</div>
