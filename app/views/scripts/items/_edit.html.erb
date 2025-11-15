@@ -57,7 +57,7 @@
             <%= f.text_field :location,
                              value: item.location,
                              class: 'form-control',
-                             placeholder: 'Localização',
+                             placeholder: 'Endereço, Cidade, País',
                              id: "edit-item-location_#{item.id}",
                              data: { action: (readonly_item ? nil : "blur->autosave#save") },
                              readonly: readonly_item %>
