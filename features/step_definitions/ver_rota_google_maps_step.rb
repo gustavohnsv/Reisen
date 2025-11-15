@@ -7,6 +7,8 @@ Dado('que tenho um item do roteiro chamado {string} com localização {string}')
                             date_time_start: DateTime.now + @script.script_items.count.days,
                             estimated_cost: 100.0,
                             description: "Descrição do #{title}")
+  # Recarrega a página para que o botão apareça após criar os itens
+  visit script_path(@script) if @script
 end
 
 Dado('que tenho um item do roteiro chamado {string} sem localização') do |title|
@@ -14,14 +16,20 @@ Dado('que tenho um item do roteiro chamado {string} sem localização') do |titl
                             title: title, 
                             script: @script, 
                             user: @user,
-                            location: '',
+                            location: 'Temp Location',  # Cria com localização temporária válida
                             date_time_start: DateTime.now + @script.script_items.count.days,
                             estimated_cost: 100.0,
                             description: "Descrição do #{title}")
+  # update_column bypassa validações para permitir localização vazia
+  @item.update_column(:location, '')
+  # Recarrega a página após modificar
+  visit script_path(@script) if @script
 end
 
 Dado('que não há itens no roteiro') do
   @script.script_items.destroy_all
+  # Recarrega a página para atualizar a sidebar
+  visit script_path(@script) if @script
 end
 
 Então('devo ver um botão {string} na sidebar') do |button_text|
