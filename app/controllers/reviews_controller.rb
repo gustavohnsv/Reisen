@@ -1,8 +1,7 @@
-# app/controllers/reviews_controller.rb
 class ReviewsController < ApplicationController
   before_action :set_reviewable
-  before_action :set_review, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :set_review, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /destinations/:destination_id/reviews
   # GET /hotels/:hotel_id/reviews
@@ -22,6 +21,15 @@ class ReviewsController < ApplicationController
       format.html
       format.json { render json: @review, include: :user }
     end
+  end
+
+  # GET /destinations/:destination_id/reviews/new
+  def new
+    @review = @reviewable.reviews.build
+  end
+
+  # GET /destinations/:destination_id/reviews/:id/edit
+  def edit
   end
 
   # POST /destinations/:destination_id/reviews

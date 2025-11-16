@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <h1>Nova Avaliação</h1>
+  
+  <div class="card mt-3">
+    <div class="card-body">
+      <%= form_with(model: [@reviewable, @review], local: true) do |form| %>
+        <%= render 'shared/error_messages', object: form.object %>
+        
+        <div class="form-group mb-3">
+          <%= form.label :rating, "Avaliação *" %>
+          <%= form.select :rating, (1..5).to_a, { prompt: "Selecione uma nota" }, class: "form-control" %>
+        </div>
+        
+        <div class="form-group mb-3">
+          <%= form.label :title, "Título" %>
+          <%= form.text_field :title, class: "form-control", placeholder: "Ex: Excelente experiência!" %>
+        </div>
+        
+        <div class="form-group mb-3">
+          <%= form.label :comment, "Comentário" %>
+          <%= form.text_area :comment, rows: 5, class: "form-control", placeholder: "Conte sobre sua experiência..." %>
+        </div>
+        
+        <div class="actions">
+          <%= form.submit "Publicar Avaliação", class: "btn btn-primary" %>
+          <%= link_to "Cancelar", polymorphic_path([@reviewable, :reviews]), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

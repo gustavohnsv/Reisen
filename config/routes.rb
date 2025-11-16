@@ -32,15 +32,15 @@ Rails.application.routes.draw do
 
   # Rotas de Reviews para Destinations, Hotels e Tours
   resources :destinations, only: [] do
-    resources :reviews, only: [:index, :show, :create, :update, :destroy]
+    resources :reviews
   end
 
   resources :hotels, only: [] do
-    resources :reviews, only: [:index, :show, :create, :update, :destroy]
+    resources :reviews
   end
 
   resources :tours, only: [] do
-    resources :reviews, only: [:index, :show, :create, :update, :destroy]
+    resources :reviews
   end
 
   # Rotas destinadas ao ambiente de testes

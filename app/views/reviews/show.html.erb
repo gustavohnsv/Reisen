@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h2><%= @review.title %></h2>
+      <div class="review-rating">
+        <%= "★" * @review.rating %><%= "☆" * (5 - @review.rating) %>
+      </div>
+    </div>
+    
+    <div class="card-body">
+      <p class="review-author">
+        <strong>Por:</strong> <%= @review.user.name || @review.user.email %>
+        <br>
+        <small class="text-muted"><%= l(@review.created_at, format: :long) %></small>
+      </p>
+      
+      <% if @review.comment.present? %>
+        <div class="review-comment mt-3">
+          <p><%= @review.comment %></p>
+        </div>
+      <% end %>
+      
+      <% if user_signed_in? && current_user == @review.user %>
+        <div class="review-actions mt-3">
+          <%= link_to "Editar", edit_polymorphic_path([@reviewable, @review]), class: "btn btn-primary" %>
+          <%= button_to "Excluir", polymorphic_path([@reviewable, @review]), 
+                        method: :delete, 
+                        data: { confirm: "Tem certeza que deseja excluir esta avaliação?" },
+                        class: "btn btn-danger" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <%= link_to "Voltar", polymorphic_path([@reviewable, :reviews]), class: "btn btn-secondary mt-3" %>
+</div>
