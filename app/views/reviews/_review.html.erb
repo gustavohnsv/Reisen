@@ -1,0 +1,26 @@
+<!-- app/views/reviews/_review.html.erb -->
+<div class="review">
+  <div class="review-header">
+    <h4><%= review.title %></h4>
+    <div class="review-rating">
+      <%= "★" * review.rating %><%= "☆" * (5 - review.rating) %>
+    </div>
+    <p class="review-author">
+      Por <%= review.user.name || review.user.email %> - 
+      <%= l(review.created_at, format: :short) %>
+    </p>
+  </div>
+  
+  <div class="review-body">
+    <p><%= review.comment %></p>
+  </div>
+
+  <% if user_signed_in? && current_user == review.user %>
+    <div class="review-actions">
+      <%= link_to "Editar", edit_polymorphic_path([review.reviewable, review]) %>
+      <%= button_to "Excluir", polymorphic_path([review.reviewable, review]), 
+                    method: :delete, 
+                    data: { confirm: "Tem certeza?" } %>
+    </div>
+  <% end %>
+</div>

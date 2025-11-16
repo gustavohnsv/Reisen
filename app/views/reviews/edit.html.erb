@@ -1,0 +1,40 @@
+<div class="container mt-4">
+  <h1>Editar Avaliação</h1>
+  
+  <div class="card mt-3">
+    <div class="card-body">
+      <%= form_with(model: [@reviewable, @review], local: true) do |form| %>
+        <% if @review.errors.any? %>
+          <div class="alert alert-danger">
+            <h4><%= pluralize(@review.errors.count, "erro") %> impediram que a avaliação fosse atualizada:</h4>
+            <ul>
+              <% @review.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        
+        <div class="form-group mb-3">
+          <%= form.label :rating, "Avaliação *" %>
+          <%= form.select :rating, (1..5).to_a, {}, class: "form-control" %>
+        </div>
+        
+        <div class="form-group mb-3">
+          <%= form.label :title, "Título" %>
+          <%= form.text_field :title, class: "form-control" %>
+        </div>
+        
+        <div class="form-group mb-3">
+          <%= form.label :comment, "Comentário" %>
+          <%= form.text_area :comment, rows: 5, class: "form-control" %>
+        </div>
+        
+        <div class="actions">
+          <%= form.submit "Atualizar Avaliação", class: "btn btn-primary" %>
+          <%= link_to "Cancelar", polymorphic_path([@reviewable, @review]), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

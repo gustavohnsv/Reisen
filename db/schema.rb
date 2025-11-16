@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_15_190425) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -67,6 +67,20 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
     t.index ["user_id"], name: "index_checklists_on_user_id"
   end
 
+  create_table "destinations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hotels", force: :cascade do |t|
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notices", force: :cascade do |t|
     t.text "body", null: false
     t.datetime "created_at", null: false
@@ -75,6 +89,20 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
     t.integer "user_id"
     t.boolean "visible", default: false, null: false
     t.index ["user_id"], name: "index_notices_on_user_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.integer "rating", null: false
+    t.integer "reviewable_id", null: false
+    t.string "reviewable_type", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["reviewable_type", "reviewable_id", "user_id"], name: "index_reviews_on_reviewable_and_user", unique: true
+    t.index ["reviewable_type", "reviewable_id"], name: "index_reviews_on_reviewable"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 
   create_table "script_comments", force: :cascade do |t|
@@ -135,6 +163,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
     t.index ["user_id"], name: "index_scripts_on_user_id"
   end
 
+  create_table "tours", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
@@ -160,6 +195,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_06_213800) do
   add_foreign_key "checklist_participants", "users"
   add_foreign_key "checklists", "users"
   add_foreign_key "notices", "users"
+  add_foreign_key "reviews", "users"
   add_foreign_key "script_comments", "scripts"
   add_foreign_key "script_comments", "users"
   add_foreign_key "script_items", "scripts"
