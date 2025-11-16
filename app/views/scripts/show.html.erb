@@ -94,6 +94,16 @@
           </button>
         <% end %>
 
+        <% if google_maps_directions_url(@script).present? %>
+          <%= link_to google_maps_directions_url(@script),
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      class: "btn btn-info w-100 mb-2 d-flex align-items-center justify-content-center gap-2" do %>
+            <i class="material-icons" style="font-size: 1.2rem;">directions</i>
+            <span>Ver Rota no Google Maps</span>
+          <% end %>
+        <% end %>
+
         <% if @permission_level == :owner %>
           <%= link_to script_path(@script&.id),
                       class: "btn btn-outline-danger w-100 mb-4 d-flex align-items-center justify-content-center gap-2",
