@@ -1,7 +1,7 @@
 <div class="container mt-4">
   <div class="card">
     <div class="card-header">
-      <h2><%= @review.title %></h2>
+      <h2><%= @review.title.present? ? @review.title : "Avaliação" %></h2>
       <div class="review-rating">
         <%= "★" * @review.rating %><%= "☆" * (5 - @review.rating) %>
       </div>
@@ -11,7 +11,7 @@
       <p class="review-author">
         <strong>Por:</strong> <%= @review.user.name || @review.user.email %>
         <br>
-        <small class="text-muted"><%= l(@review.created_at, format: :long) %></small>
+        <small class="text-muted"><%= l(@review.created_at, format: :long) if @review.created_at %></small>
       </p>
       
       <% if @review.comment.present? %>

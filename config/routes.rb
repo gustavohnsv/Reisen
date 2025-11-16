@@ -31,17 +31,17 @@ Rails.application.routes.draw do
   end
 
   # Rotas de Reviews para Destinations, Hotels e Tours
-  resources :destinations, only: [] do
-    resources :reviews
-  end
+resources :destinations, only: [] do
+  resources :reviews
+end
 
-  resources :hotels, only: [] do
-    resources :reviews
-  end
+resources :hotels, only: [] do
+  resources :reviews
+end
 
-  resources :tours, only: [] do
-    resources :reviews
-  end
+resources :tours, only: [] do
+  resources :reviews
+end
 
   # Rotas destinadas ao ambiente de testes
   if Rails.env.test?

@@ -4,8 +4,6 @@ class ReviewsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   # GET /destinations/:destination_id/reviews
-  # GET /hotels/:hotel_id/reviews
-  # GET /tours/:tour_id/reviews
   def index
     @reviews = @reviewable.reviews.recent.includes(:user)
     
@@ -30,6 +28,7 @@ class ReviewsController < ApplicationController
 
   # GET /destinations/:destination_id/reviews/:id/edit
   def edit
+    return head :forbidden unless @review.user == current_user
   end
 
   # POST /destinations/:destination_id/reviews

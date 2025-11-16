@@ -4,7 +4,16 @@
   <div class="card mt-3">
     <div class="card-body">
       <%= form_with(model: [@reviewable, @review], local: true) do |form| %>
-        <%= render 'shared/error_messages', object: form.object %>
+        <% if @review.errors.any? %>
+          <div class="alert alert-danger">
+            <h4><%= pluralize(@review.errors.count, "erro") %> impediram que a avaliação fosse atualizada:</h4>
+            <ul>
+              <% @review.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
         
         <div class="form-group mb-3">
           <%= form.label :rating, "Avaliação *" %>
