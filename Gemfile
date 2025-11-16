@@ -27,7 +27,7 @@ gem "jbuilder", "~> 2.14"
 gem "devise", "~> 4.9"
 
 # Timezone support for Windows
-gem "tzinfo-data"
+gem "tzinfo-data", platforms: [:windows, :jruby]
 
 # Reduces boot times through caching
 gem "bootsnap", "~> 1.18", require: false
@@ -46,18 +46,7 @@ end
 # Development + Test database adapter
 group :development, :test do
   gem "sqlite3", "~> 2.2.0", force_ruby_platform: true
-end
-
-# Only development
-group :development do
-  gem "letter_opener", "~> 1.10"
-
-  # Console on exceptions pages
-  gem "web-console", "~> 4.2"
-end
-
-# Development + Test tools
-group :development, :test do
+  
   # Debugging
   gem "debug", "~> 1.11", platforms: %i[mri windows]
 
@@ -82,17 +71,24 @@ group :development, :test do
   # Code smell detection
   gem "reek", "~> 6.5", require: false
 
+  # Test data generation
   gem "faker", "~> 3.5"
+  
+  # Helpers
   gem "launchy", "~> 3.1"
   gem "webmock", "~> 3.26"
   gem "pry-rails", "~> 0.3"
+end
 
-  # Corrected — missing closing quote
+# Test-only gems
+group :test do
   gem "shoulda-matchers", "~> 6.0"
 end
 
-# Old test group left commented for reference
-# group :test do
-#   gem "capybara"
-#   gem "selenium-webdriver"
-# end
+# Development-only gems
+group :development do
+  gem "letter_opener", "~> 1.10"
+  
+  # Console on exceptions pages
+  gem "web-console", "~> 4.2"
+end
