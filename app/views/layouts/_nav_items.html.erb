@@ -6,6 +6,11 @@
     </button>
   </li>
 
+  <% unless user_signed_in? %>
+    <li class="nav-item">
+      <%= link_to "Roteiro", roteiro_path, class: "nav-link" %>
+    </li>
+  <% end %>
   <li class="nav-item">
     <%= link_to "Pesquisa", maps_search_path, class: "nav-link" %>
   </li>

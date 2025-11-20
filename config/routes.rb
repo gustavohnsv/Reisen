@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   root 'home#index'
+  get '/roteiro', to: 'roteiro#show', as: :roteiro
 
   resources :profiles, only: [:show, :edit]
   resources :users, only: [:edit, :update]
