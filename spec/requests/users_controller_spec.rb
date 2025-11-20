@@ -33,4 +33,31 @@ RSpec.describe "UsersController", type: :request do
       expect(response).to render_template('profiles/edit')
     end
   end
+
+  describe 'DELETE /users/:id' do
+    context 'quando autenticado' do
+      before { sign_in user }
+
+      it 'exclui a própria conta' do
+        delete user_path(user)
+
+        expect(response).to redirect_to(root_path)
+        follow_redirect!
+        expect(response.body).to include('Conta excluída com sucesso.')
+        expect(User.find_by(id: user.id)).to be_nil
+      end
+
+      it 'não permite excluir conta de outro usuário' do
+        delete user_path(other_user)
+
+        expect(response).to redirect_to(root_path)
+        expect(User.find_by(id: other_user.id)).to be_present
+      end
+    end
+
+    it 'redireciona visitantes para login' do
+      delete user_path(user)
+      expect(response).to redirect_to(new_user_session_path)
+    end
+  end
 end

@@ -30,8 +30,12 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
-    redirect_to root_path, notice: 'Usuário deletado com sucesso'
+    if @user.destroy
+      sign_out(:user)
+      redirect_to root_path, notice: 'Conta excluída com sucesso.'
+    else
+      redirect_to edit_profile_path(@user), alert: 'Não foi possível excluir sua conta. Tente novamente mais tarde.'
+    end
   end
 
   private

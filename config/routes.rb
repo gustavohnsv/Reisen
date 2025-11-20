@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   resources :profiles, only: [:show, :edit]
-  resources :users, only: [:edit, :update]
+  resources :users, only: [:edit, :update, :destroy]
 
   get 'my_profile', to: 'profiles#my_profile'
 
