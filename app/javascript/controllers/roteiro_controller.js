@@ -297,7 +297,8 @@ export default class extends Controller {
         return value
       }
       const options = { dateStyle: "medium" }
-      if (value.includes("T")) {
+      // Check if the date has a time component by inspecting hours, minutes, or seconds
+      if (date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0) {
         options.timeStyle = "short"
       }
       return date.toLocaleString(undefined, options)
