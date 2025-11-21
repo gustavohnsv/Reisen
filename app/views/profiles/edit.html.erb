@@ -92,6 +92,20 @@
 
           <% end %>
 
+          <hr class="my-5">
+
+          <div class="alert alert-danger" role="alert">
+            <h3 class="h6 fw-semibold">Excluir conta</h3>
+            <p class="small mb-3">
+              Esta ação remove permanentemente seus roteiros, checklists e demais dados associados. Ela não pode ser desfeita.
+            </p>
+            <%= button_to "Excluir conta",
+                          user_path(@user),
+                          method: :delete,
+                          class: "btn btn-danger",
+                          data: { turbo_confirm: "Tem certeza que deseja excluir sua conta? Esta ação é irreversível." } %>
+          </div>
+
         </div>
       </div>
     </div>

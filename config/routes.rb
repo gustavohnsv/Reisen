@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get '/roteiro', to: 'roteiro#show', as: :roteiro
 
   resources :profiles, only: [:show, :edit]
-  resources :users, only: [:edit, :update]
+  resources :users, only: [:edit, :update, :destroy]
 
   get 'my_profile', to: 'profiles#my_profile'
 
