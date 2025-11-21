@@ -1,0 +1,107 @@
+<div class="container py-5" data-controller="roteiro" data-roteiro-storage-key-value="reisen:roteiro:v1">
+  <div class="row g-4 g-xl-5">
+    <div class="col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h1 class="h5 mb-0">Roteiro rápido</h1>
+        </div>
+        <div class="card-body">
+          <p class="text-muted small mb-4">
+            Adicione pontos do seu roteiro para salvá-los automaticamente neste navegador, mesmo sem fazer login.
+          </p>
+
+          <form data-roteiro-target="form" data-action="submit->roteiro#addItem">
+            <div class="mb-3">
+              <label for="roteiro-title" class="form-label">Título <span class="text-danger">*</span></label>
+              <input id="roteiro-title"
+                     type="text"
+                     class="form-control"
+                     placeholder="Ex.: Chegada em Lisboa"
+                     required
+                     data-roteiro-target="title"
+                     data-action="input->roteiro#storeDraft change->roteiro#storeDraft" />
+            </div>
+
+            <div class="mb-3">
+              <label for="roteiro-description" class="form-label">Descrição</label>
+              <textarea id="roteiro-description"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Ex.: Conferir horário do transfer e documentos"
+                        data-roteiro-target="description"
+                        data-action="input->roteiro#storeDraft change->roteiro#storeDraft"></textarea>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label for="roteiro-location" class="form-label">Local</label>
+                <input id="roteiro-location"
+                       type="text"
+                       class="form-control"
+                       placeholder="Cidade, ponto turístico, endereço"
+                       data-roteiro-target="location"
+                       data-action="input->roteiro#storeDraft change->roteiro#storeDraft" />
+              </div>
+              <div class="col-sm-6">
+                <label for="roteiro-date" class="form-label">Data e hora</label>
+                <input id="roteiro-date"
+                       type="datetime-local"
+                       class="form-control"
+                       data-roteiro-target="date"
+                       data-action="input->roteiro#storeDraft change->roteiro#storeDraft" />
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="roteiro-cost" class="form-label">Custo estimado</label>
+              <input id="roteiro-cost"
+                     type="number"
+                     class="form-control"
+                     placeholder="Ex.: 250.00"
+                     step="0.01"
+                     min="0"
+                     data-roteiro-target="cost"
+                     data-action="input->roteiro#storeDraft change->roteiro#storeDraft" />
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">Salvar item</button>
+              <button type="button" class="btn btn-outline-danger" data-action="roteiro#clearAll">Limpar tudo</button>
+            </div>
+          </form>
+
+          <% unless user_signed_in? %>
+            <div class="alert alert-light border mt-4 mb-0 small" role="status">
+              Quer acessar este planejamento em outros dispositivos? <%= link_to "Crie uma conta gratuita", new_user_registration_path %> para sincronizar seus roteiros.
+            </div>
+          <% else %>
+            <div class="alert alert-light border mt-4 mb-0 small" role="status">
+              Crie um novo roteiro em <%= link_to "Minhas viagens", profile_path(current_user) %> e copie os itens salvos localmente para o planejamento oficial.
+            </div>
+          <% end %>
+
+          <p class="small text-muted mt-3" data-roteiro-target="status">
+            As alterações ficam salvas localmente neste navegador.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card shadow-sm h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0">Itens planejados</h2>
+          <span class="badge bg-secondary" data-roteiro-target="counter">0</span>
+        </div>
+        <div class="card-body">
+          <div data-roteiro-target="emptyState" class="text-center text-muted py-5">
+            <i class="material-icons mb-3" style="font-size: 2.5rem;">event_note</i>
+            <p class="fw-semibold mb-1">Nenhum item salvo ainda</p>
+            <p class="small mb-0">Adicione um item ao lado para começar a planejar sua viagem.</p>
+          </div>
+          <div data-roteiro-target="list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
