@@ -7,8 +7,9 @@
   budget = items.sum { |item| item.estimated_cost || 0 }
 
   # --- 2. Busca e Agrupamento de Gastos (Otimizado) ---
-  day_spends = script.script_spends.includes(:user).where(date: day)
-
+  # day_spends is passed from the view
+  day_spends ||= [] # Fallback if not passed
+  
   gastos_agrupados = day_spends.group_by(&:category).map do |category, spends|
     por_usuario = spends.group_by { |s| s.user&.name || "Desconhecido" }
                         .transform_values do |user_spends|
@@ -147,7 +148,7 @@
         <p class="text-white-50 small">Aqui você pode ver todos os gastos deste dia e remover os que você registrou.</p>
 
         <ul class="list-group list-group-flush">
-          <% day_spends.order(created_at: :desc).each do |spend| %>
+          <% day_spends.sort_by(&:created_at).reverse.each do |spend| %>
             <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center px-0">
               <div>
                 <% quantity = spend.quantity || 1 %>
