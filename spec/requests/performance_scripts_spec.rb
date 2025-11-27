@@ -9,7 +9,7 @@ RSpec.describe "Scripts Performance", type: :request do
     # Create data for 3 days
     3.times do |i|
       date = Date.today + i.days
-      create(:script_item, script: script, date_time_start: date.to_time, date_time_end: date.to_time + 1.hour)
+      create(:script_item, script: script, date_time_start: date.to_time)
       create_list(:script_spend, 5, script: script, date: date, user: user)
     end
   end
