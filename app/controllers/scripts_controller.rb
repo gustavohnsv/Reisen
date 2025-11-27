@@ -13,6 +13,12 @@ class ScriptsController < ApplicationController
   before_action :set_show_variables, only: [:show]
   def show
     @airlines = airlines
+    set_meta_tags title: @script.title,
+                  description: "Confira o roteiro de viagem '#{@script.title}' no Reisen.",
+                  og: {
+                    title: :title,
+                    description: :description
+                  }
   end
 
   def new

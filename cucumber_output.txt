@@ -1,0 +1,169 @@
+Capybara configurado: Usando Chrome Headless (linux).
+  Caminho: /usr/bin/chromium-browser
+→ Nenhuma variável ENV['BROWSER'] definida. Usando navegador padrão.
+Using the default profile...
+# language: pt
+@javascript
+Funcionalidade: Acessibilidade
+  Como um usuário com deficiência
+  Eu quero navegar no site sem barreiras
+  Para que eu possa usar todas as funcionalidades
+
+  Cenário: Verificar acessibilidade na página inicial                     # features/accessibility.feature:8
+DEPRECATION WARNING: resource received a hash argument only. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /home/renanbg/Projects/Reisen/config/routes.rb:4)
+DEPRECATION WARNING: resource received a hash argument path. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /home/renanbg/Projects/Reisen/config/routes.rb:4)
+DEPRECATION WARNING: resource received a hash argument path_names. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /home/renanbg/Projects/Reisen/config/routes.rb:4)
+DEPRECATION WARNING: resource received a hash argument controller. Please use a keyword instead. Support to hash argument will be removed in Rails 8.2. (called from block in <main> at /home/renanbg/Projects/Reisen/config/routes.rb:4)
+Capybara starting Puma...
+* Version 7.1.0, codename: Neon Witch
+* Min threads: 0, max threads: 4
+* Listening on http://127.0.0.1:35773
+    Dado que eu estou na página inicial                                   # features/step_definitions/seo_and_a11y_steps.rb:31
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+    Então a página não deve ter violações de acessibilidade (WCAG 2.1 AA) # features/step_definitions/seo_and_a11y_steps.rb:27
+      
+      Found 1 accessibility violation:
+      
+      1) image-alt: Images must have alternative text (critical)
+          https://dequeuniversity.com/rules/axe/4.11/image-alt?application=axeAPI
+          The following 1 node violate this rule:
+          
+              Selector: img
+              HTML: <img style="filter: invert(1); height: 2rem; transform: scale(1.5)" src="/assets/reisen-logo-30c172b30c2a3bd9aac92c1b04f8695d0426a00199c783f01f92a7c76c73e1ec.png">
+              Fix any of the following:
+              - Element does not have an alt attribute
+              - aria-label attribute does not exist or is empty
+              - aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty
+              - Element has no title attribute
+              - Element's default semantics were not overridden with role="none" or role="presentation"
+              
+      Invocation: axe.run({exclude: []}, {}, callback); (RSpec::Expectations::ExpectationNotMetError)
+      ./features/step_definitions/seo_and_a11y_steps.rb:28:in `"a página não deve ter violações de acessibilidade \(WCAG 2.1 AA)"'
+      features/accessibility.feature:10:in `a página não deve ter violações de acessibilidade (WCAG 2.1 AA)'
+
+  Cenário: Verificar acessibilidade na página de login                    # features/accessibility.feature:12
+    Dado que eu estou na página de login                                  # features/step_definitions/redefinir_senha_steps.rb:3
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+/home/renanbg/.rbenv/versions/3.4.5/lib/ruby/gems/3.4.0/gems/axe-core-api-4.11.0/lib/axe/api/results/rule.rb:45: warning: literal string will be frozen in the future (run with --debug-frozen-string-literal for more information)
+    Então a página não deve ter violações de acessibilidade (WCAG 2.1 AA) # features/step_definitions/seo_and_a11y_steps.rb:27
+      
+      Found 4 accessibility violations:
+      
+      1) image-alt: Images must have alternative text (critical)
+          https://dequeuniversity.com/rules/axe/4.11/image-alt?application=axeAPI
+          The following 1 node violate this rule:
+          
+              Selector: img
+              HTML: <img style="filter: invert(1); height: 2rem; transform: scale(1.5)" src="/assets/reisen-logo-30c172b30c2a3bd9aac92c1b04f8695d0426a00199c783f01f92a7c76c73e1ec.png">
+              Fix any of the following:
+              - Element does not have an alt attribute
+              - aria-label attribute does not exist or is empty
+              - aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty
+              - Element has no title attribute
+              - Element's default semantics were not overridden with role="none" or role="presentation"
+              
+      2) landmark-one-main: Document should have one main landmark (moderate)
+          https://dequeuniversity.com/rules/axe/4.11/landmark-one-main?application=axeAPI
+          The following 1 node violate this rule:
+          
+              Selector: html
+              HTML: <html lang="pt-br">
+              Fix all of the following:
+              - Document does not have a main landmark
+              
+      3) page-has-heading-one: Page should contain a level-one heading (moderate)
+          https://dequeuniversity.com/rules/axe/4.11/page-has-heading-one?application=axeAPI
+          The following 1 node violate this rule:
+          
+              Selector: html
+              HTML: <html lang="pt-br">
+              Fix all of the following:
+              - Page must have a level-one heading
+              
+      4) region: All page content should be contained by landmarks (moderate)
+          https://dequeuniversity.com/rules/axe/4.11/region?application=axeAPI
+          The following 7 nodes violate this rule:
+          
+              Selector: h2
+              HTML: <h2 class="text-center mb-4 fw-semibold">Log in</h2>
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+              Selector: .mb-3:nth-child(1)
+              HTML: <div class="mb-3"><label class="form-label" for="user_email">Email</label><input autofocus="autofocus" autocomplete="email" class="form-control" type="email" value="" name="user[email]" id="user_email"></div>
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+              Selector: .mb-3:nth-child(2)
+              HTML: <div class="mb-3"><label class="form-label" for="user_password">Password</label><input autocomplete="current-password" class="form-control" type="password" name="user[password]" id="user_password"></div>
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+              Selector: #user_remember_me
+              HTML: <input class="form-check-input" type="checkbox" value="1" name="user[remember_me]" id="user_remember_me">
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+              Selector: .form-check-label
+              HTML: <label class="form-check-label" for="user_remember_me">Remember me</label>
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+              Selector: .mt-4
+              HTML: <div class="mt-4 text-center auth-links-small small"><a href="/users/sign_up">Sign up</a><br><a href="/users/password/new">Forgot your password?</a><br><a href="/users/confirmation/new">Didn't receive confirmation instructions?</a><br></div>
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+              Selector: .mt-3
+              HTML: <div class="mt-3 text-center text-muted auth-hint"><p class="mb-0">Crie uma conta para sincronizar roteiros e checklists em todos os dispositivos. Use "Lembrar-me" somente em dispositivos pessoais.</p></div>
+              Fix any of the following:
+              - Some page content is not contained by landmarks
+              
+      Invocation: axe.run({exclude: []}, {}, callback); (RSpec::Expectations::ExpectationNotMetError)
+      ./features/step_definitions/seo_and_a11y_steps.rb:28:in `"a página não deve ter violações de acessibilidade \(WCAG 2.1 AA)"'
+      features/accessibility.feature:14:in `a página não deve ter violações de acessibilidade (WCAG 2.1 AA)'
+
+Failing Scenarios:
+cucumber features/accessibility.feature:8 # Cenário: Verificar acessibilidade na página inicial
+cucumber features/accessibility.feature:12 # Cenário: Verificar acessibilidade na página de login
+
+2 scenarios (2 failed)
+4 steps (2 failed, 2 passed)
+0m4.849s
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Share your Cucumber Report with your team at https://reports.cucumber.io     │
+│                                                                              │
+│ Command line option:    --publish                                            │
+│ Environment variable:   CUCUMBER_PUBLISH_ENABLED=true                        │
+│ cucumber.yml:           default: --publish                                   │
+│                                                                              │
+│ More information at https://cucumber.io/docs/cucumber/environment-variables/ │
+│                                                                              │
+│ To disable this message, specify CUCUMBER_PUBLISH_QUIET=true or use the      │
+│ --publish-quiet option. You can also add this to your cucumber.yml:          │
+│ default: --publish-quiet                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘

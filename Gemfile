@@ -20,6 +20,8 @@ gem "httparty", "~> 0.23"
 gem "material_icons", "~> 4.0"
 gem "countries", "~> 8.0"
 gem "rails-i18n"
+gem "meta-tags"
+gem "sitemap_generator"
 
 # Production
 group :production do
