@@ -45,6 +45,7 @@ group :development, :test do
   gem "launchy", "~> 3.1"
   gem "webmock", "~> 3.26"
   gem "pry-rails", "~> 0.3"
+  gem "axe-core-cucumber"
 end
 
 # Test only
