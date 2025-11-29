@@ -78,19 +78,6 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
-    axe-core-api (4.11.0)
-      dumb_delegator
-      ostruct
-      virtus
-    axe-core-cucumber (4.11.0)
-      axe-core-api (= 4.11.0)
-      dumb_delegator
-      ostruct
-      virtus
-    axiom-types (0.1.1)
-      descendants_tracker (~> 0.0.4)
-      ice_nine (~> 0.11.0)
-      thread_safe (~> 0.3, >= 0.3.1)
     base64 (0.3.0)
     bcrypt (3.1.20)
     bigdecimal (3.3.1)
@@ -110,8 +97,6 @@ GEM
     childprocess (5.1.0)
       logger (~> 1.5)
     coderay (1.1.3)
-    coercible (1.0.0)
-      descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
     countries (8.0.4)
@@ -163,8 +148,6 @@ GEM
     debug (1.11.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
-    descendants_tracker (0.0.4)
-      thread_safe (~> 0.3, >= 0.3.1)
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -203,7 +186,6 @@ GEM
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
-    dumb_delegator (1.1.0)
     erb (6.0.0)
     erubi (1.13.1)
     factory_bot (6.5.6)
@@ -214,6 +196,7 @@ GEM
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
     ffi (1.17.2)
+    ffi (1.17.2-x86_64-linux-gnu)
     globalid (1.3.0)
       activesupport (>= 6.1)
     hashdiff (1.2.1)
@@ -223,7 +206,6 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    ice_nine (0.11.2)
     importmap-rails (2.2.2)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -258,8 +240,6 @@ GEM
       railties (>= 3.2)
     matrix (0.4.3)
     memoist3 (1.0.0)
-    meta-tags (2.22.2)
-      actionpack (>= 6.0.0, < 8.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
@@ -282,12 +262,14 @@ GEM
     nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    nokogiri (1.18.10-x86_64-linux-gnu)
+      racc (~> 1.4)
     orm_adapter (0.5.0)
-    ostruct (0.6.3)
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
     pg (1.6.2)
+    pg (1.6.2-x86_64-linux)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -405,8 +387,6 @@ GEM
     simplecov-html (0.13.2)
     simplecov-lcov (0.9.0)
     simplecov_json_formatter (0.1.4)
-    sitemap_generator (6.3.0)
-      builder (~> 3.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -427,7 +407,6 @@ GEM
     term-ansicolor (1.11.3)
       tins (~> 1)
     thor (1.4.0)
-    thread_safe (0.3.6)
     timeout (0.4.4)
     tins (1.47.0)
       bigdecimal
@@ -442,10 +421,6 @@ GEM
     unaccent (0.4.0)
     uri (1.1.1)
     useragent (0.16.11)
-    virtus (2.0.0)
-      axiom-types (~> 0.1)
-      coercible (~> 1.0)
-      descendants_tracker (~> 0.0, >= 0.0.3)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -467,10 +442,9 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
-  axe-core-cucumber
   bootsnap (~> 1.18)
   capybara (~> 3.40)
   countries (~> 8.0)
@@ -487,7 +461,6 @@ DEPENDENCIES
   launchy (~> 3.1)
   letter_opener (~> 1.10)
   material_icons (~> 4.0)
-  meta-tags
   pg (~> 1.6)
   pry-rails (~> 0.3)
   puma (~> 7.1)
@@ -502,7 +475,6 @@ DEPENDENCIES
   shoulda-matchers (~> 6.0)
   simplecov (~> 0.22)
   simplecov-lcov (~> 0.9)
-  sitemap_generator
   sprockets-rails (~> 3.5)
   sqlite3 (~> 2.2.0)
   stimulus-rails (~> 1.3)
