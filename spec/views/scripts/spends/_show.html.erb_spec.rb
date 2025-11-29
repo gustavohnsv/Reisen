@@ -30,7 +30,8 @@ RSpec.describe "scripts/spends/_show.html.erb", type: :view do
              locals: {
                script: script,
                items: [],
-               date: target_date
+               date: target_date,
+               day_spends: [spend_on_date]
              }
     end
 
@@ -63,7 +64,8 @@ RSpec.describe "scripts/spends/_show.html.erb", type: :view do
              locals: {
                script: script,
                items: [item_com_custo],
-               date: target_date
+               date: target_date,
+               day_spends: [gasto_do_dia]
              }
     end
 
@@ -89,7 +91,7 @@ RSpec.describe "scripts/spends/_show.html.erb", type: :view do
     it 'mostra o botão de excluir se o gasto pertence ao current_user' do
       allow(view).to receive(:current_user).and_return(user_dono_do_gasto)
 
-      render partial: "scripts/spends/show", locals: { script: script, items: [], date: target_date }
+      render partial: "scripts/spends/show", locals: { script: script, items: [], date: target_date, day_spends: [gasto] }
 
       expect(rendered).to include('button_to')
       expect(rendered).to include(script_script_spend_path(script.id, gasto.id))
@@ -100,7 +102,7 @@ RSpec.describe "scripts/spends/_show.html.erb", type: :view do
     it 'NÃO mostra o botão de excluir se o gasto for de outro usuário' do
       allow(view).to receive(:current_user).and_return(outro_usuario)
 
-      render partial: "scripts/spends/show", locals: { script: script, items: [], date: target_date }
+      render partial: "scripts/spends/show", locals: { script: script, items: [], date: target_date, day_spends: [gasto] }
 
       expect(rendered).not_to include('button_to')
       expect(rendered).to include("Registrado por: #{user_dono_do_gasto.name}")
