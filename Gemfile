@@ -59,4 +59,5 @@ end
 group :development do
   gem "letter_opener", "~> 1.10"
   gem "web-console", "~> 4.2"
+  gem "rack-mini-profiler"
 end

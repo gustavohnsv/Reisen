@@ -11,6 +11,9 @@ module ScriptShowVariables
       @script.script_participants.where(user_id: nil)
     )
     @grouped_items = @script.script_items.order(date_time_start: :asc).group_by { |item| item.date_time_start&.to_date }
+    
+    # Pre-fetch all spends and group by date to avoid N+1
+    @spends_by_date = @script.script_spends.includes(:user).group_by(&:date) || {}
   end
 
 end

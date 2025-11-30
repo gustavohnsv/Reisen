@@ -53,7 +53,7 @@
                     <% end %>
                   </div>
                 </div>
-                <%= render "scripts/spends/show", script: @script, items: data[:items], date: date %>
+                <%= render "scripts/spends/show", script: @script, items: data[:items], date: date, day_spends: (@spends_by_date && @spends_by_date[date]) || [] %>
               </div>
             <% end %>
 
