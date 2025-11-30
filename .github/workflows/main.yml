@@ -52,9 +52,12 @@ jobs:
           echo "=== Listando roles ==="
           psql -h localhost -p 5432 -U postgres -c '\du' || true
 
-          # Drop/Create + Load Schema (método mais limpo e rápido para CI)
-          echo "=== Preparando database (drop/create + schema load) ==="
-          bundle exec rails db:drop db:create db:schema:load
+          # Cria e carrega schema (método mais limpo e rápido para CI)
+          echo "=== Criando database ==="
+          bundle exec rails db:create
+          
+          echo "=== Carregando schema ==="
+          bundle exec rails db:schema:load
           
           # Verifica versão das migrations
           echo "=== Versão do database ==="
