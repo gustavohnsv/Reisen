@@ -25,6 +25,12 @@ Rails.application.routes.draw do
       get :news
     end
   end
+  
+  # Rotas de Reviews e Fotos para ScriptItems ← MODIFICAR ESTA SEÇÃO
+  resources :script_items, only: [] do
+    resources :reviews, only: [:create, :destroy], controller: 'script_items/reviews'
+    resources :photos, only: [:create, :destroy], controller: 'script_items/photos'
+  end
 
   resources :checklists, except: [:index] do
     resources :checklist_items, only: [:create, :update, :destroy], controller: 'checklists/items'
@@ -32,17 +38,17 @@ Rails.application.routes.draw do
   end
 
   # Rotas de Reviews para Destinations, Hotels e Tours
-resources :destinations, only: [] do
-  resources :reviews
-end
+  resources :destinations, only: [] do
+    resources :reviews
+  end
 
-resources :hotels, only: [] do
-  resources :reviews
-end
+  resources :hotels, only: [] do
+    resources :reviews
+  end
 
-resources :tours, only: [] do
-  resources :reviews
-end
+  resources :tours, only: [] do
+    resources :reviews
+  end
 
   # Rotas destinadas ao ambiente de testes
   if Rails.env.test?
