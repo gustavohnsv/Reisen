@@ -2,15 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "profiles/show.html.erb", type: :view do
   # Cria um usuário fake
-  let!(:user) do
-    User.create!(
-      name: 'John Smith',
-      email: 'johnsmith@example.com',
-      password: 'password',
-      password_confirmation: 'password',
-      confirmed_at: Time.current
-    )
-  end
+  let!(:user) { create(:user) }
 
   # Cria um roteiro e uma checklist para o usuário
   let!(:script) {user.scripts.create!(title: 'Roteiro')}

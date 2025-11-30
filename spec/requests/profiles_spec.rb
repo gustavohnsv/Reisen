@@ -1,13 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Profiles", type: :request do
-  let(:user) {User.create!(
-    name: 'John Smith',
-    email: 'johnsmith@example.com',
-    password: 'password',
-    password_confirmation: 'password',
-    confirmed_at: Time.current,
-  )}
+  let(:user) { create(:user) }
 
   describe 'GET /profiles/:id' do
     context 'usuário está logado' do
@@ -20,7 +14,7 @@ RSpec.describe "Profiles", type: :request do
         expect(response.body).to include(user.name)
       end
       it 'acessa o perfil de outro usuário' do
-        other = User.create!(name: 'Jane Doe', email: 'janedoe@example.com', password: 'password', password_confirmation: 'password')
+        other = create(:user)
         get profile_path(other.id)
         expect(response).to redirect_to(root_path)
       end
