@@ -44,6 +44,12 @@
                     <% if data[:items].any? %>
                       <% data[:items].each do |i| %>
                         <%= render "scripts/items/edit", script: @script, item: i %>
+                        
+                        <!-- ← ADICIONAR ESTAS LINHAS AQUI -->
+                        <%= render 'script_items/photos', script_item: i %>
+                        <%= render 'script_items/reviews', script_item: i %>
+                        <!-- FIM DA ADIÇÃO -->
+                        
                       <% end %>
                     <% else %>
                       <div class="text-center p-3 bg-body-secondary rounded mb-3">
