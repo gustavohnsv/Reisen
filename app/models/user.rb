@@ -11,20 +11,18 @@ class User < ApplicationRecord
   has_many :checklists, dependent: :destroy
   has_many :script_participants, dependent: :destroy
   has_many :checklist_participants, dependent: :destroy
-
   has_many :script_comments, dependent: :destroy
   has_many :script_items, dependent: :destroy
   has_many :script_spends, dependent: :destroy
-  
-  # REMOVA ESTA LINHA:
-  # has_many :checklist_items, dependent: :destroy
-
   has_many :participated_scripts, through: :script_participants, source: :script
   has_many :participated_checklists, through: :checklist_participants, source: :checklist
   
   # Associação com Reviews
   has_many :reviews, dependent: :destroy
-
+  
+  # Associação com Fotos ← ADICIONAR
+  has_many :script_item_photos, dependent: :destroy
+  
   has_one_attached :avatar
   validate :avatar_type_and_size
 
