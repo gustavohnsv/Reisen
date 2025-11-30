@@ -44,9 +44,9 @@ RSpec.describe Review, type: :model do
   end
 
   describe 'scopes' do
-    let!(:old_review) { create(:review, created_at: 2.days.ago, rating: 3) }
-    let!(:new_review) { create(:review, created_at: 1.day.ago, rating: 5) }
-    let!(:medium_review) { create(:review, created_at: Time.current, rating: 4) }
+    let!(:old_review) { create(:review, rating: 3).tap { |r| r.update_columns(created_at: 2.days.ago) } }
+    let!(:new_review) { create(:review, rating: 5).tap { |r| r.update_columns(created_at: 1.day.ago) } }
+    let!(:medium_review) { create(:review, rating: 4).tap { |r| r.update_columns(created_at: Time.current) } }
 
     describe '.recent' do
       it 'orders reviews by creation date descending' do
