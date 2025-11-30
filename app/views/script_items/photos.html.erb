@@ -1,0 +1,64 @@
+<div class="photos-section mt-4">
+  <h5>📷 Galeria de Fotos (<%= script_item.total_photos %>)</h5>
+  
+  <!-- Formulário para adicionar foto -->
+  <% if user_signed_in? %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h6>Adicionar Foto</h6>
+        <%= form_with model: ScriptItemPhoto.new, url: script_item_photos_path(script_item), local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :image, "Selecione uma foto", class: "form-label" %>
+            <%= f.file_field :image, accept: "image/*", class: "form-control" %>
+            <small class="text-muted">Formatos aceitos: JPEG, PNG, WEBP (máximo 5MB)</small>
+          </div>
+          
+          <div class="mb-3">
+            <%= f.label :description, "Descrição (opcional)", class: "form-label" %>
+            <%= f.text_area :description, rows: 2, class: "form-control", placeholder: "Adicione uma descrição para esta foto" %>
+          </div>
+          
+          <%= f.submit "Adicionar Foto", class: "btn btn-primary btn-sm" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  
+  <!-- Lista de fotos em grid -->
+  <div class="photos-grid">
+    <% if script_item.script_item_photos.any? %>
+      <div class="row g-3">
+        <% script_item.script_item_photos.order(created_at: :desc).each do |photo| %>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+              <% if photo.image.attached? %>
+                <%= image_tag photo.image, class: "card-img-top", alt: photo.description || "Foto", style: "height: 200px; object-fit: cover;" %>
+              <% end %>
+              <div class="card-body">
+                <% if photo.description.present? %>
+                  <p class="card-text"><%= photo.description %></p>
+                <% end %>
+                <small class="text-muted d-block">
+                  Por: <%= photo.user.name %><br>
+                  <%= l(photo.created_at, format: :short) %>
+                </small>
+                
+                <% if user_signed_in? && (photo.user == current_user || script_item.script.user == current_user) %>
+                  <div class="mt-2">
+                    <%= button_to "Excluir", 
+                        script_item_photo_path(script_item, photo), 
+                        method: :delete, 
+                        data: { turbo_confirm: "Tem certeza que deseja excluir esta foto?" },
+                        class: "btn btn-sm btn-outline-danger" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-muted">Ainda não há fotos para este item. Seja o primeiro a adicionar!</p>
+    <% end %>
+  </div>
+</div>
