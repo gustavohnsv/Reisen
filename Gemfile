@@ -23,8 +23,8 @@ gem "rails-i18n"
 gem "meta-tags"
 gem "sitemap_generator"
 
-# Production
-group :production do
+# Production and Test (CI uses Postgres)
+group :production, :test do
   gem "pg", "~> 1.6"
 end
 
