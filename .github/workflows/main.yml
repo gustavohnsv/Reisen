@@ -1,18 +1,18 @@
-name: Ruby on Rails CI
+# .github/workflows/main.yml
+name: CI
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
+  push:
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    
     services:
       postgres:
-        image: postgres:14
+        image: postgres:15
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -26,37 +26,38 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
+      - uses: actions/checkout@v3
+      
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          chrome-version: stable
-        id: setup-chrome
-
-      - name: Setup ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.4.5
           bundler-cache: true
-
+      
       - name: Setup Database
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+          PGPASSWORD: postgres
         run: |
-          # espera o Postgres ficar pronto (até ~30s)
+          # Aguarda o Postgres estar pronto (até ~30s)
           for i in {1..30}; do
             pg_isready -h localhost -p 5432 && break
             echo "waiting for postgres..."
             sleep 1
           done
 
-          bundle exec rails db:create
-          bundle exec rails db:migrate
-          # loga versão aplicada para facilitar debugging
+          # Debug: lista DBs e roles (ajuda a ver quais usuários existem)
+          echo "=== Listando databases ==="
+          psql -h localhost -p 5432 -U postgres -c '\l' || true
+          echo "=== Listando roles ==="
+          psql -h localhost -p 5432 -U postgres -c '\du' || true
+
+          # Usa db:prepare (mais seguro - cria DB se necessário, carrega schema/migra)
+          echo "=== Preparando database ==="
+          bundle exec rails db:prepare
+          
+          # Verifica versão das migrations
+          echo "=== Versão do database ==="
           bundle exec rails db:version
 
       - name: Run RSpec tests

@@ -8,12 +8,8 @@ development:
   database: storage/development.sqlite3
 
 test:
-  adapter: postgresql
-  encoding: unicode
-  database: app_test
-  username: postgres
-  password:
-  host: localhost
+  # Use DATABASE_URL para evitar fallback para o usuário do sistema "root"
+  url: <%= ENV['DATABASE_URL'] %>
 
 production:
   <<: *default
