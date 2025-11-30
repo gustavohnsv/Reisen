@@ -54,8 +54,7 @@ jobs:
             sleep 1
           done
 
-          bundle exec rails db:create
-          bundle exec rails db:migrate
+          bundle exec rails db:prepare
           # loga versão aplicada para facilitar debugging
           bundle exec rails db:version
 

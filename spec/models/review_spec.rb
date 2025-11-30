@@ -44,25 +44,25 @@ RSpec.describe Review, type: :model do
   end
 
   describe 'scopes' do
-    let!(:old_review) { create(:review, created_at: 2.days.ago, rating: 3) }
-    let!(:new_review) { create(:review, created_at: 1.day.ago, rating: 5) }
-    let!(:medium_review) { create(:review, rating: 4) }
+    let!(:old_review) { create(:review, rating: 3).tap { |r| r.update_columns(created_at: 2.days.ago) } }
+    let!(:new_review) { create(:review, rating: 5).tap { |r| r.update_columns(created_at: 1.day.ago) } }
+    let!(:medium_review) { create(:review, rating: 4).tap { |r| r.update_columns(created_at: Time.current) } }
 
     describe '.recent' do
       it 'orders reviews by creation date descending' do
-        expect(Review.recent).to eq([medium_review, new_review, old_review])
+        expect(Review.recent.pluck(:id)).to eq([medium_review.id, new_review.id, old_review.id])
       end
     end
 
     describe '.by_rating' do
       it 'filters reviews by rating' do
-        expect(Review.by_rating(5)).to eq([new_review])
+        expect(Review.by_rating(5).pluck(:id)).to eq([new_review.id])
       end
     end
 
     describe '.highest_rated' do
       it 'orders reviews by rating descending' do
-        expect(Review.highest_rated.first).to eq(new_review)
+        expect(Review.highest_rated.first.id).to eq(new_review.id)
       end
     end
   end
